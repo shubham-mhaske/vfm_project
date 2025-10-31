@@ -1,0 +1,27 @@
+# Datasets
+data/
+CrowdsourcingDataset-Amgadetal2019/
+
+# SAM folder
+sam2/
+
+# Models
+models/
+
+# Logs
+finetune_logs/
+*.log
+
+# Python cache
+__pycache__/
+*.pyc
+
+# OS-specific
+.DS_Store
+
+# Output files
+*.png
+*.jpg
+
+# Jupyter notebook checkpoints
+.ipynb_checkpoints/

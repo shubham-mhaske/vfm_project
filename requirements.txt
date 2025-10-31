@@ -1,0 +1,14 @@
+
+girder_client
+pillow
+numpy
+scikit-image
+imageio
+torch
+torchvision
+transformers
+segment-anything-py
+opencv-python
+scikit-learn
+matplotlib
+pandas
