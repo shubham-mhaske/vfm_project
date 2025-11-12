@@ -1,0 +1,44 @@
+{
+    "tumor": [
+        "a histopathology image of a tumor",
+        "cancerous tissue with malignant cells",
+        "a dense cluster of large, irregularly shaped cells with dark nuclei",
+        "invasive ductal carcinoma cells",
+        "a region of neoplastic cells"
+    ],
+    "stroma": [
+        "a histopathology image of stroma",
+        "connective tissue supporting the tumor",
+        "spindle-shaped cells with elongated nuclei",
+        "fibrous tissue surrounding cancer cells",
+        "a region of desmoplastic stroma"
+    ],
+    "lymphocyte": [
+        "a histopathology image of lymphocytes",
+        "a cluster of immune cells",
+        "small, round cells with dark, circular nuclei and minimal cytoplasm",
+        "an infiltration of lymphocytes",
+        "a region of immune response in tissue"
+    ],
+    "necrosis": [
+        "a histopathology image of necrosis",
+        "dead tissue, often with fragmented cells and debris",
+        "an area of cell death with loss of cell structure",
+        "necrotic core of a tumor",
+        "a region of eosinophilic, anucleated cells"
+    ],
+    "blood_vessel": [
+        "a histopathology image of a blood vessel",
+        "a channel for blood flow lined by endothelial cells",
+        "a cross-section of a capillary or arteriole",
+        "a vessel containing red blood cells",
+        "vascular structure in tissue"
+    ],
+    "background": [
+        "a histopathology image of background tissue",
+        "adipose tissue or empty space",
+        "fat cells and slide background",
+        "a region with no distinct cellular structures",
+        "normal, non-cancerous tissue"
+    ]
+}

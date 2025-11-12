@@ -1,0 +1,54 @@
+{
+    "tumor": [
+        "Complex branching papillary structures lined by atypical epithelium.",
+        "Foci of squamous differentiation forming concentric keratin pearls.",
+        "Highly pleomorphic nuclei with coarse, vesicular chromatin.",
+        "Dense sheets of hyperchromatic purple cells with scant intervening stroma.",
+        "Irregular nests and fragments of tumor cells floating in white artifactual space.",
+        "Polygonal cells displaying a high nuclear-to-cytoplasmic ratio.",
+        "Prominent eosinophilic nucleoli within enlarged nuclei."
+    ],
+    "stroma": [
+        "Irregular, labyrinthine arrangement of eosinophilic tissue.",
+        "Intersecting bundles of elongated, wavy pink fibers.",
+        "Delicate, spiky pink tissue septa surrounding large open spaces.",
+        "Patchy infiltrates of haphazardly oriented spindle nuclei.",
+        "Dense magenta collagen interspersed with small blue nuclei.",
+        "Thickened, densely packed hyalinized stromal bands.",
+        "Interstitial proliferation forming ragged, finger-like projections."
+    ],
+    "lymphocyte": [
+        "Deep basophilic nuclei with minimal pink cytoplasm",
+        "Monotonous sheets of dense small blue cells",
+        "High nucleus-to-cytoplasm ratio",
+        "Irregular fragmented cellular clusters",
+        "Ragged and scalloped edges on the tissue islands",
+        "Tightly packed cells forming dense purple aggregates",
+        "Highly dissociated single cells scattered on white background"
+    ],
+    "necrosis": [
+        "Amorphous fragments of wispy, pale pink cytoplasm",
+        "Scattered pyknotic and fragmented dark purple nuclei",
+        "Sheets of tissue showing diffuse eosinophilic homogenization",
+        "Loss of recognizable cellular and nuclear architecture",
+        "Ghost-like cellular outlines against a white background",
+        "Large pale cells containing multiple dark internal inclusions",
+        "Sharp boundary between dense viable tissue and acellular debris"
+    ],
+    "blood_vessel": [
+        "Multiple circular, white luminal spaces.",
+        "Prominent pink/magenta eosinophilic matrix.",
+        "Dark purple nuclei aggregated at lumen boundaries.",
+        "Highly curved or C-shaped tissue segments.",
+        "Clear delineation between white voids and stained tissue walls.",
+        "The tissue forms thick, homogeneous structures.",
+        "Variable sizes of the enclosed circular spaces."
+    ],
+    "background": [
+        "a blank white area",
+        "empty slide space",
+        "no tissue present",
+        "out of focus region",
+        "an acellular, featureless area"
+    ]
+}

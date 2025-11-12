@@ -1,0 +1,61 @@
+{
+    "config": {
+        "output_dir": "results/exp3_v1_zeroshot_sam_llm_text_jargon",
+        "sam_model_cfg": "configs/sam2.1/sam2.1_hiera_l.yaml",
+        "sam_checkpoint": "sam2/checkpoints/sam2.1_hiera_large.pt",
+        "clip_prompts": "configs/prompts/llm_text_prompts_v1_gemini_pro_latest.json",
+        "sam_prompt_type": "box",
+        "use_neg_points": true
+    },
+    "segmentation": {
+        "avg_dice": 0.5231216845525996,
+        "avg_iou": 0.37661245135503435
+    },
+    "classification": {
+        "accuracy": 0.24358974358974358,
+        "labels": [
+            "tumor",
+            "stroma",
+            "lymphocyte",
+            "necrosis",
+            "blood_vessel"
+        ],
+        "confusion_matrix": [
+            [
+                1,
+                39,
+                0,
+                5,
+                0
+            ],
+            [
+                1,
+                36,
+                1,
+                2,
+                4
+            ],
+            [
+                1,
+                24,
+                0,
+                5,
+                1
+            ],
+            [
+                0,
+                14,
+                1,
+                1,
+                0
+            ],
+            [
+                0,
+                3,
+                0,
+                0,
+                0
+            ]
+        ]
+    }
+}

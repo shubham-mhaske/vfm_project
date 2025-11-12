@@ -12,3 +12,4 @@ opencv-python
 scikit-learn
 matplotlib
 pandas
+google-generativeai

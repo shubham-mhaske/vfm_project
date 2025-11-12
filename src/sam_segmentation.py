@@ -34,7 +34,12 @@ def show_box(box, ax):
 
 def get_sam2_predictor(model_cfg, checkpoint):
     """Initializes and returns a SAM 2 predictor."""
-    device = "cuda" if torch.cuda.is_available() else "cpu"
+    if torch.backends.mps.is_available():
+        device = "mps"
+    elif torch.cuda.is_available():
+        device = "cuda"
+    else:
+        device = "cpu"
     predictor = SAM2ImagePredictor(build_sam2(model_cfg, checkpoint, device=device))
     return predictor
 
@@ -115,7 +120,15 @@ def get_predicted_mask_from_prompts(predictor, image, prompts, prompt_type='cent
         else:
             point_coords, point_labels = neg_coords, neg_labels
     
-    with torch.inference_mode(), torch.autocast("cuda", dtype=torch.bfloat16):
+    device = predictor.model.device
+    if device == "mps":
+        autocast_context = torch.autocast("mps", dtype=torch.float16)
+    elif device == "cuda":
+        autocast_context = torch.autocast("cuda", dtype=torch.bfloat16)
+    else:
+        autocast_context = torch.no_grad() # No autocast for CPU, just no_grad
+
+    with autocast_context:
         masks, _, _ = predictor.predict(
             point_coords=point_coords,
             point_labels=point_labels,

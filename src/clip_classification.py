@@ -2,53 +2,21 @@ import torch
 from transformers import CLIPProcessor, CLIPModel
 from PIL import Image
 import numpy as np
+import json
+import os
+import sys
 
-def generate_text_prompts():
-    """Generates an ensemble of text prompts for each class."""
-    prompts = {
-        'tumor': [
-            "a histopathology image of a tumor",
-            "cancerous tissue with malignant cells",
-            "a dense cluster of large, irregularly shaped cells with dark nuclei",
-            "invasive ductal carcinoma cells",
-            "a region of neoplastic cells"
-        ],
-        'stroma': [
-            "a histopathology image of stroma",
-            "connective tissue supporting the tumor",
-            "spindle-shaped cells with elongated nuclei",
-            "fibrous tissue surrounding cancer cells",
-            "a region of desmoplastic stroma"
-        ],
-        'lymphocyte': [
-            "a histopathology image of lymphocytes",
-            "a cluster of immune cells",
-            "small, round cells with dark, circular nuclei and minimal cytoplasm",
-            "an infiltration of lymphocytes",
-            "a region of immune response in tissue"
-        ],
-        'necrosis': [
-            "a histopathology image of necrosis",
-            "dead tissue, often with fragmented cells and debris",
-            "an area of cell death with loss of cell structure",
-            "necrotic core of a tumor",
-            "a region of eosinophilic, anucleated cells"
-        ],
-        'blood_vessel': [
-            "a histopathology image of a blood vessel",
-            "a channel for blood flow lined by endothelial cells",
-            "a cross-section of a capillary or arteriole",
-            "a vessel containing red blood cells",
-            "vascular structure in tissue"
-        ],
-        'background': [
-            "a histopathology image of background tissue",
-            "adipose tissue or empty space",
-            "fat cells and slide background",
-            "a region with no distinct cellular structures",
-            "normal, non-cancerous tissue"
-        ]
-    }
+def load_prompts_from_json(json_path: str):
+    """Loads a prompt dictionary from a JSON file."""
+    if not os.path.exists(json_path):
+        print("="*80)
+        print(f"ERROR: Prompt file not found: {json_path}")
+        print("This file must be provided to the CLIPClassifier.")
+        print("="*80)
+        raise FileNotFoundError(json_path)
+            
+    with open(json_path, 'r') as f:
+        prompts = json.load(f)
     return prompts
 
 def crop_region_from_mask(image_np, mask):
@@ -59,6 +27,10 @@ def crop_region_from_mask(image_np, mask):
     # Find bounding box of the mask
     rows = np.any(mask, axis=1)
     cols = np.any(mask, axis=0)
+    # Handle empty mask edge case
+    if not np.any(rows) or not np.any(cols):
+        return None
+        
     rmin, rmax = np.where(rows)[0][[0, -1]]
     cmin, cmax = np.where(cols)[0][[0, -1]]
 
@@ -72,13 +44,22 @@ def crop_region_from_mask(image_np, mask):
     return Image.fromarray(cropped_image_np)
 
 class CLIPClassifier:
-    def __init__(self, model_name="openai/clip-vit-base-patch32"):
-        """Initializes the CLIP classifier."""
+    def __init__(self, prompt_file_path: str, model_name="openai/clip-vit-base-patch32"):
+        """
+        Initializes the CLIP classifier by loading prompts from a specified JSON file.
+        
+        Args:
+            prompt_file_path (str): Path to the JSON file containing prompt ensembles.
+            model_name (str): The CLIP model to load from Hugging Face.
+        """
         self.device = "cuda" if torch.cuda.is_available() else "cpu"
         self.model = CLIPModel.from_pretrained(model_name).to(self.device)
-        self.processor = CLIPProcessor.from_pretrained(model_name)
-        self.prompts = generate_text_prompts()
+        self.processor = CLIPProcessor.from_pretrained(model_name, use_fast=True)
+        
+        # Load prompts from the specified JSON file
+        self.prompts = load_prompts_from_json(prompt_file_path) 
         self.class_names = list(self.prompts.keys())
+        print(f"CLIPClassifier initialized with prompts from: {prompt_file_path}")
 
     def classify_region(self, image):
         """Classifies a cropped image region using CLIP."""
@@ -104,6 +85,11 @@ class CLIPClassifier:
         class_probs = []
         start_index = 0
         for num_prompts in num_prompts_per_class:
+            # Handle cases where a class might have 0 prompts
+            if num_prompts == 0:
+                class_probs.append(torch.tensor(0.0).to(self.device))
+                continue
+            
             class_probs.append(probs[:, start_index:start_index+num_prompts].mean(dim=1))
             start_index += num_prompts
         

@@ -5,6 +5,8 @@ from sklearn.metrics import accuracy_score, confusion_matrix, ConfusionMatrixDis
 import matplotlib.pyplot as plt
 import sys
 import os
+import json
+import argparse # Upgraded to be the main experiment runner
 
 # Add the sam2 directory to the Python path
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'sam2')))
@@ -22,21 +24,28 @@ from clip_classification import (
     crop_region_from_mask
 )
 
-def run_evaluation():
-    """Runs the full quantitative evaluation on the test set."""
+def run_evaluation(args):
+    """Runs the full quantitative evaluation on the test set based on provided args."""
+    print("="*80)
     print("Starting quantitative evaluation...")
+    print(f"  SAM Config:     {args.sam_model_cfg}")
+    print(f"  SAM Checkpoint: {args.sam_checkpoint}")
+    print(f"  CLIP Prompts:   {args.clip_prompts}")
+    print(f"  Output Dir:     {args.output_dir}")
+    print("="*80)
+    os.makedirs(args.output_dir, exist_ok=True)
 
     # --- 1. Load Data and Models ---
     image_dir = 'data/bcss/images'
     mask_dir = 'data/bcss/masks'
     bcss_dataset = BCSSDataset(image_dir=image_dir, mask_dir=mask_dir, split='test')
-    bcss_dataset.image_files = bcss_dataset.image_files[:10]
+    
+    # CRITICAL: This line is removed to run on the FULL test set.
+    # bcss_dataset.image_files = bcss_dataset.image_files[:10] 
     
     print("Loading models...")
-    sam_model_cfg = "configs/sam2.1/sam2.1_hiera_l.yaml"
-    sam_checkpoint = "sam2/checkpoints/sam2.1_hiera_large.pt"
-    sam_predictor = get_sam2_predictor(sam_model_cfg, sam_checkpoint)
-    clip_classifier = CLIPClassifier()
+    sam_predictor = get_sam2_predictor(args.sam_model_cfg, args.sam_checkpoint)
+    clip_classifier = CLIPClassifier(prompt_file_path=args.clip_prompts)
 
     # --- 2. Evaluation Loop ---
     segmentation_results = []
@@ -61,10 +70,16 @@ def run_evaluation():
                 continue
 
             prompts = get_prompts_from_mask(binary_gt_mask)
-            if not prompts:
+            if not prompts or args.sam_prompt_type not in prompts:
                 continue
 
-            predicted_mask, _, _ = get_predicted_mask_from_prompts(sam_predictor, image, prompts, prompt_type='box', use_neg_points=True)
+            predicted_mask, _, _ = get_predicted_mask_from_prompts(
+                sam_predictor, 
+                image, 
+                prompts, 
+                prompt_type=args.sam_prompt_type, 
+                use_neg_points=args.use_neg_points
+            )
             final_mask = postprocess_mask(predicted_mask)
             
             seg_dice, seg_iou = calculate_metrics(final_mask, binary_gt_mask)
@@ -79,10 +94,14 @@ def run_evaluation():
 
     # --- 3. Compute and Print Metrics ---
     print("\n--- Evaluation Results ---")
+    metrics = {
+        "config": vars(args) # Save the experiment config
+    }
 
     # Segmentation Metrics
     avg_dice = np.mean([res['dice'] for res in segmentation_results])
     avg_iou = np.mean([res['iou'] for res in segmentation_results])
+    metrics['segmentation'] = {'avg_dice': avg_dice, 'avg_iou': avg_iou}
     print(f"\n[Segmentation]\n")
     print(f"Average Dice Score: {avg_dice:.4f}")
     print(f"Average IoU Score:  {avg_iou:.4f}")
@@ -94,7 +113,8 @@ def run_evaluation():
     accuracy = accuracy_score(true_labels, pred_labels)
     class_names = list(bcss_dataset.class_names.values())[1:] # Exclude background
     cm = confusion_matrix(true_labels, pred_labels, labels=class_names)
-
+    
+    metrics['classification'] = {'accuracy': accuracy, 'labels': class_names, 'confusion_matrix': cm.tolist()}
     print(f"\n[Classification]\n")
     print(f"Overall Accuracy: {accuracy:.4f}")
     print("\nConfusion Matrix:")
@@ -104,12 +124,46 @@ def run_evaluation():
     disp = ConfusionMatrixDisplay(confusion_matrix=cm, display_labels=class_names)
     fig, ax = plt.subplots(figsize=(10, 10))
     disp.plot(ax=ax, xticks_rotation='vertical')
-    plt.title("Zero-Shot Classification Confusion Matrix")
+    plt.title(f"Classification Confusion Matrix\n(SAM: {os.path.basename(args.sam_checkpoint)})")
     plt.tight_layout()
-    cm_filename = "confusion_matrix.png"
+    cm_filename = os.path.join(args.output_dir, "confusion_matrix.png")
     plt.savefig(cm_filename)
     print(f"\nConfusion matrix saved to {cm_filename}")
     plt.close()
 
+    # Save all metrics to a JSON file
+    metrics_filename = os.path.join(args.output_dir, "metrics.json")
+    with open(metrics_filename, 'w') as f:
+        json.dump(metrics, f, indent=4)
+    print(f"All metrics saved to {metrics_filename}")
+
 if __name__ == '__main__':
-    run_evaluation()
+    parser = argparse.ArgumentParser(description="Run VFM Evaluation Pipeline")
+    
+    # --- Experiment Control Arguments ---
+    parser.add_argument('--output_dir', type=str, required=True,
+                        help="Directory to save experiment results (metrics.json, confusion_matrix.png)")
+    
+    parser.add_argument('--sam_model_cfg', type=str, 
+                        default="configs/sam2.1/sam2.1_hiera_l.yaml",
+                        help="Path to the SAM model config file.")
+    
+    parser.add_argument('--sam_checkpoint', type=str, 
+                        default="sam2/checkpoints/sam2.1_hiera_large.pt",
+                        help="Path to the SAM checkpoint file (.pt).")
+    
+    parser.add_argument('--clip_prompts', type=str, required=True,
+                        help="Path to the CLIP prompts JSON file. (e.g., src/hard_coded_prompts.json)")
+    
+    parser.add_argument('--sam_prompt_type', type=str, 
+                        default='box',
+                        choices=['box', 'centroid', 'multi_point'],
+                        help="Type of SAM prompt to simulate.")
+    
+    parser.add_argument('--use_neg_points', action=argparse.BooleanOptionalAction,
+                        default=True,
+                        help="Flag to use negative points.")
+
+    args = parser.parse_args()
+    
+    run_evaluation(args)

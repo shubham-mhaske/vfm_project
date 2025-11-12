@@ -1,0 +1,56 @@
+{
+    "tumor": [
+        "Infiltrating nests and cords of pleomorphic epithelial cells.",
+        "Large, hyperchromatic nuclei with irregular nuclear membranes.",
+        "Disorganized sheets of atypical cells with prominent nucleoli.",
+        "A chaotic proliferation of cells with a high nuclear-to-cytoplasmic ratio.",
+        "Densely packed cells with dark purple nuclei invading fibrous stroma.",
+        "Irregularly shaped malignant glands and ductal structures.",
+        "Atypical mitotic figures within pleomorphic tumor cells."
+    ],
+    "stroma": [
+        "Wavy pink collagen fibers with scattered spindle cells.",
+        "Eosinophilic and fibrillar connective tissue.",
+        "Elongated cells with bland, ovoid nuclei.",
+        "Streaming bundles of pink extracellular matrix.",
+        "Paucicellular fibrous tissue with a collagenous background.",
+        "Spindle-shaped nuclei embedded in a pink stroma.",
+        "Hypocellular fibrous tissue with a wispy texture."
+    ],
+    "lymphocyte": [
+        "Small round cells with large, dark-staining nuclei.",
+        "A dense hyperchromatic nucleus with a scant rim of cytoplasm.",
+        "Deeply basophilic round nuclei with condensed chromatin.",
+        "Scattered, individual dark purple cells infiltrating the stroma.",
+        "High nuclear-to-cytoplasmic ratio with a round, dark nucleus.",
+        "Small, dark cells resembling an \"ink dot\" appearance.",
+        "Dense aggregates of small, round, dark blue inflammatory cells."
+    ],
+    "necrosis": [
+        "Amorphous eosinophilic material with cellular debris.",
+        "Sheets of dead cells with glassy pink cytoplasm and faded nuclei.",
+        "A central core of coagulative necrosis with ghost-like cell outlines.",
+        "Clumps of cells with pyknotic nuclei and karyorrhectic dust.",
+        "Acellular granular debris with intense eosinophilic staining.",
+        "Fields of anucleated shadow cells with indistinct borders.",
+        "Fragmented, shrunken, and hyperchromatic nuclear remnants."
+    ],
+    "blood_vessel": [
+        "A circular channel lined by a single layer of flattened, dark nuclei.",
+        "Lumen containing a cluster of anucleated, eosinophilic red blood cells.",
+        "A cross-section of a vessel filled with pink erythrocytes.",
+        "An ovoid space surrounded by elongated endothelial cell nuclei.",
+        "A thin-walled tubular structure with a central, open lumen.",
+        "A channel lined by hyperchromatic, spindle-shaped endothelial nuclei.",
+        "A collection of small, circular, bright red cells within a defined vessel."
+    ],
+    "background": [
+        "White empty space on a glass slide",
+        "A clear, circular air bubble artifact",
+        "Out-of-focus blurry region without cellular detail",
+        "Smooth acellular light-colored area",
+        "A sharp fold or crease in the tissue section",
+        "Dark purple stain precipitate artifact",
+        "Absence of biological tissue and cellular structures"
+    ]
+}
