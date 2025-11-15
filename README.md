@@ -106,16 +106,19 @@ The pixel values in the masks correspond to the following classes:
 
 This guide explains the repository's structure and provides a step-by-step process for setting up the project environment.
 
-### Repository vs. Local Files
+### Repository Structure: Nested Repositories
 
-It is important to distinguish between files tracked by Git and files that are generated locally.
+This project uses a **nested repository** structure to include external dependencies. The `sam2` and `CrowdsourcingDataset-Amgadetal2019` directories are separate Git repositories nested inside the main project.
+
+This means the main project does not track the individual files of these nested repositories. Instead, it tracks a reference to a specific commit of each one. This ensures that the exact version of the dependency code is used, which is critical for reproducibility.
 
 **What is in the Repository (Tracked by Git):**
 -   `/src`, `/notebooks`, `/configs`: All source code, experiment notebooks, and configuration files.
 -   `requirements.txt`: A list of Python packages required for the project.
--   `/sam2` & `/CrowdsourcingDataset-Amgadetal2019`: These are Git submodules. The repository only stores a pointer to a specific commit of these external projects, not all their files.
+-   A reference to the specific commits of the `sam2` and `CrowdsourcingDataset-Amgadetal2019` repositories.
 
 **What is NOT in the Repository (Local Files):**
+-   The full contents of `sam2` and `CrowdsourcingDataset-Amgadetal2019`. These must be cloned separately.
 -   `/data`: Contains the large BCSS dataset. This is downloaded locally.
 -   `/models` & `/checkpoints`: Contain large, pre-trained model weights. These are downloaded locally.
 -   `/finetune_logs`: Contains outputs from training runs (logs, TensorBoard files). These are generated during execution.
@@ -123,22 +126,43 @@ It is important to distinguish between files tracked by Git and files that are g
 
 ### Step-by-Step Setup Instructions
 
-**A Note on Submodules:** This project uses Git submodules to include the `sam2` and `CrowdsourcingDataset-Amgadetal2019` repositories. A submodule locks the external code to a specific version (commit). This is a deliberate choice to ensure **reproducibility**—it guarantees that every team member is using the exact same version of the dependency code, which is critical for consistent baseline results. The alternative would be a script that clones the repositories, which could accidentally download newer, incompatible versions.
+**1. Clone the Main Repository**
 
-**1. Clone the Repository**
-
-Clone the repository and initialize the submodules (`sam2` and `CrowdsourcingDataset-Amgadetal2019`) in one command:
-
+First, clone the main project repository:
 ```bash
-git clone --recurse-submodules <your-repository-url>
+git clone <your-repository-url>
+cd <project-directory>
 ```
 
-*If you have already cloned the repository without the flag, you can initialize the submodules with:*
+**2. Set Up Nested Repositories**
+
+After cloning the main project, you must manually clone the nested repositories and check out the correct commits.
+
+**For `CrowdsourcingDataset-Amgadetal2019`:**
 ```bash
-git submodule update --init --recursive
+# Remove the placeholder directory if it exists
+rm -rf CrowdsourcingDataset-Amgadetal2019
+# Clone the repository
+git clone https://github.com/shubham-mhaske/BCSS.git CrowdsourcingDataset-Amgadetal2019
+# Check out the specific commit
+cd CrowdsourcingDataset-Amgadetal2019
+git checkout be25c5373d435a1a290262566241494da827b04a
+cd ..
 ```
 
-**2. Install Dependencies**
+**For `sam2`:**
+```bash
+# Remove the placeholder directory if it exists
+rm -rf sam2
+# Clone the repository
+git clone https://github.com/shubham-mhaske/sam2.git sam2
+# Check out the specific commit
+cd sam2
+git checkout 6fb05b743026ab656f5e9c7edbd5018b5f3c7a37
+cd ..
+```
+
+**3. Install Dependencies**
 
 Install all required Python packages:
 
@@ -146,7 +170,7 @@ Install all required Python packages:
 pip install -r requirements.txt
 ```
 
-**3. Download Pre-trained Models**
+**4. Download Pre-trained Models**
 
 The project uses checkpoints from both SAM and SAM2.
 
@@ -161,7 +185,7 @@ The project uses checkpoints from both SAM and SAM2.
     # The model can be found in the official Segment Anything repository.
     ```
 
-**4. Download the Dataset**
+**5. Download the Dataset**
 
 Follow the instructions in the **Dataset Setup** section above to download and organize the BCSS dataset in the `/data/bcss` directory.
 
