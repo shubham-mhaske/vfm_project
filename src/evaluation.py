@@ -21,8 +21,11 @@ from sam_segmentation import (
 )
 from clip_classification import (
     CLIPClassifier,
-    crop_region_from_mask
+    crop_region_from_mask,
+    load_prompts_from_json
 )
+from device_utils import get_device, get_num_workers
+from torch.utils.data import DataLoader
 
 def run_evaluation(args):
     """Runs the full quantitative evaluation on the test set based on provided args."""
@@ -35,28 +38,33 @@ def run_evaluation(args):
     print("="*80)
     os.makedirs(args.output_dir, exist_ok=True)
 
+    # --- 0. Device Selection ---
+    device = get_device()
+    print(f"Using device: {device}")
+
     # --- 1. Load Data and Models ---
     image_dir = os.path.join(args.data_dir, 'images')
     mask_dir = os.path.join(args.data_dir, 'masks')
     bcss_dataset = BCSSDataset(image_dir=image_dir, mask_dir=mask_dir, split='test')
     
-    # CRITICAL: This line is removed to run on the FULL test set.
-    # bcss_dataset.image_files = bcss_dataset.image_files[:10] 
+    data_loader = DataLoader(bcss_dataset, batch_size=1, shuffle=False, num_workers=get_num_workers())
     
     print("Loading models...")
-    sam_predictor = get_sam2_predictor(args.sam_model_cfg, args.sam_checkpoint)
-    clip_classifier = CLIPClassifier(prompt_file_path=args.clip_prompts)
+    sam_predictor = get_sam2_predictor(args.sam_model_cfg, args.sam_checkpoint, device=device)
+    clip_classifier = CLIPClassifier(device=device)
+    clip_prompts = load_prompts_from_json(args.clip_prompts)
 
     # --- 2. Evaluation Loop ---
     segmentation_results = []
     classification_results = []
 
     print(f"Evaluating on {len(bcss_dataset)} test samples...")
-    for sample in tqdm(bcss_dataset):
-        image = sample['image_np']
-        gt_mask = sample['mask'].numpy()
+    for batch in tqdm(data_loader):
+        # Unpack batch since batch_size is 1
+        image = batch['image_np'][0].numpy()
+        gt_mask = batch['mask'][0].numpy()
+        unique_classes = batch['unique_classes'][0].numpy()
         
-        unique_classes = sample['unique_classes']
         unique_classes = unique_classes[unique_classes != 0] # Exclude background
 
         for class_id in unique_classes:
@@ -87,7 +95,7 @@ def run_evaluation(args):
 
             # --- Run Classification ---
             cropped_image = crop_region_from_mask(image, final_mask)
-            predicted_class_name = clip_classifier.classify_region(cropped_image)
+            predicted_class_name = clip_classifier.classify_region(cropped_image, clip_prompts)
 
             if predicted_class_name is not None:
                 classification_results.append({'true': gt_class_name, 'pred': predicted_class_name})
@@ -136,6 +144,7 @@ def run_evaluation(args):
     with open(metrics_filename, 'w') as f:
         json.dump(metrics, f, indent=4)
     print(f"All metrics saved to {metrics_filename}")
+
 
 if __name__ == '__main__':
     # Define project root based on the script's location

@@ -33,15 +33,8 @@ def show_box(box, ax):
     w, h = box[1] - box[0]
     ax.add_patch(plt.Rectangle((x0, y0), w, h, edgecolor='green', facecolor=(0,0,0,0), lw=2))
 
-def get_sam2_predictor(model_cfg, checkpoint):
-    """Initializes and returns a SAM 2 predictor."""
-    if torch.backends.mps.is_available():
-        device = "mps"
-    elif torch.cuda.is_available():
-        device = "cuda"
-    else:
-        device = "cpu"
-
+def get_sam2_predictor(model_cfg, checkpoint, device):
+    """Initializes and returns a SAM 2 predictor on the specified device."""
     # Get the path to the sam2 package root
     sam2_pkg_root = sam2.__path__[0]
     # Get the relative path of the config file w.r.t. the package root
@@ -200,21 +193,21 @@ def run_and_visualize(predictor, image, gt_mask, class_id, prompt_type, use_neg_
     print(f"Result saved to {output_filename}")
     plt.close()
 
-def main():
+def main(args):
     """Main function to run the segmentation with different prompt strategies."""
+    # --- 0. Device Selection ---
+    device = get_device()
+    print(f"Using device: {device}")
+
     # Load dataset
-    image_dir = 'data/bcss/images'
-    mask_dir = 'data/bcss/masks'
-    bcss_dataset = BCSSDataset(image_dir=image_dir, mask_dir=mask_dir, split='test')
+    bcss_dataset = BCSSDataset(image_dir=args.image_dir, mask_dir=args.mask_dir, split='test')
     sample = bcss_dataset[0]
     image = sample['image_np']
     gt_mask = sample['mask'].numpy()
-    class_id = 1 # Example class_id
+    class_id = args.class_id # Example class_id
 
     # Get SAM 2 predictor
-    model_cfg = "configs/sam2.1/sam2.1_hiera_l.yaml"
-    checkpoint = "sam2/checkpoints/sam2.1_hiera_large.pt"
-    predictor = get_sam2_predictor(model_cfg, checkpoint)
+    predictor = get_sam2_predictor(args.model_cfg, args.checkpoint, device)
 
     # Run for different prompt types and enhancements
     run_and_visualize(predictor, image, gt_mask, class_id, 'box', use_neg_points=False, apply_postprocessing=False)
@@ -222,4 +215,14 @@ def main():
     run_and_visualize(predictor, image, gt_mask, class_id, 'box', use_neg_points=True, apply_postprocessing=True)
 
 if __name__ == '__main__':
-    main()
+    import argparse
+    from device_utils import get_device
+
+    parser = argparse.ArgumentParser(description="Run SAM 2 segmentation with different prompt strategies.")
+    parser.add_argument('--image_dir', type=str, default='data/bcss/images', help='Directory for images.')
+    parser.add_argument('--mask_dir', type=str, default='data/bcss/masks', help='Directory for masks.')
+    parser.add_argument('--model_cfg', type=str, default="configs/sam2.1/sam2.1_hiera_l.yaml", help='SAM model configuration file.')
+    parser.add_argument('--checkpoint', type=str, default="sam2/checkpoints/sam2.1_hiera_large.pt", help='Path to SAM checkpoint.')
+    parser.add_argument('--class_id', type=int, default=1, help='Class ID to segment.')
+    args = parser.parse_args()
+    main(args)

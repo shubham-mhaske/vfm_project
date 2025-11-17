@@ -1,4 +1,3 @@
-
 girder_client
 pillow
 numpy
@@ -13,3 +12,11 @@ scikit-learn
 matplotlib
 pandas
 google-generativeai
+tensorboard
+submitit
+tensordict
+hydra-core
+fvcore
+tqdm
+iopath
+jupyter

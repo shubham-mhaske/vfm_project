@@ -49,6 +49,7 @@ python src/generate_multimodal_prompts.py
 **What to check before editing or running code**
 - Confirm you have the nested repos (`sam2/`, `CrowdsourcingDataset-Amgadetal2019/`) checked out at the correct commits (README documents commit hashes).
 - Ensure checkpoints exist in `sam2/checkpoints` and/or `models/sam_checkpoints`.
+- For training: `tensorboard` is required but not always installed by default. If you see `ModuleNotFoundError: No module named 'tensorboard'`, run `pip install tensorboard`.
 - Run small smoke runs on a subset of the dataset to validate changes (the dataset loader can be sliced for quick tests).
 
 **If you need to modify experiments**

@@ -44,30 +44,27 @@ def crop_region_from_mask(image_np, mask):
     return Image.fromarray(cropped_image_np)
 
 class CLIPClassifier:
-    def __init__(self, prompt_file_path: str, model_name="openai/clip-vit-base-patch32"):
+    def __init__(self, model_name="openai/clip-vit-base-patch32", device=None):
         """
-        Initializes the CLIP classifier by loading prompts from a specified JSON file.
+        Initializes the CLIP classifier.
         
         Args:
-            prompt_file_path (str): Path to the JSON file containing prompt ensembles.
             model_name (str): The CLIP model to load from Hugging Face.
+            device (torch.device, optional): The device to load the model on. Defaults to CPU.
         """
-        self.device = "cuda" if torch.cuda.is_available() else "cpu"
+        self.device = device if device else torch.device("cpu")
         self.model = CLIPModel.from_pretrained(model_name).to(self.device)
         self.processor = CLIPProcessor.from_pretrained(model_name, use_fast=True)
-        
-        # Load prompts from the specified JSON file
-        self.prompts = load_prompts_from_json(prompt_file_path) 
-        self.class_names = list(self.prompts.keys())
-        print(f"CLIPClassifier initialized with prompts from: {prompt_file_path}")
+        print(f"CLIPClassifier initialized on device: {self.device}")
 
-    def classify_region(self, image):
-        """Classifies a cropped image region using CLIP."""
+    def classify_region(self, image, prompts):
+        """Classifies a cropped image region using CLIP with a given set of prompts."""
         if image is None:
             return None
 
+        class_names = list(prompts.keys())
         # Create text prompts for all classes
-        text_inputs = [prompt for class_name in self.class_names for prompt in self.prompts[class_name]]
+        text_inputs = [prompt for class_name in class_names for prompt in prompts[class_name]]
         
         # Process image and text
         inputs = self.processor(text=text_inputs, images=image, return_tensors="pt", padding=True)
@@ -81,7 +78,7 @@ class CLIPClassifier:
         probs = logits_per_image.softmax(dim=1)
 
         # Average the probabilities for each class ensemble
-        num_prompts_per_class = [len(self.prompts[class_name]) for class_name in self.class_names]
+        num_prompts_per_class = [len(prompts[class_name]) for class_name in class_names]
         class_probs = []
         start_index = 0
         for num_prompts in num_prompts_per_class:
@@ -97,4 +94,4 @@ class CLIPClassifier:
         avg_probs = torch.stack(class_probs, dim=1)
         predicted_class_index = avg_probs.argmax(dim=1).item()
         
-        return self.class_names[predicted_class_index]
+        return class_names[predicted_class_index]
