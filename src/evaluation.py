@@ -36,8 +36,8 @@ def run_evaluation(args):
     os.makedirs(args.output_dir, exist_ok=True)
 
     # --- 1. Load Data and Models ---
-    image_dir = 'data/bcss/images'
-    mask_dir = 'data/bcss/masks'
+    image_dir = os.path.join(args.data_dir, 'images')
+    mask_dir = os.path.join(args.data_dir, 'masks')
     bcss_dataset = BCSSDataset(image_dir=image_dir, mask_dir=mask_dir, split='test')
     
     # CRITICAL: This line is removed to run on the FULL test set.
@@ -138,6 +138,9 @@ def run_evaluation(args):
     print(f"All metrics saved to {metrics_filename}")
 
 if __name__ == '__main__':
+    # Define project root based on the script's location
+    project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+
     parser = argparse.ArgumentParser(description="Run VFM Evaluation Pipeline")
     
     # --- Experiment Control Arguments ---
@@ -145,7 +148,7 @@ if __name__ == '__main__':
                         help="Directory to save experiment results (metrics.json, confusion_matrix.png)")
     
     parser.add_argument('--sam_model_cfg', type=str, 
-                        default="configs/sam2.1/sam2.1_hiera_l.yaml",
+                        default="sam2/sam2/configs/sam2.1/sam2.1_hiera_l.yaml",
                         help="Path to the SAM model config file.")
     
     parser.add_argument('--sam_checkpoint', type=str, 
@@ -164,6 +167,17 @@ if __name__ == '__main__':
                         default=True,
                         help="Flag to use negative points.")
 
+    parser.add_argument('--data_dir', type=str, 
+                        default='data/bcss',
+                        help="Path to the BCSS dataset directory, relative to project root.")
+
     args = parser.parse_args()
+
+    # Resolve all paths relative to the project root to make execution location-independent
+    args.output_dir = os.path.join(project_root, args.output_dir)
+    args.sam_model_cfg = os.path.join(project_root, args.sam_model_cfg)
+    args.sam_checkpoint = os.path.join(project_root, args.sam_checkpoint)
+    args.clip_prompts = os.path.join(project_root, args.clip_prompts)
+    args.data_dir = os.path.join(project_root, args.data_dir)
     
     run_evaluation(args)

@@ -1,0 +1,47 @@
+{
+    "tumor": [
+        "densely crowded dark purple cells packed together",
+        "large irregular purple nuclei in chaotic arrangement",
+        "thick masses of deep purple tissue with high cell density",
+        "overlapping dark purple nuclei forming a solid sheet",
+        "clustered purple nuclei of varying shapes and sizes",
+        "jumbled piles of large, intensely purple nuclei",
+        "a dense aggregate of large, irregularly shaped purple cells"
+    ],
+    "stroma": [
+        "bright pink wavy fibers forming streaming patterns",
+        "light pink collagen with scattered thin elongated nuclei",
+        "parallel bundles of pink fibrous tissue",
+        "wispy strands of light pink tissue with a few skinny purple nuclei",
+        "a sparse collection of long purple nuclei within a pink fibrous background",
+        "dense sheets of bright pink fibrous material",
+        "a loose mesh of thin pink strings and threads"
+    ],
+    "lymphocyte": [
+        "many tiny dark blue dots scattered throughout",
+        "small uniform round purple circles densely clustered",
+        "dense groups of tiny dark blue spheres",
+        "a solid sheet of tiny deep purple beads",
+        "countless small dark purple specks sprinkled everywhere",
+        "a dense patch of small inky blue-purple dots",
+        "a solid field of very small dark purple circles"
+    ],
+    "necrosis": [
+        "pale ghostly pink tissue with faded blurry appearance",
+        "washed out pale areas with fragmented cell debris",
+        "smudgy faint pink tissue losing structure",
+        "formless cloudy pink areas where purple dots have vanished",
+        "dull pink disintegrating tissue with specks of dark purple dust",
+        "hazy pale pink unstructured blotches with no clear cell shapes",
+        "faint pink cell outlines with blurry empty centers"
+    ],
+    "blood_vessel": [
+        "circular empty white space surrounded by thin pink wall",
+        "ring-shaped hollow area with pink rim",
+        "round opening with thin pink tissue lining the edge",
+        "oval opening enclosed by a thin ring of pink tissue",
+        "hollow tube in cross-section with a fine pink outline",
+        "round white space defined by a single layer of pink cells",
+        "open channel lined by a smooth pink border"
+    ]
+}

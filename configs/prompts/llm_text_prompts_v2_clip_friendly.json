@@ -1,0 +1,47 @@
+{
+    "tumor": [
+        "a dense crowd of large, dark purple cells",
+        "solid sheets of messy dark blue circles",
+        "large irregular dark purple blobs clustered together",
+        "a packed-together mass of large, dark blue dots",
+        "disorganized clumps of big purple and pink cells",
+        "a solid, messy sheet of dark purple dots",
+        "crowded and jumbled large dark blue cells"
+    ],
+    "stroma": [
+        "bright pink wavy fibers streaming together",
+        "a sea of bright pink with sparse, tiny purple specks",
+        "wavy bands of bright pink with scattered purple dots",
+        "long thin purple dots sprinkled across a pink background",
+        "swirling patterns of stringy bright pink tissue",
+        "a field of pink with very few dark blue dots",
+        "long ribbons of pink with stretched out purple dots"
+    ],
+    "lymphocyte": [
+        "A dense crowd of tiny dark purple dots.",
+        "Many small, round, dark blue circles packed together.",
+        "Tiny dark purple dots scattered throughout the pink tissue.",
+        "A solid sheet of very small, deep purple cells.",
+        "Clusters of tiny, round dark blue spots.",
+        "A field of tightly packed small dark purple dots.",
+        "Countless small, dark purple circles crowded together."
+    ],
+    "necrosis": [
+        "a large area of pale, smudgy pink with a messy, unstructured look",
+        "washed-out pink background with scattered tiny dark purple fragments",
+        "ghostly pale pink tissue with a blurry, faded appearance",
+        "a disorganized patch of pale pink with jumbled dark specks",
+        "large irregular region of cloudy pink and crumbled dark dots",
+        "messy field of pale pink with broken bits of dark purple",
+        "a pale pink area that looks like faded cells and dark dust"
+    ],
+    "blood_vessel": [
+        "a circular hollow shape with a thin pink wall",
+        "a round pink tube filled with small bright pink dots",
+        "an empty white circle surrounded by a pink border",
+        "a hollow circle lined with tiny flat purple nuclei",
+        "a tube-like shape packed with reddish pink circles",
+        "a round opening enclosed by a solid pink ring",
+        "a cluster of bright pink dots contained within a thin pink wall"
+    ]
+}

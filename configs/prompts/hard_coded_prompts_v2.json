@@ -1,0 +1,37 @@
+{
+    "tumor": [
+        "densely crowded dark purple cells packed together",
+        "large irregular purple nuclei in chaotic arrangement",
+        "thick masses of deep purple tissue with high cell density",
+        "disorganized clusters of dark purple cells",
+        "purple nuclei dominating the image with minimal space between cells"
+    ],
+    "stroma": [
+        "bright pink wavy fibers forming streaming patterns",
+        "light pink collagen with scattered thin elongated nuclei",
+        "parallel bundles of pink fibrous tissue",
+        "smooth bright pink background with sparse dark spindle nuclei",
+        "thread-like pink fibers running in wavy patterns"
+    ],
+    "lymphocyte": [
+        "many tiny dark blue dots scattered throughout",
+        "small uniform round purple circles densely clustered",
+        "dense groups of tiny dark blue spheres",
+        "scattered small dark purple dots of equal size",
+        "clusters of tiny uniform blue-purple cells"
+    ],
+    "necrosis": [
+        "pale ghostly pink tissue with faded blurry appearance",
+        "washed out pale areas with fragmented cell debris",
+        "smudgy faint pink tissue losing structure",
+        "ghostly pale region with indistinct borders",
+        "faded pink areas with scattered dark fragments"
+    ],
+    "blood_vessel": [
+        "circular empty white space surrounded by thin pink wall",
+        "ring-shaped hollow area with pink rim",
+        "round opening with thin pink tissue lining the edge",
+        "tube-like hollow structure with smooth pink walls",
+        "circular white lumen with delicate pink border"
+    ]
+}

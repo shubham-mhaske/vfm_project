@@ -8,6 +8,7 @@ import cv2
 # Add the sam2 directory to the Python path
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'sam2')))
 
+import sam2
 from sam2.build_sam import build_sam2
 from sam2.sam2_image_predictor import SAM2ImagePredictor
 from dataset import BCSSDataset
@@ -40,7 +41,18 @@ def get_sam2_predictor(model_cfg, checkpoint):
         device = "cuda"
     else:
         device = "cpu"
-    predictor = SAM2ImagePredictor(build_sam2(model_cfg, checkpoint, device=device))
+
+    # Get the path to the sam2 package root
+    sam2_pkg_root = sam2.__path__[0]
+    # Get the relative path of the config file w.r.t. the package root
+    relative_cfg_path = os.path.relpath(model_cfg, sam2_pkg_root)
+    # Hydra expects forward slashes
+    relative_cfg_path = relative_cfg_path.replace('\\', '/')
+
+    # The config name should be relative to the package's config directory,
+    # which is what build_sam2 expects.
+    predictor = SAM2ImagePredictor(build_sam2(relative_cfg_path, checkpoint, device=device))
+
     return predictor
 
 def get_prompts_from_mask(binary_mask, num_points=5, neg_point_margin=10):

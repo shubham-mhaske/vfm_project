@@ -1,0 +1,47 @@
+{
+    "tumor": [
+        "Densely packed clusters of dark purple cells",
+        "Jagged and irregular branching patterns of tissue",
+        "Large dark purple round cells with tiny white circles inside",
+        "Small scattered clumps floating in large white spaces",
+        "Circular structures made of layered pink and purple material",
+        "Solid thick sheets of crowded purple cells",
+        "Wavy borders of tissue fragments against white background"
+    ],
+    "stroma": [
+        "Thick, bright pink wavy strands of fibrous material",
+        "Large irregular white spaces separating the tissue",
+        "Lace-like pattern made of dense pink tissue",
+        "Sparse small dark purple dots scattered throughout the pink",
+        "Irregular branching pattern of tissue strips",
+        "Clumps of crowded pale purple cells filling the space",
+        "Pink tissue forming thick, disconnected, rope-like pieces"
+    ],
+    "lymphocyte": [
+        "Densely packed clusters of tiny dark purple dots",
+        "Large, irregular patches of solid purple tissue",
+        "Minimal pale pink space visible between the crowded cells",
+        "Fragmented tissue masses floating in a white void",
+        "The cellular areas look uniform and very dense",
+        "Sharp, jagged borders around the dark colored shapes",
+        "Small scattered groups of purple cells separated by white"
+    ],
+    "necrosis": [
+        "Small pieces of purple and pink tissue scattered widely",
+        "Large pale pink areas with fuzzy or washed out textures",
+        "Irregular clusters of dense dark purple cells",
+        "Wavy, sharp, and jagged edges around the tissue",
+        "Dense pink background crowded with tiny dark dots",
+        "Large white background surrounding sparse tissue fragments",
+        "Clear rounded spaces containing internal purple blobs"
+    ],
+    "blood_vessel": [
+        "Circular white empty spaces in pink tissue",
+        "Thin curved lines of dark purple cells",
+        "A dense, solid bright pink background mass",
+        "Scattered round holes of various sizes",
+        "Irregular large blob of pink and purple tissue",
+        "Fragments of pink tissue with wavy edges",
+        "Vessel lining made of dark purple cells"
+    ]
+}

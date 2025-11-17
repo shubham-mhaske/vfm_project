@@ -1,0 +1,47 @@
+{
+    "tumor": [
+        "densely crowded dark purple cells packed together",
+        "large irregular purple nuclei in chaotic arrangement",
+        "thick masses of deep purple tissue with high cell density",
+        "Large dark purple nuclei showing significant variation in shape.",
+        "Dense sheets of purple cells with minimal pale pink cytoplasm visible.",
+        "Clumps of highly cellular dark purple tissue lacking distinct cell borders.",
+        "Haphazard arrangement of numerous large dark purple nuclei."
+    ],
+    "stroma": [
+        "bright pink wavy fibers forming streaming patterns",
+        "light pink collagen with scattered thin elongated nuclei",
+        "parallel bundles of pink fibrous tissue",
+        "Thick pink bands separated by wide empty white gaps.",
+        "Spindle-shaped dark purple nuclei embedded in bright pink matrix.",
+        "Dense ropes of magenta tissue forming loose intersecting bands.",
+        "Long thin strands of pink material resembling stretched fibers."
+    ],
+    "lymphocyte": [
+        "many tiny dark blue dots scattered throughout",
+        "small uniform round purple circles densely clustered",
+        "dense groups of tiny dark blue spheres",
+        "Extremely dark purple round nuclei tightly crowded together",
+        "Clumps of small uniform purple nuclei forming isolated islands",
+        "Tiny deeply violet circles packed into thick masses",
+        "A highly granular texture made of minute dark purple dots"
+    ],
+    "necrosis": [
+        "pale ghostly pink tissue with faded blurry appearance",
+        "washed out pale areas with fragmented cell debris",
+        "smudgy faint pink tissue losing structure",
+        "Fragmented pink material scattered with dark purple cellular debris.",
+        "Ghostly pale pink outlines mixed throughout with fine purple nuclear dust.",
+        "Amorphous pink material with scattered dark blue shattered cell remnants.",
+        "Patchy pink tissue dissolving into a sparse collection of dusty granules."
+    ],
+    "blood_vessel": [
+        "circular empty white space surrounded by thin pink wall",
+        "ring-shaped hollow area with pink rim",
+        "round opening with thin pink tissue lining the edge",
+        "smooth curved pink tissue outlining a clear space",
+        "delicate pink lining surrounding a large clear channel",
+        "oval empty region defined by a thin border of pale pink tissue",
+        "cross section of a small hollow tube with a thin pink wall"
+    ]
+}
