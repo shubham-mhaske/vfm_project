@@ -2,8 +2,7 @@
 data/
 CrowdsourcingDataset-Amgadetal2019/
 
-# SAM folder
-sam2/
+
 
 # Models
 models/
