@@ -7,10 +7,16 @@ def main(args):
     """Launches the SAM 2 fine-tuning job with the specified configuration."""
     
     project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+    sam2_root = os.path.join(project_root, 'sam2')
     
-    # Prepend the project root to the PYTHONPATH environment variable
+    # Prepend sam2/ and project root to PYTHONPATH
+    # This allows Python to find:
+    # - sam2.sam2.configs module (needed by Hydra)
+    # - training.utils module (needed by train.py)
+    # - src.finetune_dataset module (needed by config)
     env = os.environ.copy()
-    env['PYTHONPATH'] = f"{project_root}:{env.get('PYTHONPATH', '')}"
+    env['PYTHONPATH'] = f"{sam2_root}:{project_root}:{env.get('PYTHONPATH', '')}"
+    env['HYDRA_FULL_ERROR'] = '1'
     
     train_script_path = os.path.join(project_root, args.train_script)
     

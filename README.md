@@ -1,192 +1,158 @@
-# Visual Foundation Model (VFM) Project
+# Visual Foundation Model for Histopathology Image Segmentation
 
-This project is designed for medical image segmentation tasks, specifically focusing on breast cancer histology images. It utilizes the Segment Anything Model (SAM/SAM2) and provides a framework for finetuning, evaluation, and running baseline comparisons.
+This project provides a comprehensive framework for utilizing and evaluating Visual Foundation Models (VFMs) like the Segment Anything Model (SAM/SAM2) for medical image segmentation, with a specific focus on breast cancer histology images from the BCSS dataset.
 
-## Code Structure
+The framework supports various prompting strategies for zero-shot segmentation, including hard-coded prompts and LLM-generated text and multimodal prompts. It also includes scripts for fine-tuning SAM, evaluating segmentation performance, and running experiments in a reproducible manner, both locally and on High-Performance Computing (HPC) clusters.
 
-The project is organized into the following key directories:
+## Features
 
--   `/src`: Contains all the primary Python source code for the project.
-    -   `dataset.py`: Defines PyTorch `Dataset` classes for loading and preprocessing data.
-    -   `prompt_generation.py`: Intended for generating prompts (e.g., points, boxes) for the SAM model from masks. **(Note: This file is currently empty).**
-    -   `sam_segmentation.py`: Contains the core logic for performing segmentation using the SAM model.
-    -   `train_sam.py`: The main script for finetuning the SAM model on a custom dataset.
-    -   `evaluate_segmentation.py`: The main script for evaluating the performance of a trained segmentation model.
--   `/data`: The default directory where all datasets are stored.
-    -   `bcss/`: Intended for the Breast Cancer Semantic Segmentation (BCSS) dataset.
--   `/sam2`: A Git submodule containing the SAM2 model source code and checkpoints.
--   `/CrowdsourcingDataset-Amgadetal2019`: A Git submodule containing scripts to download and manage the crowdsourced breast cancer dataset from Amgad et al., 2019.
--   `/notebooks`: Jupyter notebooks for experimentation, visualization, and model testing.
--   `/models`: Directory for storing model checkpoints, both pre-trained and finetuned.
+- **Zero-Shot Segmentation**: Evaluate pre-trained SAM with different prompting strategies.
+- **LLM-Powered Prompt Engineering**: Automatically generate text and multimodal prompts using Large Language Models (LLMs) like Gemini.
+- **Fine-Tuning**: Fine-tune the SAM model on the BCSS dataset for improved performance.
+- **Comprehensive Evaluation**: Calculate segmentation metrics (like Dice score) and class-based performance.
+- **Reproducible Experiments**: Standardized scripts and configuration files for running experiments.
+- **HPC Ready**: Includes a SLURM script for running jobs on GPU nodes.
 
-## Dataset Setup
+## Directory Structure
 
-The project uses the Breast Cancer Semantic Segmentation (BCSS) dataset, which was generated via crowdsourcing by Amgad et al., 2019. The `BCSSDataset` class in `src/dataset.py` is configured to load this data from the `/data/bcss` directory.
+```
+/
+├───configs/                # Configuration files for experiments.
+│   └───prompts/            # JSON files with generated prompts for SAM.
+├───data/                   # Root directory for datasets (not tracked by Git).
+│   └───bcss/               # BCSS dataset images and masks.
+├───results/                # Output directory for experiment results (not tracked by Git).
+│   └───[experiment_name]/  # Each experiment saves its metrics and outputs here.
+├───src/                    # All Python source code.
+│   ├───main.py             # Main script to run all experiments.
+│   ├───sam_segmentation.py # Core logic for SAM-based segmentation.
+│   ├───evaluation.py       # Logic for evaluating segmentation masks.
+│   ├───train_sam.py        # Script for fine-tuning SAM.
+│   ├───dataset.py          # PyTorch Dataset and DataLoader definitions.
+│   ├───prompt_generation.py # Scripts for generating prompts using LLMs.
+│   └───...
+├───sam2/                   # Git submodule for the SAM2 model.
+├───CrowdsourcingDataset-Amgadetal2019/ # Git submodule for BCSS dataset download scripts.
+├───models/                 # Directory for storing model checkpoints (not tracked by Git).
+├───notebooks/              # Jupyter notebooks for exploration and analysis.
+├───run_gpu.slurm           # SLURM script for running jobs on an HPC cluster.
+└───README.md               # This file.
+```
 
-Follow these steps to download and set up the dataset:
+## Setup and Installation
 
-### Step 1: Download the Data
-
-The `CrowdsourcingDataset-Amgadetal2019` submodule provides a script to download the images and masks.
-
-1.  Navigate to the submodule directory:
-    ```bash
-    cd CrowdsourcingDataset-Amgadetal2019
-    ```
-2.  Install the required Python packages:
-    ```bash
-    pip install girder_client numpy imageio scikit-image
-    ```
-3.  Run the download script:
-    ```bash
-    python download_crowdsource_dataset.py
-    ```
-4.  The script will prompt you for authentication to the Girder API. You can register for a free account if you do not have one.
-
-This will download the data into the `CrowdsourcingDataset-Amgadetal2019/data` directory.
-
-### Step 2: Organize the Data for the Project
-
-The `BCSSDataset` loader expects the files in the root `/data/bcss` directory. You will need to move or copy the downloaded files to the correct location.
-
-1.  Move the downloaded images to `/data/bcss/images/`.
-2.  Move the downloaded masks to `/data/bcss/masks/`.
-
-The `BCSSDataset` class will then automatically handle the splitting of data into training, validation, and test sets.
-
-## About the BCSS Dataset
-
-The Breast Cancer Semantic Segmentation (BCSS) dataset from Amgad et al., 2019, consists of high-resolution image patches extracted from breast cancer histology slides. It is designed for semantic segmentation tasks.
-
-### File Naming Convention
-
-Each image and mask filename provides important metadata:
-`TCGA-A1-A0SK-DX1_xmin45749_ymin25055_MPP-0.2500.png`
-
--   `TCGA-A1-A0SK-DX1`: The identifier for the original whole-slide image from The Cancer Genome Atlas (TCGA).
--   `xmin..._ymin...`: The x and y coordinates of the top-left corner of the patch within the original slide.
--   `MPP-0.2500`: The microns-per-pixel resolution at which the patch was saved.
-
-### Image and Mask Format
-
--   **Images**: Standard RGB PNG files.
--   **Masks**: Single-channel PNG files where each pixel's integer value represents a specific tissue class.
-
-### Class Definitions
-
-The pixel values in the masks correspond to the following classes:
-
--   `0`: Background
--   `1`: Tumor
--   `2`: Stroma
--   `3`: Lymphocyte
--   `4`: Necrosis
--   `5`: Blood Vessel
-
-## Data Processing
-
-1.  **Data Loading & Splitting:** The `src/dataset.py` file defines the `BCSSDataset` class, which is responsible for loading and preparing the data. It performs a deterministic split to ensure reproducible experiments:
-    -   **Test Set**: A fixed test set is created using all images whose TCGA identifiers start with `TCGA-OL-`, `TCGA-LL-`, `TCGA-E2-`, `TCGA-EW-`, `TCGA-GM-`, or `TCGA-S3-`. This is critical for ensuring all baseline comparisons are evaluated on the same unseen data.
-    -   **Training & Validation Sets**: All remaining files are shuffled reproducibly (using a fixed random seed), with 80% used for training and 20% for validation.
-
-2.  **Data Structure:** When you iterate over a `BCSSDataset` object (e.g., in a PyTorch `DataLoader`), it returns a dictionary for each image-mask pair with the following structure:
-
-    ```python
-    {
-        'image': torch.Tensor,      # The transformed image tensor (C, H, W)
-        'mask': torch.Tensor,       # The mask tensor (H, W)
-        'unique_classes': np.array, # A NumPy array of class IDs present in this mask
-        'filename': str,            # The original filename of the image
-        'image_np': np.array        # The original image as a NumPy array (H, W, C)
-    }
-    ```
-
-
-## New User Setup and Repository Guide
-
-This guide explains the repository's structure and provides a step-by-step process for setting up the project environment.
-
-### Repository Structure: Nested Repositories
-
-This project uses a **nested repository** structure to include external dependencies. The `sam2` and `CrowdsourcingDataset-Amgadetal2019` directories are separate Git repositories nested inside the main project.
-
-This means the main project does not track the individual files of these nested repositories. Instead, it tracks a reference to a specific commit of each one. This ensures that the exact version of the dependency code is used, which is critical for reproducibility.
-
-**What is in the Repository (Tracked by Git):**
--   `/src`, `/notebooks`, `/configs`: All source code, experiment notebooks, and configuration files.
--   `requirements.txt`: A list of Python packages required for the project.
--   A reference to the specific commits of the `sam2` and `CrowdsourcingDataset-Amgadetal2019` repositories.
-
-**What is NOT in the Repository (Local Files):**
--   The full contents of `sam2` and `CrowdsourcingDataset-Amgadetal2019`. These must be cloned separately.
--   `/data`: Contains the large BCSS dataset. This is downloaded locally.
--   `/models` & `/checkpoints`: Contain large, pre-trained model weights. These are downloaded locally.
--   `/finetune_logs`: Contains outputs from training runs (logs, TensorBoard files). These are generated during execution.
--   Python cache (`__pycache__`), build artifacts (`*.egg-info`), and local environment folders (`.venv`).
-
-### Step-by-Step Setup Instructions
+Follow these steps to set up the project environment.
 
 **1. Clone the Main Repository**
-
-First, clone the main project repository:
 ```bash
 git clone <your-repository-url>
 cd <project-directory>
 ```
 
-**2. Set Up Nested Repositories**
-
-After cloning the main project, you must manually clone the nested repositories and check out the correct commits.
-
-**For `CrowdsourcingDataset-Amgadetal2019`:**
+**2. Set Up Nested Submodules**
+This project uses Git submodules for `sam2` and the dataset downloader. Initialize them with:
 ```bash
-# Remove the placeholder directory if it exists
-rm -rf CrowdsourcingDataset-Amgadetal2019
-# Clone the repository
-git clone https://github.com/shubham-mhaske/BCSS.git CrowdsourcingDataset-Amgadetal2019
-# Check out the specific commit
-cd CrowdsourcingDataset-Amgadetal2019
-git checkout be25c5373d435a1a290262566241494da827b04a
-cd ..
+git submodule update --init --recursive
 ```
 
-**For `sam2`:**
+**3. Create a Python Environment and Install Dependencies**
+It is recommended to use a virtual environment.
 ```bash
-# Remove the placeholder directory if it exists
-rm -rf sam2
-# Clone the repository
-git clone https://github.com/shubham-mhaske/sam2.git sam2
-# Check out the specific commit
-cd sam2
-git checkout 6fb05b743026ab656f5e9c7edbd5018b5f3c7a37
-cd ..
-```
-
-**3. Install Dependencies**
-
-Install all required Python packages:
-
-```bash
+python3 -m venv venv
+source venv/bin/activate
 pip install -r requirements.txt
 ```
 
 **4. Download Pre-trained Models**
-
-The project uses checkpoints from both SAM and SAM2.
-
--   **SAM2 Models:** The `sam2` submodule includes a script to download its models. Run it from the project root:
-    ```bash
-    bash sam2/checkpoints/download_ckpts.sh
-    ```
--   **Original SAM Model:** The project also uses the original ViT-H SAM model. Create the directory for it and download the checkpoint from the official source.
-    ```bash
-    mkdir -p models/sam_checkpoints
-    # Download sam_vit_h_4b8939.pth and place it in models/sam_checkpoints/
-    # The model can be found in the official Segment Anything repository.
-    ```
+- **SAM2 Models**: The `sam2` submodule includes a script to download its models.
+  ```bash
+  bash sam2/checkpoints/download_ckpts.sh
+  ```
+- **Original SAM Model**: Download the official ViT-H SAM model.
+  ```bash
+  mkdir -p models/sam_checkpoints
+  wget -P models/sam_checkpoints https://dl.fbaipublicfiles.com/segment_anything/sam_vit_h_4b8939.pth
+  ```
 
 **5. Download the Dataset**
+The dataset is downloaded using the script from the `CrowdsourcingDataset-Amgadetal2019` submodule.
+```bash
+# Navigate to the submodule directory
+cd CrowdsourcingDataset-Amgadetal2019
 
-Follow the instructions in the **Dataset Setup** section above to download and organize the BCSS dataset in the `/data/bcss` directory.
+# Install its specific dependencies
+pip install girder_client numpy imageio scikit-image
 
-After completing these steps, your local environment will be fully set up and ready for running the training and evaluation scripts.
+# Run the download script (you may need to register for an account)
+python download_crowdsource_dataset.py
+
+# Return to the project root
+cd ..
+
+# Organize the data into the project's data directory
+# Create the destination folders
+mkdir -p data/bcss/images data/bcss/masks
+
+# Move the downloaded files
+mv CrowdsourcingDataset-Amgadetal2019/data/wsis/* data/bcss/images/
+mv CrowdsourcingDataset-Amgadetal2019/data/annotations/* data/bcss/masks/
+```
+
+## Running Experiments
+
+All experiments are managed through `src/main.py`. You can select the experiment to run using the `--experiment` flag.
+
+**Available Experiments:**
+- `zeroshot_sam_hardcoded`: Zero-shot SAM with hard-coded point prompts.
+- `zeroshot_sam_llm_text`: Zero-shot SAM with text prompts generated by an LLM.
+- `zeroshot_sam_llm_multimodal`: Zero-shot SAM with multimodal (text + image) prompts from an LLM.
+- `finetune_sam`: Fine-tune the SAM model on the BCSS dataset.
+
+**Example Usage:**
+
+```bash
+# Run the baseline zero-shot experiment with hard-coded prompts
+python src/main.py --experiment zeroshot_sam_hardcoded --output_dir results/exp_hardcoded
+
+# Run the experiment with LLM-generated text prompts
+python src/main.py --experiment zeroshot_sam_llm_text --output_dir results/exp_llm_text
+
+# Fine-tune the SAM model
+python src/main.py --experiment finetune_sam --output_dir results/finetuned_model
+```
+
+The results of each experiment (metrics, logs, and sample images) will be saved to the specified `--output_dir`.
+
+## Configuration
+
+The prompts used for the LLM-based experiments are stored in `configs/prompts/`. These JSON files are generated by the scripts in `src/` (e.g., `generate_text_prompts.py`).
+
+- `hard_coded_prompts.json`: Simple, manually defined prompts.
+- `llm_text_prompts_*.json`: Text prompts generated by different versions of LLM prompting strategies.
+- `llm_multimodal_prompts_*.json`: Multimodal prompts generated by different versions of LLM prompting strategies.
+
+## Running on an HPC Cluster (SLURM)
+
+The `run_gpu.slurm` script is configured to run the training/evaluation on a GPU node in a SLURM-based HPC environment.
+
+**To use it:**
+1.  Modify the script to set your account details and desired Python environment.
+2.  Adjust the `python src/main.py ...` command to run the experiment you want.
+3.  Submit the job to the queue:
+    ```bash
+    sbatch run_gpu.slurm
+    ```
+The output logs will be saved in a `logs/` directory in your scratch space.
+
+## Dataset Details
+
+This project uses the Breast Cancer Semantic Segmentation (BCSS) dataset from Amgad et al., 2019.
+
+- **Classes**: The masks contain integer pixel values corresponding to different tissue types:
+  - `0`: Background
+  - `1`: Tumor
+  - `2`: Stroma
+  - `3`: Lymphocyte
+  - `4`: Necrosis
+  - `5`: Blood Vessel
+- **Data Split**: The `src/dataset.py` script performs a deterministic split into training, validation, and test sets based on the TCGA slide identifiers to ensure that images from the same patient do not cross from the training set into the test set.

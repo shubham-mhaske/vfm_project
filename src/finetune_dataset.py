@@ -2,7 +2,7 @@ import os
 import numpy as np
 import torch
 from PIL import Image
-from sam2.training.dataset.vos_raw_dataset import VOSRawDataset, VOSFrame, VOSVideo
+from training.dataset.vos_raw_dataset import VOSRawDataset, VOSFrame, VOSVideo
 
 class BCSSSegmentLoader:
     def __init__(self, mask_path):
