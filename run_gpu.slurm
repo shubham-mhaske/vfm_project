@@ -9,17 +9,17 @@
 #SBATCH --gres=gpu:1
 #SBATCH --time=24:00:00
 
-# Load required modules
+# Load required modules/environment
 module restore dl
 
-# Activate Python virtual environment
-# IMPORTANT: Replace with the actual path to your virtual environment
+# Activate Python virtual environment (update path if needed)
 source $SCRATCH/venvs/vfm_env/bin/activate
 
-# Change to the project directory on scratch
+# Change to project directory
 cd $SCRATCH/vfm_project
 
-# Run the training script
-# The train.py script uses Hydra and finds the config by name.
-# The output directory will be created automatically inside the project directory.
-python src/train_sam.py -c bcss_finetune
+# Ensure log directory exists
+mkdir -p logs
+
+# Run training (use explicit config/output if possible)
+python src/train_sam.py --config sam2/training/configs/bcss_finetune.yaml --output_dir $SCRATCH/vfm_project/results/exp_finetune_sam
