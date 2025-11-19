@@ -3,18 +3,23 @@ import numpy as np
 from tqdm import tqdm
 from dataset import BCSSDataset
 from sam_segmentation import get_sam2_predictor, get_predicted_mask, calculate_metrics
+import argparse
+from device_utils import get_device
 
-def evaluate_segmentation():
+def evaluate_segmentation(args):
     """Runs the SAM 2 segmentation and evaluation on the full test set."""
     # Load the dataset
     image_dir = '../data/bcss/images'
     mask_dir = '../data/bcss/masks'
     bcss_dataset = BCSSDataset(image_dir=image_dir, mask_dir=mask_dir, split='test')
 
+    # --- Device Selection ---
+    device = get_device()
+    print(f"Using device: {device}")
+
     # Get SAM 2 predictor
     model_cfg = "../sam2/configs/sam2.1/sam2.1_hiera_l.yaml"
-    checkpoint = "../sam2/checkpoints/sam2.1_hiera_large.pt"
-    predictor = get_sam2_predictor(model_cfg, checkpoint)
+    predictor = get_sam2_predictor(model_cfg, args.checkpoint, device)
 
     # Initialize metrics
     total_dice = 0
@@ -42,4 +47,7 @@ def evaluate_segmentation():
     print(f"Average IoU: {avg_iou:.4f}")
 
 if __name__ == '__main__':
-    evaluate_segmentation()
+    parser = argparse.ArgumentParser(description="Evaluate SAM 2 segmentation.")
+    parser.add_argument('--checkpoint', type=str, required=True, help='Path to SAM checkpoint.')
+    args = parser.parse_args()
+    evaluate_segmentation(args)

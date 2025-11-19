@@ -143,6 +143,33 @@ def get_predicted_mask_from_prompts(predictor, image, prompts, prompt_type='cent
     
     return masks[0], point_coords, point_labels
 
+def get_predicted_mask(predictor, image, gt_mask, prompt_type='centroid', use_neg_points=False):
+    """
+    Generates a predicted mask for the entire foreground.
+    """
+    # 1. Create a binary ground truth mask for the foreground
+    binary_gt_mask = (gt_mask > 0).astype(np.uint8)
+
+    # 2. Generate prompts from this combined foreground mask.
+    prompts = get_prompts_from_mask(binary_gt_mask)
+
+    predicted_mask = np.zeros_like(binary_gt_mask)
+    points = None
+    labels = None
+
+    if prompt_type in prompts:
+        # 3. Get a single predicted mask for the foreground.
+        predicted_mask, points, labels = get_predicted_mask_from_prompts(
+            predictor,
+            image,
+            prompts,
+            prompt_type=prompt_type,
+            use_neg_points=use_neg_points
+        )
+
+    # 4. Return the predicted mask and the binary ground truth mask.
+    return predicted_mask, binary_gt_mask, points, labels
+
 def calculate_metrics(pred_mask, gt_mask):
     """Calculates Dice Similarity Coefficient and Intersection over Union."""
     pred_mask = pred_mask.astype(np.bool_)
