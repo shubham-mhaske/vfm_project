@@ -4,10 +4,17 @@ import os
 
 IS_MAC = platform.system() == "Darwin"
 
-def get_device():
+def get_device(force_cpu=False):
     """
     Selects the appropriate device (MPS, CUDA, or CPU) based on availability.
+    
+    Args:
+        force_cpu: If True, always return CPU device regardless of GPU availability
     """
+    if force_cpu:
+        print("Forcing CPU usage as requested.")
+        return torch.device("cpu")
+    
     if IS_MAC:
         if torch.backends.mps.is_available():
             print("Using Apple MPS backend.")
