@@ -5,23 +5,16 @@
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=1
 #SBATCH --cpus-per-task=8
-#SBATCH --mem=32G
+#SBATCH --mem=128G              # SAFE FOR YOUR TRAINING
 #SBATCH --gres=gpu:1
-#SBATCH --time=24:00:00
+#SBATCH --partition=gpu         # Explicitly specify GPU partition
+#SBATCH --time=1-00:00:00       # 1 day (adjust as needed)
 
-# Load required modules/environment
 module restore dl
-
-# Activate Python virtual environment
 source $SCRATCH/vfm_env/bin/activate
-
-# Change to the project directory on scratch
 cd $SCRATCH/vfm_project
-
-# Ensure both the SAM2 repo and project root are importable
 export PYTHONPATH="$SCRATCH/vfm_project/sam2:$SCRATCH/vfm_project:$PYTHONPATH"
 
-# Run the fine-tuning script
 echo "Starting SAM fine-tuning..."
 python src/train_sam.py -c bcss_finetune
 echo "Fine-tuning script finished."
