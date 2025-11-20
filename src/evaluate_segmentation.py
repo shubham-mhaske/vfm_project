@@ -7,14 +7,26 @@ sys.path.insert(0, project_root)
 sam2_root = os.path.join(project_root, 'sam2')
 sys.path.insert(0, sam2_root)
 
+print("[BOOT] Starting evaluate_segmentation.py", flush=True)
+import time
+boot_t0 = time.time()
+print("[BOOT] Importing torch...", flush=True)
 import torch
+print("[BOOT] Importing numpy...", flush=True)
 import numpy as np
+print("[BOOT] Importing tqdm...", flush=True)
 from tqdm import tqdm
+print("[BOOT] Importing dataset module...", flush=True)
 from dataset import BCSSDataset
+print("[BOOT] Importing sam_segmentation helpers...", flush=True)
 from sam_segmentation import get_sam2_predictor, get_predicted_mask, calculate_metrics
+print("[BOOT] Importing argparse...", flush=True)
 import argparse
+print("[BOOT] Importing device_utils...", flush=True)
 from device_utils import get_device
+print("[BOOT] Importing training utils (OmegaConf resolvers)...", flush=True)
 from training.utils.train_utils import register_omegaconf_resolvers
+print(f"[BOOT] Imports done in {time.time()-boot_t0:.2f}s", flush=True)
 
 def evaluate_segmentation(args):
     """Runs the SAM 2 segmentation and evaluation on the full test set (or a subset)."""
@@ -39,7 +51,11 @@ def evaluate_segmentation(args):
     checkpoint_path = os.path.join(project_root, args.checkpoint)
     if args.verbose:
         print(f"[LOAD] Loading checkpoint from {checkpoint_path} ...", flush=True)
+    if args.verbose:
+        t_load0 = time.time()
     ckpt = torch.load(checkpoint_path, map_location='cpu', weights_only=False)
+    if args.verbose:
+        print(f"[LOAD] torch.load() completed in {time.time()-t_load0:.2f}s", flush=True)
     if args.verbose:
         print("[LOAD] Checkpoint loaded in memory.", flush=True)
 
@@ -52,10 +68,18 @@ def evaluate_segmentation(args):
             print("[BUILD] Building SAM2 model (no weights)...", flush=True)
         sam2_pkg_root = sam2.__path__[0]
         relative_cfg_path = os.path.relpath(model_cfg, sam2_pkg_root).replace('\\', '/')
+        if args.verbose:
+            t_build0 = time.time()
         model = build_sam2(relative_cfg_path, ckpt_path=None, device=device)
         if args.verbose:
+            print(f"[BUILD] Model construction time {time.time()-t_build0:.2f}s", flush=True)
+        if args.verbose:
             print("[LOAD] Loading finetuned state dict into model...", flush=True)
+        if args.verbose:
+            t_sd0 = time.time()
         missing_keys, unexpected_keys = model.load_state_dict(ckpt['model'], strict=False)
+        if args.verbose:
+            print(f"[LOAD] state_dict load time {time.time()-t_sd0:.2f}s", flush=True)
         if missing_keys:
             print(f"Missing keys: {missing_keys}", flush=True)
         if unexpected_keys:
@@ -80,7 +104,9 @@ def evaluate_segmentation(args):
     total_dice = 0.0
     total_iou = 0.0
 
+    loop_start = time.time()
     for i in tqdm(range(num_samples), disable=not args.tqdm):
+        iter_t0 = time.time()
         sample = bcss_dataset[i]
         image = sample['image_np']
         gt_mask = sample['mask'].numpy()
@@ -96,12 +122,14 @@ def evaluate_segmentation(args):
         total_iou += iou
 
         if args.verbose and (i + 1) % 10 == 0:
-            print(f"[PROGRESS] Processed {i+1}/{num_samples}", flush=True)
+            print(f"[PROGRESS] Processed {i+1}/{num_samples} | iter {(time.time()-iter_t0):.3f}s", flush=True)
 
     avg_dice = total_dice / num_samples
     avg_iou = total_iou / num_samples
+    total_loop_time = time.time()-loop_start
     print(f"Average Dice Score: {avg_dice:.4f}", flush=True)
     print(f"Average IoU: {avg_iou:.4f}", flush=True)
+    print(f"[TIMING] Total loop time {total_loop_time:.2f}s | per-sample {(total_loop_time/num_samples):.3f}s", flush=True)
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description="Evaluate SAM 2 segmentation.")

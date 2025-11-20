@@ -19,7 +19,7 @@ export PYTHONPATH="$SCRATCH/vfm_project:$SCRATCH/vfm_project/sam2:$PYTHONPATH"
 
 # Run evaluation
 echo "Starting segmentation evaluation..."
-python src/evaluate_segmentation.py \
+python -u src/evaluate_segmentation.py \
   --checkpoint finetune_logs_improved/checkpoints/checkpoint_82.pt \
   --model_cfg sam2/sam2/configs/sam2.1/sam2.1_hiera_b+.yaml \
   --image_dir data/bcss/images \
