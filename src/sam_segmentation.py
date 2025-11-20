@@ -11,7 +11,10 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 's
 import sam2
 from sam2.build_sam import build_sam2
 from sam2.sam2_image_predictor import SAM2ImagePredictor
-from dataset import BCSSDataset
+try:
+    from dataset import BCSSDataset  # only used in __main__ demo
+except Exception:
+    BCSSDataset = None
 
 def show_mask(mask, ax, random_color=False):
     if random_color:
@@ -227,6 +230,8 @@ def main(args):
     print(f"Using device: {device}")
 
     # Load dataset
+    if BCSSDataset is None:
+        raise RuntimeError("BCSSDataset import unavailable; run from project root or adjust PYTHONPATH.")
     bcss_dataset = BCSSDataset(image_dir=args.image_dir, mask_dir=args.mask_dir, split='test')
     sample = bcss_dataset[0]
     image = sample['image_np']
