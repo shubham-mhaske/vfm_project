@@ -2,22 +2,23 @@
 #SBATCH --job-name=eval_segmentation
 #SBATCH --output=results_segmentation/eval_segmentation_%j.log
 #SBATCH --error=results_segmentation/eval_segmentation_%j.err
+#SBATCH --nodes=1
+#SBATCH --ntasks-per-node=1
+#SBATCH --cpus-per-task=32
+#SBATCH --mem=128G
+#SBATCH --gres=gpu:a100:1
 #SBATCH --partition=gpu
-#SBATCH --gres=gpu:1
-#SBATCH --cpus-per-task=8
-#SBATCH --mem=32G
-#SBATCH --time=04:00:00
-#SBATCH --mail-type=END,FAIL
-#SBATCH --mail-user=shubhammhaske@tamu.edu
+#SBATCH --time=1-12:00:00
 
 # Activate your environment
-source ~/.bashrc
-conda activate vfm_project
 
-# Move to project root
-cd /scratch/user/shubhammhaske/vfm_project
+module restore dl
+source $SCRATCH/vfm_env/bin/activate
+cd $SCRATCH/vfm_project
+export PYTHONPATH="$SCRATCH/vfm_project:$SCRATCH/vfm_project/sam2:$PYTHONPATH"
 
 # Run evaluation
+echo "Starting segmentation evaluation..."
 python src/evaluate_segmentation.py \
   --checkpoint finetune_logs_improved/checkpoints/checkpoint_82.pt \
   --model_cfg sam2/sam2/configs/sam2.1/sam2.1_hiera_b+.yaml \
@@ -27,3 +28,4 @@ python src/evaluate_segmentation.py \
   --prompt_type box \
   --use_neg_points \
   --output_dir results_segmentation
+echo "Segmentation evaluation completed."
