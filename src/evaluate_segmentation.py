@@ -1,11 +1,20 @@
+import sys
+import os
+# Add project root to path for local imports
+project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+sys.path.insert(0, project_root)
+# Add sam2 repo root to path BEFORE project root for training module access
+sam2_root = os.path.join(project_root, 'sam2')
+sys.path.insert(0, sam2_root)
+
 import torch
 import numpy as np
-import os
 from tqdm import tqdm
 from dataset import BCSSDataset
 from sam_segmentation import get_sam2_predictor, get_predicted_mask, calculate_metrics
 import argparse
 from device_utils import get_device
+from training.utils.train_utils import register_omegaconf_resolvers
 
 def evaluate_segmentation(args):
     """Runs the SAM 2 segmentation and evaluation on the full test set."""
@@ -19,23 +28,64 @@ def evaluate_segmentation(args):
     device = get_device(force_cpu=args.force_cpu) if hasattr(args, 'force_cpu') else get_device()
     print(f"Using device: {device}")
 
+    # Register OmegaConf resolvers
+    register_omegaconf_resolvers()
+
     # Get SAM 2 predictor
     model_cfg = os.path.join(project_root, args.model_cfg)
     checkpoint_path = os.path.join(project_root, args.checkpoint)
-    predictor = get_sam2_predictor(model_cfg, checkpoint_path, device)
+    
+    # Load checkpoint to check structure
+    ckpt = torch.load(checkpoint_path, map_location='cpu', weights_only=False)
+    
+    # If checkpoint is from training (has 'model' key with state_dict)
+    if 'model' in ckpt and isinstance(ckpt['model'], dict):
+        print(f"Loading finetuned checkpoint from epoch {ckpt.get('epoch', 'unknown')}")
+        # Build model without loading checkpoint first
+        from sam2.build_sam import build_sam2
+        from sam2.sam2_image_predictor import SAM2ImagePredictor
+        import sam2
+        
+        sam2_pkg_root = sam2.__path__[0]
+        relative_cfg_path = os.path.relpath(model_cfg, sam2_pkg_root)
+        relative_cfg_path = relative_cfg_path.replace('\\', '/')
+        
+        # Build model without checkpoint
+        model = build_sam2(relative_cfg_path, ckpt_path=None, device=device)
+        
+        # Load the finetuned state dict
+        missing_keys, unexpected_keys = model.load_state_dict(ckpt['model'], strict=False)
+        if missing_keys:
+            print(f"Missing keys: {missing_keys}")
+        if unexpected_keys:
+            print(f"Unexpected keys: {unexpected_keys}")
+        
+        predictor = SAM2ImagePredictor(model)
+    else:
+        # Regular checkpoint loading
+        predictor = get_sam2_predictor(model_cfg, checkpoint_path, device)
 
     # Initialize metrics
     total_dice = 0
     total_iou = 0
     num_samples = len(bcss_dataset)
+    
+    # Print evaluation configuration
+    print(f"Prompt type: {args.prompt_type}")
+    print(f"Use negative points: {args.use_neg_points}")
+    print(f"Evaluating on {num_samples} samples...")
 
     for i in tqdm(range(num_samples)):
         sample = bcss_dataset[i]
         image = sample['image_np']
         gt_mask = sample['mask'].numpy()
 
-        # Get predicted mask
-        predicted_mask, binary_mask, _, _ = get_predicted_mask(predictor, image, gt_mask)
+        # Get predicted mask with specified prompt type and negative points option
+        predicted_mask, binary_mask, _, _ = get_predicted_mask(
+            predictor, image, gt_mask, 
+            prompt_type=args.prompt_type,
+            use_neg_points=args.use_neg_points
+        )
 
         # Calculate metrics
         dice, iou = calculate_metrics(predicted_mask, binary_mask)
@@ -54,8 +104,9 @@ if __name__ == '__main__':
     parser.add_argument('--checkpoint', type=str, required=True, 
                         help='Path to SAM checkpoint (relative to project root)')
     parser.add_argument('--model_cfg', type=str, 
-                        default='sam2/configs/sam2.1/sam2.1_hiera_l.yaml',
-                        help='Path to SAM2 model config (relative to project root)')
+                        default='sam2/sam2/configs/sam2.1/sam2.1_hiera_b+.yaml',
+                        help='Path to SAM2 model config for inference (relative to project root). '
+                             'Use inference configs (e.g., sam2.1_hiera_b+.yaml) not training configs.')
     parser.add_argument('--image_dir', type=str, 
                         default='data/bcss/images',
                         help='Path to image directory (relative to project root)')
@@ -66,6 +117,12 @@ if __name__ == '__main__':
                         default='test',
                         choices=['train', 'val', 'test'],
                         help='Dataset split to evaluate on')
+    parser.add_argument('--prompt_type', type=str,
+                        default='centroid',
+                        choices=['centroid', 'multi_point', 'box'],
+                        help='Type of prompt to use for SAM2 (centroid, multi_point, or box)')
+    parser.add_argument('--use_neg_points', action='store_true',
+                        help='Use negative points (outside the mask) in addition to positive prompts')
     parser.add_argument('--force_cpu', action='store_true',
                         help='Force CPU usage even if GPU is available')
     args = parser.parse_args()
