@@ -4,11 +4,11 @@
 #SBATCH --error=logs/sam_finetune_%j.err
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=1
-#SBATCH --cpus-per-task=16
-#SBATCH --mem=64G
+#SBATCH --cpus-per-task=32
+#SBATCH --mem=128G
 #SBATCH --gres=gpu:a100:1
 #SBATCH --partition=gpu
-#SBATCH --time=2-00:00:00
+#SBATCH --time=1-12:00:00
 
 module restore dl
 source $SCRATCH/vfm_env/bin/activate
