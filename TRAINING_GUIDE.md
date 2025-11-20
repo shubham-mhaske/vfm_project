@@ -104,3 +104,43 @@ python src/evaluate_segmentation.py \
 - Evaluation uses same prompt type and settings as training for consistency
 - Non-strict checkpoint loading allows architecture flexibility
 - AMP (Automatic Mixed Precision) enabled for GPU to reduce memory and speed up training
+
+## 📊 **Quick Experimental Plan (Improved)**
+
+### **Step 1: Evaluate Existing Checkpoints**
+Before starting new training, check if your long training run (epoch 400+) actually improved performance.
+```bash
+python src/evaluate_checkpoint.py \
+  --checkpoint finetune_logs/checkpoints/checkpoint_439.pt \
+  --config sam2.1_hiera_b+.yaml \
+  --output_dir results/eval_checkpoint_439
+```
+
+### **Step 2: Run Improved Training (Recommended)**
+We have created a new configuration `configs/bcss_finetune_improved.yaml` that includes:
+- **Larger Model:** `hiera_l` (Large) instead of `hiera_b+`
+- **Stronger Augmentation:** Color jitter, rotation, vertical flips
+- **Mixed Prompts:** Randomly switches between box and centroid prompts
+- **Optimized Hyperparameters:** Adjusted learning rate and phases
+
+**To run this experiment:**
+```bash
+# 1. Download the large checkpoint if you haven't
+bash sam2/checkpoints/download_ckpts.sh
+
+# 2. Start training
+python src/train_sam.py -c bcss_finetune_improved
+```
+
+### **Step 3: Compare Results**
+After training, evaluate the new model:
+```bash
+python src/evaluate_checkpoint.py \
+  --checkpoint finetune_logs_improved/checkpoints/checkpoint_49.pt \
+  --config sam2.1_hiera_l.yaml \
+  --output_dir results/eval_improved_model
+```
+
+## 🎯 **Expected Improvements**
+- **Dice:** 0.43 → **0.55-0.65** (matching/exceeding baseline)
+- **IoU:** 0.28 → **0.40-0.50**

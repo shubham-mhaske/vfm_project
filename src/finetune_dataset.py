@@ -46,11 +46,18 @@ class BCSSSegmentLoader:
             # Normalize to point-based inputs expected by SAM2 training: two tensors (coords, labels)
             point_coords = None
             point_labels = None
-            if self.prompt_type == 'centroid' and 'centroid' in prompt_dict:
+            
+            # Handle mixed prompt type
+            current_prompt_type = self.prompt_type
+            if self.prompt_type == 'mixed':
+                # Randomly choose between box and centroid
+                current_prompt_type = 'box' if np.random.rand() > 0.5 else 'centroid'
+
+            if current_prompt_type == 'centroid' and 'centroid' in prompt_dict:
                 point_coords, point_labels = prompt_dict['centroid']
-            elif self.prompt_type == 'multi_point' and 'multi_point' in prompt_dict:
+            elif current_prompt_type == 'multi_point' and 'multi_point' in prompt_dict:
                 point_coords, point_labels = prompt_dict['multi_point']
-            elif self.prompt_type == 'box' and 'box' in prompt_dict:
+            elif current_prompt_type == 'box' and 'box' in prompt_dict:
                 # SAM2 uses two special labels for box corners: 2 (top-left) and 3 (bottom-right)
                 box = prompt_dict['box']  # shape (2,2) [[x0,y0],[x1,y1]]
                 point_coords = box
