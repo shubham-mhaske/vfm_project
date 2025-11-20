@@ -14,16 +14,11 @@ vos:
     transforms:
     - _target_: training.dataset.transforms.RandomHorizontalFlip
       consistent_transform: true
-    - _target_: training.dataset.transforms.RandomVerticalFlip
-      consistent_transform: true
     - _target_: training.dataset.transforms.ColorJitter
       brightness: 0.2
       contrast: 0.2
       saturation: 0.2
       hue: 0.05
-      consistent_transform: true
-    - _target_: training.dataset.transforms.RandomRotation
-      degrees: 15
       consistent_transform: true
     - _target_: training.dataset.transforms.RandomResizeAPI
       sizes: ${scratch.resolution}
@@ -56,8 +51,8 @@ trainer:
         num_heads: 2
         stages: [2, 6, 36, 4]
         global_att_blocks: [23, 33, 43]
-        window_pos_embed_bkg_spatial_size: [14, 14]
-        window_spec: [8, 4, 14, 7]
+        window_pos_embed_bkg_spatial_size: [7, 7]
+        window_spec: [8, 4, 16, 8]
       neck:
         _target_: sam2.modeling.backbones.image_encoder.FpnNeck
         position_encoding:
