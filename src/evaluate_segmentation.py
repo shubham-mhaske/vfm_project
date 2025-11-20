@@ -17,87 +17,91 @@ from device_utils import get_device
 from training.utils.train_utils import register_omegaconf_resolvers
 
 def evaluate_segmentation(args):
-    """Runs the SAM 2 segmentation and evaluation on the full test set."""
-    # Resolve paths relative to project root
+    """Runs the SAM 2 segmentation and evaluation on the full test set (or a subset)."""
     project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
     image_dir = os.path.join(project_root, args.image_dir)
     mask_dir = os.path.join(project_root, args.mask_dir)
+
+    if args.verbose:
+        print("[INIT] Building BCSSDataset...", flush=True)
     bcss_dataset = BCSSDataset(image_dir=image_dir, mask_dir=mask_dir, split=args.split)
+    if args.verbose:
+        print(f"[INIT] Dataset split '{args.split}' size: {len(bcss_dataset)}", flush=True)
 
-    # --- Device Selection ---
     device = get_device(force_cpu=args.force_cpu) if hasattr(args, 'force_cpu') else get_device()
-    print(f"Using device: {device}")
+    print(f"Using device: {device}", flush=True)
 
-    # Register OmegaConf resolvers
+    if args.verbose:
+        print("[INIT] Registering OmegaConf resolvers...", flush=True)
     register_omegaconf_resolvers()
 
-    # Get SAM 2 predictor
     model_cfg = os.path.join(project_root, args.model_cfg)
     checkpoint_path = os.path.join(project_root, args.checkpoint)
-    
-    # Load checkpoint to check structure
+    if args.verbose:
+        print(f"[LOAD] Loading checkpoint from {checkpoint_path} ...", flush=True)
     ckpt = torch.load(checkpoint_path, map_location='cpu', weights_only=False)
-    
-    # If checkpoint is from training (has 'model' key with state_dict)
+    if args.verbose:
+        print("[LOAD] Checkpoint loaded in memory.", flush=True)
+
     if 'model' in ckpt and isinstance(ckpt['model'], dict):
-        print(f"Loading finetuned checkpoint from epoch {ckpt.get('epoch', 'unknown')}")
-        # Build model without loading checkpoint first
+        print(f"Loading finetuned checkpoint from epoch {ckpt.get('epoch', 'unknown')}", flush=True)
         from sam2.build_sam import build_sam2
         from sam2.sam2_image_predictor import SAM2ImagePredictor
         import sam2
-        
+        if args.verbose:
+            print("[BUILD] Building SAM2 model (no weights)...", flush=True)
         sam2_pkg_root = sam2.__path__[0]
-        relative_cfg_path = os.path.relpath(model_cfg, sam2_pkg_root)
-        relative_cfg_path = relative_cfg_path.replace('\\', '/')
-        
-        # Build model without checkpoint
+        relative_cfg_path = os.path.relpath(model_cfg, sam2_pkg_root).replace('\\', '/')
         model = build_sam2(relative_cfg_path, ckpt_path=None, device=device)
-        
-        # Load the finetuned state dict
+        if args.verbose:
+            print("[LOAD] Loading finetuned state dict into model...", flush=True)
         missing_keys, unexpected_keys = model.load_state_dict(ckpt['model'], strict=False)
         if missing_keys:
-            print(f"Missing keys: {missing_keys}")
+            print(f"Missing keys: {missing_keys}", flush=True)
         if unexpected_keys:
-            print(f"Unexpected keys: {unexpected_keys}")
-        
+            print(f"Unexpected keys: {unexpected_keys}", flush=True)
         predictor = SAM2ImagePredictor(model)
     else:
-        # Regular checkpoint loading
+        if args.verbose:
+            print("[BUILD] Using standard predictor loader...", flush=True)
         predictor = get_sam2_predictor(model_cfg, checkpoint_path, device)
+    if args.verbose:
+        print("[READY] Predictor initialized.", flush=True)
 
-    # Initialize metrics
-    total_dice = 0
-    total_iou = 0
-    num_samples = len(bcss_dataset)
-    
-    # Print evaluation configuration
-    print(f"Prompt type: {args.prompt_type}")
-    print(f"Use negative points: {args.use_neg_points}")
-    print(f"Evaluating on {num_samples} samples...")
+    num_samples_total = len(bcss_dataset)
+    num_samples = num_samples_total if args.max_samples is None else min(args.max_samples, num_samples_total)
+    if args.max_samples is not None:
+        print(f"[CONFIG] Limiting evaluation to {num_samples} / {num_samples_total} samples", flush=True)
 
-    for i in tqdm(range(num_samples)):
+    print(f"Prompt type: {args.prompt_type}", flush=True)
+    print(f"Use negative points: {args.use_neg_points}", flush=True)
+    print(f"Evaluating on {num_samples} samples...", flush=True)
+
+    total_dice = 0.0
+    total_iou = 0.0
+
+    for i in tqdm(range(num_samples), disable=not args.tqdm):
         sample = bcss_dataset[i]
         image = sample['image_np']
         gt_mask = sample['mask'].numpy()
 
-        # Get predicted mask with specified prompt type and negative points option
         predicted_mask, binary_mask, _, _ = get_predicted_mask(
-            predictor, image, gt_mask, 
+            predictor, image, gt_mask,
             prompt_type=args.prompt_type,
             use_neg_points=args.use_neg_points
         )
 
-        # Calculate metrics
         dice, iou = calculate_metrics(predicted_mask, binary_mask)
         total_dice += dice
         total_iou += iou
 
-    # Calculate average metrics
+        if args.verbose and (i + 1) % 10 == 0:
+            print(f"[PROGRESS] Processed {i+1}/{num_samples}", flush=True)
+
     avg_dice = total_dice / num_samples
     avg_iou = total_iou / num_samples
-
-    print(f"Average Dice Score: {avg_dice:.4f}")
-    print(f"Average IoU: {avg_iou:.4f}")
+    print(f"Average Dice Score: {avg_dice:.4f}", flush=True)
+    print(f"Average IoU: {avg_iou:.4f}", flush=True)
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description="Evaluate SAM 2 segmentation.")
@@ -125,5 +129,11 @@ if __name__ == '__main__':
                         help='Use negative points (outside the mask) in addition to positive prompts')
     parser.add_argument('--force_cpu', action='store_true',
                         help='Force CPU usage even if GPU is available')
+    parser.add_argument('--verbose', action='store_true',
+                        help='Enable verbose step-by-step logging')
+    parser.add_argument('--max_samples', type=int, default=None,
+                        help='Limit number of samples evaluated (for debugging)')
+    parser.add_argument('--tqdm', action='store_true',
+                        help='Enable tqdm progress bar (disabled by default in Slurm logs)')
     args = parser.parse_args()
     evaluate_segmentation(args)

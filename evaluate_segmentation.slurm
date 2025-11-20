@@ -27,5 +27,7 @@ python src/evaluate_segmentation.py \
   --split test \
   --prompt_type box \
   --use_neg_points \
-  --output_dir results_segmentation
+  --output_dir results_segmentation \
+  --verbose \
+  --max_samples 25
 echo "Segmentation evaluation completed."
