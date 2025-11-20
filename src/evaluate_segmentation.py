@@ -9,6 +9,7 @@ sys.path.insert(0, sam2_root)
 
 print("[BOOT] Starting evaluate_segmentation.py", flush=True)
 import time
+import json
 boot_t0 = time.time()
 print("[BOOT] Importing torch...", flush=True)
 import torch
@@ -33,6 +34,14 @@ def evaluate_segmentation(args):
     project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
     image_dir = os.path.join(project_root, args.image_dir)
     mask_dir = os.path.join(project_root, args.mask_dir)
+
+    # Resolve and prepare output directory if provided
+    output_dir = None
+    if getattr(args, 'output_dir', None):
+        output_dir = os.path.join(project_root, args.output_dir)
+        os.makedirs(output_dir, exist_ok=True)
+        if args.verbose:
+            print(f"[INIT] Output directory: {output_dir}", flush=True)
 
     if args.verbose:
         print("[INIT] Building BCSSDataset...", flush=True)
@@ -131,6 +140,23 @@ def evaluate_segmentation(args):
     print(f"Average IoU: {avg_iou:.4f}", flush=True)
     print(f"[TIMING] Total loop time {total_loop_time:.2f}s | per-sample {(total_loop_time/num_samples):.3f}s", flush=True)
 
+    # Persist metrics if output directory specified
+    if output_dir is not None:
+        metrics_path = os.path.join(output_dir, 'metrics.json')
+        with open(metrics_path, 'w') as f:
+            json.dump({
+                'avg_dice': float(avg_dice),
+                'avg_iou': float(avg_iou),
+                'num_samples': int(num_samples),
+                'prompt_type': args.prompt_type,
+                'use_neg_points': bool(args.use_neg_points),
+                'checkpoint': args.checkpoint,
+                'model_cfg': args.model_cfg,
+                'loop_time_sec': float(total_loop_time),
+                'per_sample_time_sec': float(total_loop_time/num_samples)
+            }, f, indent=2)
+        print(f"[SAVE] Metrics written to {metrics_path}", flush=True)
+
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description="Evaluate SAM 2 segmentation.")
     parser.add_argument('--checkpoint', type=str, required=True, 
@@ -163,5 +189,7 @@ if __name__ == '__main__':
                         help='Limit number of samples evaluated (for debugging)')
     parser.add_argument('--tqdm', action='store_true',
                         help='Enable tqdm progress bar (disabled by default in Slurm logs)')
+    parser.add_argument('--output_dir', type=str, default=None,
+                        help='Directory (relative to project root) to save metrics.json')
     args = parser.parse_args()
     evaluate_segmentation(args)
