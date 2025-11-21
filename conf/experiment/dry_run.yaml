@@ -1,0 +1,50 @@
+# @package _global_
+
+defaults:
+  - base_finetune
+
+experiment:
+  name: dry_run
+
+# Override settings for a quick local dry run
+scratch:
+  num_epochs: 1
+  train_batch_size: 1
+  num_train_workers: 0 # Use 0 for local debugging to avoid multiprocessing issues
+
+trainer:
+  accelerator: cpu
+  max_epochs: 1
+  distributed:
+    backend: gloo
+  model:
+    image_encoder:
+      _target_: sam2.modeling.backbones.image_encoder.ImageEncoder
+      scalp: 1
+      trunk:
+        _target_: sam2.modeling.backbones.hieradet.Hiera
+        embed_dim: 96
+        num_heads: 1
+        stages: [1, 2, 7, 2]
+        global_att_blocks: [5, 7, 9]
+        window_pos_embed_bkg_spatial_size: [7, 7]
+      neck:
+        _target_: sam2.modeling.backbones.image_encoder.FpnNeck
+        position_encoding:
+          _target_: sam2.modeling.position_encoding.PositionEmbeddingSine
+          num_pos_feats: 256
+          normalize: true
+          scale: null
+          temperature: 10000
+        d_model: 256
+        backbone_channel_list: [768, 384, 192, 96]
+        fpn_top_down_levels: [2, 3]
+        fpn_interp_model: nearest
+  checkpoint:
+    model_weight_initializer:
+      state_dict:
+        checkpoint_path: sam2/checkpoints/sam2.1_hiera_tiny.pt
+  optim:
+    amp:
+      enabled: false
+      amp_dtype: float16

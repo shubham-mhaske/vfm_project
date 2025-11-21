@@ -38,16 +38,9 @@ def show_box(box, ax):
 
 def get_sam2_predictor(model_cfg, checkpoint, device):
     """Initializes and returns a SAM 2 predictor on the specified device."""
-    # Get the path to the sam2 package root
-    sam2_pkg_root = sam2.__path__[0]
-    # Get the relative path of the config file w.r.t. the package root
-    relative_cfg_path = os.path.relpath(model_cfg, sam2_pkg_root)
-    # Hydra expects forward slashes
-    relative_cfg_path = relative_cfg_path.replace('\\', '/')
-
     # The config name should be relative to the package's config directory,
     # which is what build_sam2 expects.
-    predictor = SAM2ImagePredictor(build_sam2(relative_cfg_path, checkpoint, device=device))
+    predictor = SAM2ImagePredictor(build_sam2(model_cfg, checkpoint, device=device))
 
     return predictor
 

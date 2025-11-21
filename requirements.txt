@@ -1,6 +1,6 @@
 girder_client
 pillow
-numpy
+numpy<2.0
 scikit-image
 imageio
 torch

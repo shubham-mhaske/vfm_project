@@ -1,0 +1,11 @@
+# @package _global_
+
+defaults:
+  - base_finetune
+
+experiment:
+  name: low_lr
+
+scratch:
+  base_lr: 1.0e-05
+  vision_lr: 1.0e-06

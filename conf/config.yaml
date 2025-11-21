@@ -1,0 +1,26 @@
+defaults:
+  - experiment: base_finetune
+  - _self_
+
+# The root directory for the original sam2 configs.
+# We need this to be able to inherit from them.
+sam2_config_dir: sam2/sam2/configs
+
+# --- App specific configs ---
+# Root directory for data
+data_root: data/bcss
+
+# Directory for saving experiment outputs
+# Hydra will automatically create and manage subdirectories for each run.
+output_dir: finetune_logs
+
+# --- Hydra settings ---
+hydra:
+  run:
+    dir: ${output_dir}/${hydra.job.name}
+  sweep:
+    dir: ${output_dir}/${hydra.job.name}
+    subdir: ${hydra.job.num}
+  job:
+    # Changes the name of the output directory for each run
+    name: ${experiment.name}-${now:%Y-%m-%d_%H-%M-%S}
