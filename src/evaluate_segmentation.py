@@ -35,13 +35,16 @@ def evaluate_segmentation(args):
     image_dir = os.path.join(project_root, args.image_dir)
     mask_dir = os.path.join(project_root, args.mask_dir)
 
-    # Resolve and prepare output directory if provided
+    # Resolve and prepare output directory if provided and not in print-only mode
     output_dir = None
-    if getattr(args, 'output_dir', None):
+    if getattr(args, 'output_dir', None) and not getattr(args, 'print_only', False):
         output_dir = os.path.join(project_root, args.output_dir)
         os.makedirs(output_dir, exist_ok=True)
         if args.verbose:
             print(f"[INIT] Output directory: {output_dir}", flush=True)
+    elif getattr(args, 'output_dir', None) and getattr(args, 'print_only', False):
+        if args.verbose:
+            print(f"[INIT] print_only=True -> will NOT create or write to output_dir='{args.output_dir}'", flush=True)
 
     if args.verbose:
         print("[INIT] Building BCSSDataset...", flush=True)
@@ -140,8 +143,8 @@ def evaluate_segmentation(args):
     print(f"Average IoU: {avg_iou:.4f}", flush=True)
     print(f"[TIMING] Total loop time {total_loop_time:.2f}s | per-sample {(total_loop_time/num_samples):.3f}s", flush=True)
 
-    # Persist metrics if output directory specified
-    if output_dir is not None:
+    # Persist metrics only if output directory specified AND not print_only
+    if output_dir is not None and not getattr(args, 'print_only', False):
         metrics_path = os.path.join(output_dir, 'metrics.json')
         with open(metrics_path, 'w') as f:
             json.dump({
@@ -191,5 +194,7 @@ if __name__ == '__main__':
                         help='Enable tqdm progress bar (disabled by default in Slurm logs)')
     parser.add_argument('--output_dir', type=str, default=None,
                         help='Directory (relative to project root) to save metrics.json')
+    parser.add_argument('--print_only', action='store_true',
+                        help='Run evaluation and print metrics without writing any files (ignores output_dir).')
     args = parser.parse_args()
     evaluate_segmentation(args)
