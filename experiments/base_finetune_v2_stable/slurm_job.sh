@@ -14,13 +14,12 @@
 #          balanced loss (5:2:1:1), lower weight decay (0.01), 100 epochs
 # Expected time: ~10 hours (vs 16h for batch=4)
 
-module purge
-module load GCCcore/11.3.0 Python/3.10.4
 
-source ~/.bashrc
-conda activate vfm_env
+module restore dl 
 
-cd /scratch/user/shubhammhaske/vfm_project
+source $SCRATCH/vfm_env/bin/activate
+
+cd $SCRATCH/vfm_project
 
 # Set data root
 export data_root=/scratch/user/shubhammhaske/vfm_project/data/bcss

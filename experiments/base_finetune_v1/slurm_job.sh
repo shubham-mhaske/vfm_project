@@ -14,13 +14,11 @@
 # Submitted: 2025-11-21
 # Runtime directory: finetune_logs/base_finetune-2025-11-21_20-45-29/
 
-module purge
-module load GCCcore/11.3.0 Python/3.10.4
+module restore dl 
 
-source ~/.bashrc
-conda activate vfm_env
+source $SCRATCH/vfm_env/bin/activate
 
-cd /scratch/user/shubhammhaske/vfm_project
+cd $SCRATCH/vfm_project
 
 # Set data root
 export data_root=/scratch/user/shubhammhaske/vfm_project/data/bcss
