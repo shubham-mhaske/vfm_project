@@ -1,0 +1,72 @@
+{
+  "experiment": "base_finetune_v1",
+  "date": "2025-11-21",
+  "split": "validation",
+  "num_samples": 21,
+  "prompt_type": "box",
+  "use_neg_points": true,
+  "device": "cpu",
+  "checkpoints": [
+    {
+      "file": "checkpoint_50.pt",
+      "epoch": 50,
+      "dice": 0.0716,
+      "iou": 0.0431,
+      "time_per_sample": 14.026,
+      "status": "collapsed"
+    },
+    {
+      "file": "checkpoint_80.pt",
+      "epoch": 80,
+      "dice": 0.3208,
+      "iou": 0.2067,
+      "time_per_sample": 14.407,
+      "status": "recovered"
+    },
+    {
+      "file": "checkpoint_90.pt",
+      "epoch": 90,
+      "dice": 0.2870,
+      "iou": 0.1830,
+      "time_per_sample": 14.280,
+      "status": "degraded"
+    },
+    {
+      "file": "checkpoint_100.pt",
+      "epoch": 100,
+      "dice": 0.3354,
+      "iou": 0.2232,
+      "time_per_sample": 14.329,
+      "status": "best"
+    },
+    {
+      "file": "checkpoint_110.pt",
+      "epoch": 110,
+      "dice": 0.2662,
+      "iou": 0.1721,
+      "time_per_sample": 14.118,
+      "status": "degraded"
+    }
+  ],
+  "best_checkpoint": {
+    "file": "checkpoint_100.pt",
+    "epoch": 100,
+    "dice": 0.3354,
+    "iou": 0.2232
+  },
+  "worst_checkpoint": {
+    "file": "checkpoint_50.pt",
+    "epoch": 50,
+    "dice": 0.0716,
+    "iou": 0.0431,
+    "note": "training_collapsed"
+  },
+  "observations": {
+    "training_stable": false,
+    "monotonic_improvement": false,
+    "collapse_detected": true,
+    "collapse_epoch": 50,
+    "recovery_epoch": 80,
+    "performance_oscillation": true
+  }
+}
