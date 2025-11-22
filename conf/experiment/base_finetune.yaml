@@ -30,8 +30,7 @@ vos:
         - _target_: training.dataset.transforms.RandomAffine
           degrees: 90                # 90-degree rotations
           consistent_transform: true
-          scale: [0.9, 1.1]         # Slight scale variation
-          translate: [0.05, 0.05]   # Small translation
+          num_tentatives: 2          # Retry if mask erased; no scale/translate to avoid zero-area
         - _target_: training.dataset.transforms.RandomResizeAPI
           sizes: ${scratch.resolution}
           square: true

@@ -33,8 +33,7 @@ vos:
         - _target_: training.dataset.transforms.RandomAffine
           degrees: 90                # 90-degree rotations (tissue has no fixed orientation)
           consistent_transform: true
-          scale: [0.9, 1.1]         # Slight scale variation
-          translate: [0.05, 0.05]   # Small translation
+          num_tentatives: 2          # Remove scale/translate to keep masks intact
         - _target_: training.dataset.transforms.RandomResizeAPI
           sizes: ${scratch.resolution}
           square: true

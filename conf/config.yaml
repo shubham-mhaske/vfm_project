@@ -14,6 +14,10 @@ data_root: data/bcss
 # Hydra will automatically create and manage subdirectories for each run.
 output_dir: finetune_logs
 
+# Optional path to a checkpoint (.pt) to resume full training (model+optimizer+LR schedule).
+# Set via CLI override: resume_checkpoint=finetune_logs/base_finetune-2025-11-21_21-51-33/checkpoints/checkpoint_50.pt
+resume_checkpoint: null
+
 # --- Hydra settings ---
 hydra:
   run:

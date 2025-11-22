@@ -57,6 +57,51 @@ def main(cfg: DictConfig) -> None:
     print("Instantiating trainer...")
     trainer = instantiate(cfg.trainer, _recursive_=False)
 
+    # --- Optional Resume Logic ---
+    resume_path = cfg.get('resume_checkpoint', None)
+    if resume_path and os.path.isfile(resume_path):
+        print(f"[Resume] Loading checkpoint: {resume_path}")
+        import torch
+        try:
+            ckpt = torch.load(resume_path, map_location='cpu')
+            # Model state
+            model_state = ckpt.get('model') or ckpt.get('model_state_dict')
+            if model_state:
+                missing, unexpected = trainer.model.load_state_dict(model_state, strict=False)
+                print(f"[Resume] Model state loaded (missing={len(missing)}, unexpected={len(unexpected)})")
+            else:
+                print("[Resume] No model state found in checkpoint.")
+            # Optimizer state
+            if hasattr(trainer, 'optimizer') and 'optimizer' in ckpt:
+                try:
+                    trainer.optimizer.load_state_dict(ckpt['optimizer'])
+                    print("[Resume] Optimizer state loaded.")
+                except Exception as e:
+                    print(f"[Resume] Failed to load optimizer state: {e}")
+            # LR scheduler state(s)
+            if hasattr(trainer, 'lr_schedulers') and 'lr_schedulers' in ckpt:
+                try:
+                    # Expect list/dict of schedulers
+                    sched_state = ckpt['lr_schedulers']
+                    if isinstance(sched_state, (list, tuple)) and isinstance(trainer.lr_schedulers, (list, tuple)):
+                        for sch, state in zip(trainer.lr_schedulers, sched_state):
+                            sch.load_state_dict(state)
+                    elif isinstance(sched_state, dict):
+                        # Single scheduler
+                        trainer.lr_schedulers.load_state_dict(sched_state)
+                    print("[Resume] LR scheduler state loaded.")
+                except Exception as e:
+                    print(f"[Resume] Failed to load LR scheduler state: {e}")
+            # Step / epoch bookkeeping (if present)
+            trainer_start_epoch = ckpt.get('epoch')
+            if trainer_start_epoch is not None and hasattr(trainer, 'start_epoch'):
+                trainer.start_epoch = int(trainer_start_epoch) + 1
+                print(f"[Resume] Resuming from epoch {trainer_start_epoch}, next epoch {trainer.start_epoch}.")
+        except Exception as e:
+            print(f"[Resume] Error loading checkpoint: {e}")
+    elif resume_path:
+        print(f"[Resume] Provided resume_checkpoint path not found: {resume_path}")
+
     # --- Run Training ---
     print("Starting training...")
     trainer.run()
