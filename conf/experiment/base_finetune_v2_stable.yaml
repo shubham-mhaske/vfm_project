@@ -57,6 +57,7 @@ trainer:
 
   model:
     _target_: training.model.sam2.SAM2Train
+    freeze_image_encoder: true
     image_encoder:
       _target_: sam2.modeling.backbones.image_encoder.ImageEncoder
       scalp: 1
