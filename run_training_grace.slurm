@@ -22,9 +22,9 @@ echo "Setting up the environment..."
 # It's good practice to purge all modules to start with a clean environment
 module purge
 
-# Load the necessary module for deep learning
-# This is the recommended way to load the DL stack on Grace
-module load DL/2023.01
+# Load the necessary modules for deep learning.
+# This is the corrected version, loading CUDA and cuDNN modules individually.
+module restore dl
 
 # Activate the conda environment
 # Using an absolute path with $SCRATCH is a robust way to do this
