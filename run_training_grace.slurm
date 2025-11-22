@@ -10,11 +10,11 @@
 #SBATCH --error=logs/sam_finetune_%j.err
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=1
-#SBATCH --cpus-per-task=8                # Adjusted from 32 for a more standard request
-#SBATCH --mem=64G                        # Adjusted from 128G for a more standard request
-#SBATCH --gres=gpu:a100:1
+#SBATCH --cpus-per-task=16               # Optimized for small dataset
+#SBATCH --mem=128G                       # Sufficient for batch_size=4
+#SBATCH --gres=gpu:a100:1                # 1 A100 is optimal for 85 images
 #SBATCH --partition=gpu
-#SBATCH --time=1-12:00:00
+#SBATCH --time=1-00:00:00                # ~18-24 hours should be enough
 
 # --- Environment Setup ---
 echo "Setting up the environment..."

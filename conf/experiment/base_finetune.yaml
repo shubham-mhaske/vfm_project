@@ -8,30 +8,40 @@ experiment:
 
 scratch:
   resolution: 1024
-  train_batch_size: 8
-  num_train_workers: 8
+  train_batch_size: 4               # Smaller batch = more steps per epoch (21 steps vs 5)
+  num_train_workers: 8              # Match available CPUs
   num_frames: 1
   max_num_objects: 3
-  base_lr: 4.0e-05
-  vision_lr: 4.0e-06  # 0.1 * base_lr
+  base_lr: 2.0e-05                  # Scaled down for smaller batch
+  vision_lr: 2.0e-06                # 0.1 * base_lr
   phases_per_epoch: 1
-  num_epochs: 50
+  num_epochs: 150                   # More epochs for small dataset (~3150 steps)
 
 vos:
   train_transforms:
     - _target_: training.dataset.transforms.ComposeAPI
       transforms:
+        # Geometric augmentations (critical for histopathology)
         - _target_: training.dataset.transforms.RandomHorizontalFlip
           consistent_transform: true
+        - _target_: training.dataset.transforms.RandomVerticalFlip
+          consistent_transform: true
+        # Rotation for tissue with no natural orientation
+        - _target_: training.dataset.transforms.RandomAffine
+          degrees: 90                # 90-degree rotations
+          consistent_transform: true
+          scale: [0.9, 1.1]         # Slight scale variation
+          translate: [0.05, 0.05]   # Small translation
         - _target_: training.dataset.transforms.RandomResizeAPI
           sizes: ${scratch.resolution}
           square: true
           consistent_transform: true
+        # Color augmentation (H&E stain variation)
         - _target_: training.dataset.transforms.ColorJitter
-          brightness: 0.2
-          contrast: 0.2
-          saturation: 0.2
-          hue: 0.05
+          brightness: 0.3           # Increased for stain variation
+          contrast: 0.3             # Different scanning protocols
+          saturation: 0.3           # Stain intensity varies
+          hue: 0.08                 # H&E color variation
           consistent_transform: true
         - _target_: training.dataset.transforms.ToTensorAPI
         - _target_: training.dataset.transforms.NormalizeAPI
@@ -245,7 +255,7 @@ trainer:
 
   checkpoint:
     save_dir: ${hydra:run.dir}/checkpoints
-    save_freq: 5
+    save_freq: 10                   # More frequent for small dataset
     model_weight_initializer:
       _partial_: true
       _target_: training.utils.checkpoint_utils.load_state_dict_into_model
