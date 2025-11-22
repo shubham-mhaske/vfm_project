@@ -8,15 +8,15 @@ experiment:
 
 scratch:
   resolution: 1024
-  train_batch_size: 8               # DOUBLED from 4 for faster training (~40% speedup)
-  num_train_workers: 16             # Increased for faster data loading
+  train_batch_size: 6               # Reduced from 8 to fit in 40GB A100 memory
+  num_train_workers: 16             # Keep high for data loading
   num_frames: 1
   max_num_objects: 3
-  base_lr: 7.0e-05                  # SCALED from 5e-5 (sqrt(2) scaling for batch size)
-  vision_lr: 7.0e-06                # 0.1 * base_lr
+  base_lr: 6.0e-05                  # SCALED for batch 6 (sqrt(6/4) = 1.22x from original 5e-5)
+  vision_lr: 6.0e-06                # 0.1 * base_lr
   phases_per_epoch: 1
   num_epochs: 100                   # REDUCED from 150 (best was at epoch 100)
-  warmup_steps: 125                 # HALVED (proportional to steps per epoch)
+  warmup_steps: 175                 # Adjusted for batch 6 (~14 steps/epoch, 12% of ~1400 steps)
 
 vos:
   train_transforms:
@@ -228,8 +228,8 @@ trainer:
                 end_value: ${scratch.base_lr}
               - _target_: fvcore.common.param_scheduler.CosineParamScheduler
                 start_value: ${scratch.base_lr}
-                end_value: 7.0e-06      # SCALED from 5e-6 for larger batch
-            lengths: [0.12, 0.88]       # 12% warmup (125/1050 steps), 88% cosine
+                end_value: 6.0e-06      # SCALED for batch 6
+            lengths: [0.12, 0.88]       # 12% warmup, 88% cosine
             interval_scaling: ['rescaled', 'rescaled']
       weight_decay:
         - scheduler:

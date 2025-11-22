@@ -24,11 +24,11 @@
 ## v2: base_finetune_v2_stable
 
 **Date**: TBD  
-**Status**: ✅ Ready to launch
+**Status**: ✅ Ready to launch (OOM fixed)
 
 **Changes from v1**:
-- LR: 2e-5→**7e-5**, warmup **125 steps**, end 1e-6→**7e-6**
-- Batch: 4→**8** (40% faster, ~10h vs 16h)
+- LR: 2e-5→**6e-5**, warmup **175 steps**, end 1e-6→**6e-6**
+- Batch: 4→**6** (50% faster, ~12h, fits A100 40GB)
 - Loss: mask 20→**5**, dice 1→**2**
 - Weight decay: 0.05→**0.01**
 - ColorJitter: 0.3→**0.2**

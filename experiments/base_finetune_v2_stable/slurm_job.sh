@@ -2,7 +2,7 @@
 #SBATCH --job-name=base_finetune_v2_stable
 #SBATCH --output=slurm_logs/base_finetune_v2_stable_%j.out
 #SBATCH --error=slurm_logs/base_finetune_v2_stable_%j.err
-#SBATCH --time=12:00:00
+#SBATCH --time=14:00:00
 #SBATCH --partition=gpu
 #SBATCH --gres=gpu:a100:1
 #SBATCH --ntasks=1
@@ -10,9 +10,9 @@
 #SBATCH --mem=128GB
 
 # Experiment: base_finetune_v2_stable
-# Changes: Higher LR (7e-5), warmup (125 steps), batch size 8 (2x faster),
+# Changes: LR 6e-5, warmup 175 steps, batch size 6 (fits A100 40GB),
 #          balanced loss (5:2:1:1), lower weight decay (0.01), 100 epochs
-# Expected time: ~10 hours (vs 16h for batch=4)
+# Expected time: ~12 hours
 
 
 module restore dl 
