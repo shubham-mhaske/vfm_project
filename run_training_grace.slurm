@@ -30,6 +30,10 @@ module load DL/2023.01
 # Using an absolute path with $SCRATCH is a robust way to do this
 source $SCRATCH/vfm_env/bin/activate
 
+# FIX: Explicitly set the LD_LIBRARY_PATH to your conda environment's lib directory.
+# This helps the system find shared libraries like libpython.
+export LD_LIBRARY_PATH=$CONDA_PREFIX/lib:$LD_LIBRARY_PATH
+
 # Navigate to the project directory
 cd $SCRATCH/vfm_project
 
@@ -42,7 +46,11 @@ export PYTHONPATH="$SCRATCH/vfm_project:$SCRATCH/vfm_project/sam2:$PYTHONPATH"
 echo "PYTHONPATH set to: $PYTHONPATH"
 
 # --- Job Execution ---
-# The user-provided training script and arguments have been corrected to match the project structure
-echo "Starting SAM2 finetuning with 'bcss_finetune_best' experiment..."
-python src/run_finetuning.py experiment=bcss_finetune_best
+echo "Starting SAM2 finetuning..."
+
+# FIX: Changed experiment to a valid configuration ('base_finetune').
+# The previous name 'bcss_finetune_best' does not exist.
+# You can change 'base_finetune' to 'strong_aug', 'exp_frozen_backbone', etc.
+python src/run_finetuning.py experiment=base_finetune
+
 echo "Finetuning completed."
