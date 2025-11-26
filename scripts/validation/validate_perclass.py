@@ -14,8 +14,10 @@ from tqdm import tqdm
 import json
 
 # Add project root to path
-project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '../..'))
 sys.path.insert(0, project_root)
+sam2_path = os.path.join(project_root, 'sam2')
+sys.path.insert(0, sam2_path)
 
 from src.dataset import BCSSDataset
 from src.sam_segmentation import get_sam2_predictor, get_predicted_mask_from_prompts
