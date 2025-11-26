@@ -37,7 +37,7 @@ The framework supports various prompting strategies for zero-shot segmentation, 
 │   ├── validate_config.py
 │   └── cleanup.sh
 ├── src/                      # Python source code
-│   ├── train_sam.py         # Main training script
+│   ├── run_finetuning.py    # Main training script
 │   ├── evaluation.py        # Full evaluation pipeline
 │   ├── dataset.py           # BCSS Dataset
 │   ├── sam_segmentation.py  # SAM utilities

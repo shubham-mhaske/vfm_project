@@ -65,7 +65,7 @@ export DATA_ROOT="$SLURM_SUBMIT_DIR/data/bcss"
 echo "============================================"
 echo "Starting Training..."
 echo "============================================"
-python src/train_sam.py \
+python src/run_finetuning.py \
     experiment=base_finetune_v3_perclass \
     data_root=$DATA_ROOT \
     hydra.run.dir=finetune_logs/base_finetune_v3_perclass-$(date +%Y-%m-%d_%H-%M-%S)

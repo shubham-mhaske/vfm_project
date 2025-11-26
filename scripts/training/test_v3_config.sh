@@ -19,7 +19,7 @@ python scripts/validate_config.py --config conf/experiment/base_finetune_v3_perc
 
 # Test 2: Dry run (0 epochs)
 echo -e "\n[2/3] Dry run test..."
-python src/train_sam.py \
+python src/run_finetuning.py \
   experiment=base_finetune_v3_perclass \
   scratch.num_epochs=0 \
   scratch.train_batch_size=2 \
@@ -29,7 +29,7 @@ python src/train_sam.py \
 
 # Test 3: Single epoch test
 echo -e "\n[3/3] Single epoch test..."
-python src/train_sam.py \
+python src/run_finetuning.py \
   experiment=base_finetune_v3_perclass \
   scratch.num_epochs=1 \
   scratch.train_batch_size=2 \
