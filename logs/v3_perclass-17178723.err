@@ -1,0 +1,42 @@
+Restoring modules from user's dl
+/scratch/user/shubhammhaske/vfm_env/lib/python3.10/site-packages/torch/distributed/distributed_c10d.py:4876: UserWarning: barrier(): using the device under current context. You can specify `device_id` in `init_process_group` to mute this warning.
+  warnings.warn(  # warn only once
+Error executing job with overrides: ['experiment=base_finetune_v3_perclass', 'data_root=/scratch/user/shubhammhaske/vfm_project/data/bcss']
+Traceback (most recent call last):
+  File "/scratch/user/shubhammhaske/vfm_project/src/run_finetuning.py", line 107, in main
+    trainer.run()
+  File "/scratch/user/shubhammhaske/vfm_project/sam2/training/trainer.py", line 520, in run
+    self.run_train()
+  File "/scratch/user/shubhammhaske/vfm_project/sam2/training/trainer.py", line 537, in run_train
+    outs = self.train_epoch(dataloader)
+  File "/scratch/user/shubhammhaske/vfm_project/sam2/training/trainer.py", line 745, in train_epoch
+    for data_iter, batch in enumerate(train_loader):
+  File "/scratch/user/shubhammhaske/vfm_project/sam2/training/dataset/sam2_datasets.py", line 66, in __next__
+    raise e
+  File "/scratch/user/shubhammhaske/vfm_project/sam2/training/dataset/sam2_datasets.py", line 58, in __next__
+    item = next(self._iter_dls[dataset_idx])
+  File "/scratch/user/shubhammhaske/vfm_env/lib/python3.10/site-packages/torch/utils/data/dataloader.py", line 732, in __next__
+    data = self._next_data()
+  File "/scratch/user/shubhammhaske/vfm_env/lib/python3.10/site-packages/torch/utils/data/dataloader.py", line 1506, in _next_data
+    return self._process_data(data, worker_id)
+  File "/scratch/user/shubhammhaske/vfm_env/lib/python3.10/site-packages/torch/utils/data/dataloader.py", line 1541, in _process_data
+    data.reraise()
+  File "/scratch/user/shubhammhaske/vfm_env/lib/python3.10/site-packages/torch/_utils.py", line 769, in reraise
+    raise exception
+TypeError: Caught TypeError in DataLoader worker process 0.
+Original Traceback (most recent call last):
+  File "/scratch/user/shubhammhaske/vfm_env/lib/python3.10/site-packages/torch/utils/data/_utils/worker.py", line 349, in _worker_loop
+    data = fetcher.fetch(index)  # type: ignore[possibly-undefined]
+  File "/scratch/user/shubhammhaske/vfm_env/lib/python3.10/site-packages/torch/utils/data/_utils/fetch.py", line 52, in fetch
+    data = [self.dataset[idx] for idx in possibly_batched_index]
+  File "/scratch/user/shubhammhaske/vfm_env/lib/python3.10/site-packages/torch/utils/data/_utils/fetch.py", line 52, in <listcomp>
+    data = [self.dataset[idx] for idx in possibly_batched_index]
+  File "/scratch/user/shubhammhaske/vfm_project/sam2/training/dataset/vos_dataset.py", line 144, in __getitem__
+    return self._get_datapoint(idx)
+  File "/scratch/user/shubhammhaske/vfm_project/sam2/training/dataset/vos_dataset.py", line 75, in _get_datapoint
+    for transform in self._transforms:
+TypeError: 'ComposeAPI' object is not iterable
+
+
+Set the environment variable HYDRA_FULL_ERROR=1 for a complete stack trace.
+[rank0]:[W1126 00:10:57.447721525 ProcessGroupNCCL.cpp:1524] Warning: WARNING: destroy_process_group() was not called before program exit, which can leak resources. For more info, please see https://pytorch.org/docs/stable/distributed.html#shutdown (function operator())
