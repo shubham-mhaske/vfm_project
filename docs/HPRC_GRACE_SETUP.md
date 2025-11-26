@@ -215,7 +215,7 @@ Grace uses SLURM (Simple Linux Utility for Resource Management) as its job sched
 
 ### 2. SLURM Script Anatomy
 
-The `run_training_grace.slurm` script has three sections:
+The SLURM job script `scripts/slurm/run_training_grace.slurm` has three sections:
 
 #### A. SLURM Directives (Resource Requests)
 
@@ -281,7 +281,7 @@ echo "Finetuning completed."
 cd $SCRATCH/vfm_project
 
 # Submit the job
-sbatch run_training_grace.slurm
+sbatch scripts/slurm/run_training_grace.slurm
 
 # Output will show:
 # Submitted batch job 123456
@@ -315,7 +315,7 @@ python src/run_finetuning.py experiment=base_finetune scratch.num_epochs=1
 
 #### Evaluation Job
 
-Use `evaluate_segmentation.slurm`:
+Use `scripts/slurm/evaluate_segmentation.slurm`:
 ```bash
 #!/bin/bash
 #SBATCH --job-name=eval_segmentation
@@ -684,7 +684,7 @@ cd $SCRATCH/vfm_project        # Go to project
 cd $HOME                       # Go to home directory
 
 # === Job Submission ===
-sbatch run_training_grace.slurm        # Submit job
+sbatch scripts/slurm/run_training_grace.slurm        # Submit job
 squeue -u $USER                        # Check queue
 scancel 123456                         # Cancel job
 tail -f logs/sam_finetune_123456.out   # Monitor output
@@ -760,7 +760,7 @@ ls -lh sam2/checkpoints/sam2.1_hiera_large.pt
 ls data/bcss/images/*.png | wc -l  # Should be 151
 
 # Submit training job
-sbatch run_training_grace.slurm
+sbatch scripts/slurm/run_training_grace.slurm
 
 # Note the job ID (e.g., 123456)
 
@@ -784,7 +784,7 @@ seff 123456
 ls -lh finetune_logs/base_finetune-*/checkpoints/
 
 # Run evaluation
-sbatch evaluate_segmentation.slurm
+sbatch scripts/slurm/evaluate_segmentation.slurm
 
 # ===== 5. DOWNLOAD RESULTS =====
 

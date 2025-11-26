@@ -9,7 +9,7 @@
 python src/run_finetuning.py experiment=base_finetune_v2_stable --cfg job --resolve
 
 # Submit to SLURM
-sbatch run_training_grace.slurm base_finetune_v2_stable
+sbatch scripts/slurm/run_training_grace.slurm base_finetune_v2_stable
 
 # Monitor job
 squeue -u $USER

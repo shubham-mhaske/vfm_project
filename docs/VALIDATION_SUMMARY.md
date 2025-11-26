@@ -96,12 +96,12 @@ ssh shubhammhaske@grace.hprc.tamu.edu
 cd $SCRATCH/vfm_project
 
 # Verify files are synced
-ls -lh run_training_grace.slurm
+ls -lh scripts/slurm/run_training_grace.slurm
 ls -lh conf/experiment/base_finetune.yaml
 ls data/bcss/images/*.png | wc -l  # Should show 151
 
 # Submit job
-sbatch run_training_grace.slurm
+sbatch scripts/slurm/run_training_grace.slurm
 
 # Monitor job
 squeue -u shubhammhaske

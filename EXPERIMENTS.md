@@ -200,10 +200,10 @@ python src/validate_perclass.py --checkpoint test_checkpoint.pt
 ### Phase 2: HPRC Training (4-5 hours)
 ```bash
 # Upload code
-scp -r conf/ src/ grace1:~/vfm_project/
+scp -r conf/ src/ scripts/ grace1:~/vfm_project/
 
 # Submit job
-ssh grace1 "cd vfm_project && sbatch run_training_grace.slurm base_finetune_v3_perclass"
+ssh grace1 "cd vfm_project && sbatch scripts/slurm/run_training_v3.slurm"
 
 # Monitor (watch for realistic Dice ~0.50-0.60, not 0.80+)
 ssh grace1 "tail -f finetune_logs/base_finetune_v3*/logs/*.log | grep -E '(Dice|epoch)'"

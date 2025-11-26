@@ -93,7 +93,7 @@ if [ $EXIT_CODE -eq 0 ]; then
         if [ -f "$BEST_CHECKPOINT" ]; then
             echo "Validating checkpoint: $BEST_CHECKPOINT"
             
-            python src/validate_perclass.py \
+            python scripts/validation/validate_perclass.py \
                 --checkpoint $BEST_CHECKPOINT \
                 --model_cfg configs/sam2.1/sam2.1_hiera_l.yaml \
                 --split val \
