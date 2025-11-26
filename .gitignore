@@ -6,6 +6,22 @@ data/
 models/
 
 # Logs - exclude checkpoints but keep logs/metrics
+finetune_logs/
+
+# But include analysis files (logs, configs, metrics)
+!finetune_logs/**/
+!finetune_logs/**/*.log
+!finetune_logs/**/*.txt
+!finetune_logs/**/*.json
+!finetune_logs/**/*.yaml
+!finetune_logs/**/*.md
+!finetune_logs/**/*.csv
+
+# Exclude large files from finetune_logs
+finetune_logs/**/*.pt
+finetune_logs/**/*.pth
+finetune_logs/**/*.ckpt
+finetune_logs/**/*.safetensors
 finetune_logs/**/checkpoints/
 finetune_logs/**/tensorboard/events.out.tfevents.*
 
