@@ -5,9 +5,9 @@ data/
 # Models
 models/
 
-# Logs
-finetune_logs/
-*.log
+# Logs - exclude checkpoints but keep logs/metrics
+finetune_logs/**/checkpoints/
+finetune_logs/**/tensorboard/events.out.tfevents.*
 
 # Python cache
 __pycache__/
