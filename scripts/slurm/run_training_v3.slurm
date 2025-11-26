@@ -1,7 +1,7 @@
 #!/bin/bash
 #SBATCH --job-name=sam2_v3_perclass
-#SBATCH --output=finetune_logs/v3_perclass-%j.out
-#SBATCH --error=finetune_logs/v3_perclass-%j.err
+#SBATCH --output=logs/v3_perclass-%j.out
+#SBATCH --error=logs/v3_perclass-%j.err
 #SBATCH --time=8:00:00
 #SBATCH --partition=gpu
 #SBATCH --nodes=1
@@ -36,6 +36,16 @@ cd $SLURM_SUBMIT_DIR
 echo "Working directory: $(pwd)"
 echo ""
 
+# Create run directory with timestamp
+RUN_NAME="base_finetune_v3_perclass-$(date +%Y-%m-%d_%H-%M-%S)"
+RUN_DIR="finetune_logs/$RUN_NAME"
+mkdir -p "$RUN_DIR/slurm_logs"
+
+# Copy SLURM output files to run directory (will be done at end)
+echo "Run directory: $RUN_DIR"
+echo "SLURM logs will be copied to: $RUN_DIR/slurm_logs/"
+echo ""
+
 # Print environment info
 echo "Python: $(which python)"
 echo "Python version: $(python --version)"
@@ -68,7 +78,7 @@ echo "============================================"
 python src/run_finetuning.py \
     experiment=base_finetune_v3_perclass \
     data_root=$DATA_ROOT \
-    hydra.run.dir=finetune_logs/base_finetune_v3_perclass-$(date +%Y-%m-%d_%H-%M-%S)
+    hydra.run.dir=$RUN_DIR
 
 EXIT_CODE=$?
 echo ""
@@ -79,16 +89,26 @@ echo "Exit code: $EXIT_CODE"
 echo "End time: $(date)"
 echo ""
 
+# Copy SLURM logs to run directory
+echo "Copying SLURM logs to run directory..."
+if [ -f "logs/v3_perclass-${SLURM_JOB_ID}.out" ]; then
+    cp "logs/v3_perclass-${SLURM_JOB_ID}.out" "$RUN_DIR/slurm_logs/"
+    echo "✓ Copied: logs/v3_perclass-${SLURM_JOB_ID}.out -> $RUN_DIR/slurm_logs/"
+fi
+if [ -f "logs/v3_perclass-${SLURM_JOB_ID}.err" ]; then
+    cp "logs/v3_perclass-${SLURM_JOB_ID}.err" "$RUN_DIR/slurm_logs/"
+    echo "✓ Copied: logs/v3_perclass-${SLURM_JOB_ID}.err -> $RUN_DIR/slurm_logs/"
+fi
+echo ""
+
 # If training successful, run per-class validation
 if [ $EXIT_CODE -eq 0 ]; then
     echo "Running per-class validation on best checkpoint..."
     
-    # Find best checkpoint (usually around epoch 15-25)
-    CHECKPOINT_DIR=$(ls -dt finetune_logs/base_finetune_v3_perclass-* 2>/dev/null | head -1)
-    
-    if [ -d "$CHECKPOINT_DIR/checkpoints" ]; then
+    # Use the run directory we just created
+    if [ -d "$RUN_DIR/checkpoints" ]; then
         # Find latest checkpoint as "best" (improve this with actual best selection)
-        BEST_CHECKPOINT=$(ls -t $CHECKPOINT_DIR/checkpoints/checkpoint_*.pt 2>/dev/null | head -1)
+        BEST_CHECKPOINT=$(ls -t $RUN_DIR/checkpoints/checkpoint_*.pt 2>/dev/null | head -1)
         
         if [ -f "$BEST_CHECKPOINT" ]; then
             echo "Validating checkpoint: $BEST_CHECKPOINT"
@@ -97,14 +117,14 @@ if [ $EXIT_CODE -eq 0 ]; then
                 --checkpoint $BEST_CHECKPOINT \
                 --model_cfg configs/sam2.1/sam2.1_hiera_l.yaml \
                 --split val \
-                --output $CHECKPOINT_DIR/validation_results.json
+                --output $RUN_DIR/validation_results.json
             
-            echo "Validation results saved to: $CHECKPOINT_DIR/validation_results.json"
+            echo "Validation results saved to: $RUN_DIR/validation_results.json"
         else
-            echo "Warning: No checkpoint found in $CHECKPOINT_DIR/checkpoints/"
+            echo "Warning: No checkpoint found in $RUN_DIR/checkpoints/"
         fi
     else
-        echo "Warning: Checkpoint directory not found: $CHECKPOINT_DIR/checkpoints"
+        echo "Warning: Checkpoint directory not found: $RUN_DIR/checkpoints"
     fi
 else
     echo "Training failed with exit code $EXIT_CODE"
@@ -115,13 +135,14 @@ echo ""
 echo "============================================"
 echo "Next Steps:"
 echo "============================================"
-echo "1. Check training logs: finetune_logs/v3_perclass-$SLURM_JOB_ID.out"
-echo "2. View tensorboard: tensorboard --logdir=finetune_logs/base_finetune_v3_perclass-*/tensorboard"
-echo "3. Run full evaluation:"
+echo "1. Training logs: $RUN_DIR/"
+echo "2. SLURM logs: $RUN_DIR/slurm_logs/"
+echo "3. View tensorboard: tensorboard --logdir=$RUN_DIR/tensorboard"
+echo "4. Run full evaluation:"
 echo "   python src/evaluation.py \\"
-echo "     --sam_checkpoint [BEST_CHECKPOINT] \\"
+echo "     --sam_checkpoint $RUN_DIR/checkpoints/checkpoint_XX.pt \\"
 echo "     --sam_model_cfg configs/sam2.1/sam2.1_hiera_l.yaml \\"
 echo "     --clip_prompts configs/prompts/hard_coded_prompts_v2.json \\"
 echo "     --output_dir results/v3_evaluation"
-echo "4. Compare with v2: Dice 0.42 -> target 0.60-0.70"
+echo "5. Compare with v2: Dice 0.42 -> target 0.60-0.70"
 echo ""
