@@ -24,16 +24,22 @@ echo ""
 
 # Load modules
 module purge
-module load Anaconda3/2024.02-1
-module load CUDA/12.1.1
-module load cuDNN/8.9.7.29-CUDA-12.1.1
+module restore dl
 
 # Activate conda environment
-source activate vfm_project
+source $SCRATCH/vfm_env/bin/activate
+
+# Set LD_LIBRARY_PATH
+export LD_LIBRARY_PATH=$CONDA_PREFIX/lib:$LD_LIBRARY_PATH
 
 # Navigate to project directory
 cd $SLURM_SUBMIT_DIR
 echo "Working directory: $(pwd)"
+echo ""
+
+# Set PYTHONPATH
+export PYTHONPATH="$SLURM_SUBMIT_DIR:$SLURM_SUBMIT_DIR/sam2:$PYTHONPATH"
+echo "PYTHONPATH: $PYTHONPATH"
 echo ""
 
 # Create run directory with timestamp
