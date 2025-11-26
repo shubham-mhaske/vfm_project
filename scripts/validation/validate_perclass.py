@@ -190,7 +190,7 @@ if __name__ == '__main__':
     args = parser.parse_args()
     
     # Resolve relative paths
-    project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+    project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '../..'))
     
     # Checkpoint needs absolute path
     if not os.path.isabs(args.checkpoint):
