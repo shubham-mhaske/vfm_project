@@ -17,22 +17,56 @@ The framework supports various prompting strategies for zero-shot segmentation, 
 
 ```
 /
-├───conf/                     # Hydra configuration directory for experiments.
-│   └───experiment/           # Configs for different fine-tuning experiments.
-├───data/                     # Root directory for datasets (not tracked by Git).
-│   └───bcss/                 # BCSS dataset images and masks.
-├───finetune_logs/            # Output directory for fine-tuning runs.
-├───src/                      # All Python source code.
-│   ├───main.py               # Main script for zero-shot experiments.
-│   ├───run_finetuning.py     # Script for launching fine-tuning experiments.
-│   ├───sam_segmentation.py   # Core logic for SAM-based segmentation.
-│   ├───evaluation.py         # Logic for evaluating segmentation masks.
-│   ├───dataset.py            # PyTorch Dataset and DataLoader definitions.
-│   └───...
-├───sam2/                     # Git submodule for the SAM2 model.
-├───...
-└───README.md                 # This file.
+├── conf/                     # Hydra configuration directory
+│   └── experiment/           # Training configs (v2_stable, v3_perclass)
+├── data/                     # Datasets (not tracked by Git)
+│   └── bcss/                 # BCSS images and masks
+├── docs/                     # Documentation
+│   ├── HPRC_GRACE_SETUP.md
+│   └── VALIDATION_SUMMARY.md
+├── experiments/              # Experiment tracking and logs
+│   ├── experiment_log.md
+│   ├── base_finetune_v1/
+│   └── base_finetune_v2_stable/
+├── finetune_logs/            # Training outputs
+├── scripts/                  # Organized utilities
+│   ├── slurm/               # SLURM jobs (v3, grace, eval)
+│   ├── validation/          # validate_perclass.py
+│   ├── training/            # test_v3_config.sh
+│   ├── legacy/              # Archived scripts
+│   ├── validate_config.py
+│   └── cleanup.sh
+├── src/                      # Python source code
+│   ├── train_sam.py         # Main training script
+│   ├── evaluation.py        # Full evaluation pipeline
+│   ├── dataset.py           # BCSS Dataset
+│   ├── sam_segmentation.py  # SAM utilities
+│   └── ...
+├── sam2/                     # SAM2 submodule
+├── EXPERIMENTS.md           # Master experiment tracker
+└── README.md                # This file
 ```
+
+## Quick Start (v3 Training)
+
+```bash
+# 1. Test configuration locally (5-10 min)
+bash scripts/training/test_v3_config.sh
+
+# 2. Submit training to HPRC (4-5 hours)
+sbatch scripts/slurm/run_training_v3.slurm
+
+# 3. Monitor progress
+tail -f finetune_logs/v3_perclass-*.out
+
+# 4. Validate results
+python scripts/validation/validate_perclass.py \
+  --checkpoint finetune_logs/base_finetune_v3_*/checkpoints/checkpoint_15.pt \
+  --model_cfg configs/sam2.1/sam2.1_hiera_l.yaml \
+  --split val
+```
+
+See **EXPERIMENTS.md** for complete training history and research findings.
 
 ## Setup and Installation
 
