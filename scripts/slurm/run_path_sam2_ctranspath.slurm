@@ -30,14 +30,12 @@ echo "Start: $(date)"
 echo "=============================================="
 
 # --- Environment Setup ---
-module purge
-module load GCC/12.2.0
-module load CUDA/12.1.1
-module load Anaconda3/2024.02-1
+module restore dl
+source $SCRATCH/vfm_env/bin/activate
 
-source activate vfm_env
+cd $SCRATCH/vfm_project
 
-cd /scratch/user/$USER/vfm_project
+export PYTHONPATH="$SCRATCH/vfm_project:$SCRATCH/vfm_project/sam2:$PYTHONPATH"
 
 # GPU info
 echo ""
