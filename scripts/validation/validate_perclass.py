@@ -20,7 +20,8 @@ sam2_path = os.path.join(project_root, 'sam2')
 sys.path.insert(0, sam2_path)
 
 from src.dataset import BCSSDataset
-from src.sam_segmentation import get_sam2_predictor, get_predicted_mask_from_prompts
+from src.sam_segmentation import get_predicted_mask_from_prompts
+from src.ctranspath_encoder import PathSAM2CTransPathEncoder
 from sam2.build_sam import build_sam2
 
 
@@ -61,7 +62,29 @@ def validate_perclass(checkpoint_path, model_cfg, data_root, split='val', num_sa
     # Load SAM2 model
     print("Loading SAM2 model...")
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-    predictor = get_sam2_predictor(model_cfg, checkpoint_path, device=device)
+    
+    # Build the standard SAM2 model first
+    model = build_sam2(model_cfg, ckpt_path=None, device=device)
+
+    # Check if this is a Path-SAM2 CTransPath model by looking at the checkpoint keys
+    # This is a bit of a hack, but avoids adding more command-line args.
+    # A better way would be a flag like --model_type=path_sam2_ctranspath
+    ckpt = torch.load(checkpoint_path, map_location='cpu')
+    is_path_sam2_ctranspath = any("image_encoder.sam_encoder" in k for k in ckpt['model'].keys())
+
+    if is_path_sam2_ctranspath:
+        print("Path-SAM2 CTransPath model detected. Rebuilding with custom encoder...")
+        # We don't have the CTransPath checkpoint path here, but it's not needed for inference
+        # if the weights are already in the main checkpoint.
+        model.image_encoder = PathSAM2CTransPathEncoder(sam_encoder=model.image_encoder, ctranspath_checkpoint=None, freeze_sam=True, freeze_ctranspath=True)
+
+    # Now load the state dict
+    model.load_state_dict(ckpt['model'])
+    model.eval()
+
+    # Manually import and create the predictor
+    from sam2.sam2_image_predictor import SAM2ImagePredictor
+    predictor = SAM2ImagePredictor(model)
     
     # Load dataset
     print(f"Loading {split} dataset...")
