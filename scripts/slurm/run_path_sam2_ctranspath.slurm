@@ -37,9 +37,6 @@ cd $SCRATCH/vfm_project
 
 export PYTHONPATH="$SCRATCH/vfm_project:$SCRATCH/vfm_project/sam2:$PYTHONPATH"
 
-# Install timm if not available (required for CTransPath Swin architecture)
-pip install -q timm
-
 # GPU info
 echo ""
 nvidia-smi --query-gpu=name,memory.total --format=csv
