@@ -59,7 +59,6 @@ def evaluate_segmentation(args):
         print("[INIT] Registering OmegaConf resolvers...", flush=True)
     register_omegaconf_resolvers()
 
-    model_cfg = os.path.join(project_root, args.model_cfg)
     checkpoint_path = os.path.join(project_root, args.checkpoint)
     if args.verbose:
         print(f"[LOAD] Loading checkpoint from {checkpoint_path} ...", flush=True)
@@ -78,11 +77,10 @@ def evaluate_segmentation(args):
         import sam2
         if args.verbose:
             print("[BUILD] Building SAM2 model (no weights)...", flush=True)
-        sam2_pkg_root = sam2.__path__[0]
-        relative_cfg_path = os.path.relpath(model_cfg, sam2_pkg_root).replace('\\', '/')
+        
         if args.verbose:
             t_build0 = time.time()
-        model = build_sam2(relative_cfg_path, ckpt_path=None, device=device)
+        model = build_sam2(args.model_cfg, ckpt_path=None, device=device)
         if args.verbose:
             print(f"[BUILD] Model construction time {time.time()-t_build0:.2f}s", flush=True)
         if args.verbose:
@@ -100,7 +98,7 @@ def evaluate_segmentation(args):
     else:
         if args.verbose:
             print("[BUILD] Using standard predictor loader...", flush=True)
-        predictor = get_sam2_predictor(model_cfg, checkpoint_path, device)
+        predictor = get_sam2_predictor(args.model_cfg, checkpoint_path, device)
     if args.verbose:
         print("[READY] Predictor initialized.", flush=True)
 
