@@ -25,6 +25,7 @@ from hydra.utils import instantiate
 from omegaconf import DictConfig, OmegaConf
 import logging
 import torch
+import torch.nn as nn
 
 # Add project root and sam2 to path
 project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
@@ -38,9 +39,34 @@ from src.ctranspath_encoder import PathSAM2CTransPathEncoder, CTransPathEncoder,
 
 try:
     from training.utils.train_utils import register_omegaconf_resolvers
+    from training.trainer import Trainer
 except ImportError as e:
     print(f"Could not import from training utils: {e}")
     raise e
+
+
+# Monkey-patch the trainer to skip DDP wrapping for single-GPU
+_original_setup_ddp = None
+
+def _skip_ddp_setup(self, distributed_conf, accelerator):
+    """Skip DDP wrapping for single-GPU training with CTransPath."""
+    print("  [CTransPath] Skipping DDP wrapper for single-GPU training")
+    # Don't wrap in DDP - just keep the model as-is
+    pass
+
+def patch_trainer_skip_ddp():
+    """Patch the Trainer class to skip DDP setup."""
+    global _original_setup_ddp
+    _original_setup_ddp = Trainer._setup_ddp_distributed_training
+    Trainer._setup_ddp_distributed_training = _skip_ddp_setup
+    print("  [CTransPath] Patched trainer to skip DDP")
+
+def restore_trainer_ddp():
+    """Restore original DDP setup."""
+    global _original_setup_ddp
+    if _original_setup_ddp is not None:
+        Trainer._setup_ddp_distributed_training = _original_setup_ddp
+        print("  [CTransPath] Restored original DDP setup")
 
 
 def get_unwrapped_model(model):
@@ -198,8 +224,12 @@ def main(cfg: DictConfig) -> None:
     print(f"  RANK: {os.environ.get('RANK', 'N/A')}")
     print(f"  WORLD_SIZE: {os.environ.get('WORLD_SIZE', 'N/A')}")
     print(f"  LOCAL_RANK: {os.environ.get('LOCAL_RANK', 'N/A')}")
+    
+    # Patch trainer to skip DDP for single-GPU CTransPath training
+    print("\nPatching trainer for single-GPU training...")
+    patch_trainer_skip_ddp()
 
-    # Instantiate trainer
+    # Instantiate trainer (now without DDP wrapping)
     print("\nInstantiating trainer...")
     trainer = instantiate(cfg.trainer, _recursive_=False)
     
