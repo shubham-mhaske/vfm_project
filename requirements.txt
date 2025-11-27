@@ -20,3 +20,5 @@ fvcore
 tqdm
 iopath
 jupyter
+timm>=0.9.0
+huggingface_hub>=0.20.0

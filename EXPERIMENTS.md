@@ -75,13 +75,53 @@
 
 ## Next Steps
 
-### v4: Re-train with Bug Fixes (Recommended)
+### v4: Re-train with Bug Fixes
 1. Use corrected class mapping (class 18 = blood_vessel)
 2. Train only on target classes {1, 2, 3, 4, 18}
 3. Add class weighting for blood_vessel (67× weight)
 4. Expected improvement: Blood vessel Dice 0.03 → 0.15+
 
-### Future Experiments
+### v5: Path-SAM2 (UNI Encoder Integration) ⭐ NEW
+**Architecture**: SAM2 + UNI encoder fusion (Path-SAM2 style)
+
+**Key Innovation**: Integrate [UNI encoder](https://huggingface.co/MahmoodLab/UNI) 
+trained on >100M histopathology patches for domain-specific features.
+
+**Technical Details**:
+- SAM2 Hiera-L encoder (frozen) → 256-dim visual features
+- UNI ViT-L encoder (frozen) → 1024-dim histopathology features
+- Fusion module (trainable) → combines both encoders → 256-dim
+- SAM2 decoder (trainable) → mask prediction
+
+**Expected Improvement**: Dice 0.42 → **0.65-0.80** (based on Path-SAM2 paper results)
+
+**Paper Reference**: "Path-SAM2: Transfer SAM2 for digital pathology semantic segmentation"
+- 92% Dice on EBHI dataset
+- 97.8% Dice on CRAG dataset
+- 30-36% improvement over baseline SAM2
+
+**Files**:
+- `src/uni_encoder.py` - UNI encoder + fusion module
+- `src/run_path_sam2_training.py` - Training script
+- `conf/experiment/path_sam2_uni_fusion.yaml` - Hydra config
+- `scripts/slurm/run_path_sam2_training.slurm` - SLURM job script
+
+**Commands**:
+```bash
+# Download UNI weights (requires HuggingFace login)
+huggingface-cli login
+python src/download_uni_weights.py
+
+# Train Path-SAM2
+sbatch scripts/slurm/run_path_sam2_training.slurm
+
+# Or locally:
+python src/run_path_sam2_training.py experiment=path_sam2_uni_fusion
+```
+
+---
+
+## Future Experiments
 - Gradual encoder unfreezing (epochs 20+)
 - H&E stain normalization augmentation
 - Multi-scale training (512→1024)
