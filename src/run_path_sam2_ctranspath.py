@@ -43,6 +43,13 @@ except ImportError as e:
     raise e
 
 
+def get_unwrapped_model(model):
+    """Unwrap model from DDP/FSDP if needed."""
+    if hasattr(model, 'module'):
+        return model.module
+    return model
+
+
 def integrate_ctranspath_encoder(model, ctranspath_checkpoint: str, 
                                   sam_embed_dim: int = 256,
                                   ctranspath_embed_dim: int = 768,
@@ -52,7 +59,7 @@ def integrate_ctranspath_encoder(model, ctranspath_checkpoint: str,
     Replace SAM2's image encoder with PathSAM2CTransPathEncoder.
     
     Args:
-        model: SAM2Train model
+        model: SAM2Train model (may be DDP-wrapped)
         ctranspath_checkpoint: Path to CTransPath weights
         sam_embed_dim: SAM2 output dimension (256)
         ctranspath_embed_dim: CTransPath output dimension (768)
@@ -60,13 +67,16 @@ def integrate_ctranspath_encoder(model, ctranspath_checkpoint: str,
         fusion_type: Fusion strategy (concat, add, attention)
     
     Returns:
-        Modified model
+        Modified model (unwrapped)
     """
     print(f"\n{'='*60}")
     print("Integrating CTransPath Encoder (Path-SAM2 Style)")
     print(f"{'='*60}")
     
-    original_encoder = model.image_encoder
+    # Unwrap DDP if needed
+    unwrapped_model = get_unwrapped_model(model)
+    
+    original_encoder = unwrapped_model.image_encoder
     print(f"Original SAM2 encoder: {type(original_encoder).__name__}")
     
     # Create CTransPath encoder
@@ -95,12 +105,12 @@ def integrate_ctranspath_encoder(model, ctranspath_checkpoint: str,
         fusion_type=fusion_type
     )
     
-    # Replace encoder
-    model.image_encoder = path_sam2_encoder
+    # Replace encoder on the unwrapped model
+    unwrapped_model.image_encoder = path_sam2_encoder
     
     # Parameter summary
-    total_params = sum(p.numel() for p in model.parameters())
-    trainable_params = sum(p.numel() for p in model.parameters() if p.requires_grad)
+    total_params = sum(p.numel() for p in unwrapped_model.parameters())
+    trainable_params = sum(p.numel() for p in unwrapped_model.parameters() if p.requires_grad)
     
     print(f"\nParameter Summary:")
     print(f"  Total: {total_params:,}")
@@ -109,6 +119,7 @@ def integrate_ctranspath_encoder(model, ctranspath_checkpoint: str,
     print(f"  Trainable %: {100 * trainable_params / total_params:.2f}%")
     print(f"{'='*60}\n")
     
+    # Return the original model (DDP wrapper if it was wrapped)
     return model
 
 
@@ -124,28 +135,31 @@ def setup_selective_training(model, train_fusion: bool = True, train_decoder: bo
     """
     print("Configuring selective training...")
     
+    # Unwrap DDP if needed
+    unwrapped_model = get_unwrapped_model(model)
+    
     # Freeze all first
-    for param in model.parameters():
+    for param in unwrapped_model.parameters():
         param.requires_grad = False
     
     # Unfreeze fusion
-    if train_fusion and hasattr(model, 'image_encoder'):
-        if hasattr(model.image_encoder, 'dimension_alignment'):
+    if train_fusion and hasattr(unwrapped_model, 'image_encoder'):
+        if hasattr(unwrapped_model.image_encoder, 'dimension_alignment'):
             print("  ✓ Unfreezing fusion (dimension_alignment)")
-            for param in model.image_encoder.dimension_alignment.parameters():
+            for param in unwrapped_model.image_encoder.dimension_alignment.parameters():
                 param.requires_grad = True
     
     # Unfreeze decoder components
     if train_decoder:
         components = ['memory_attention', 'memory_encoder', 'sam_mask_decoder', 'sam_prompt_encoder']
         for comp_name in components:
-            if hasattr(model, comp_name):
-                comp = getattr(model, comp_name)
+            if hasattr(unwrapped_model, comp_name):
+                comp = getattr(unwrapped_model, comp_name)
                 print(f"  ✓ Unfreezing {comp_name}")
                 for param in comp.parameters():
                     param.requires_grad = True
     
-    trainable = sum(p.numel() for p in model.parameters() if p.requires_grad)
+    trainable = sum(p.numel() for p in unwrapped_model.parameters() if p.requires_grad)
     print(f"  Total trainable: {trainable:,}")
     
     return model
