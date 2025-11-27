@@ -129,6 +129,49 @@ python src/run_path_sam2_training.py experiment=path_sam2_uni_fusion
 
 ---
 
+### v6: Path-SAM2 with CTransPath ⭐ READY TO RUN
+**Architecture**: SAM2 + CTransPath encoder fusion
+
+**Key Innovation**: Use [CTransPath](https://github.com/Xiyue-Wang/TransPath) - a Swin Transformer 
+pretrained on 15M TCGA histopathology patches. **No access restrictions!**
+
+**Technical Details**:
+- SAM2 Hiera-L encoder (frozen) → 256-dim visual features
+- CTransPath Swin (frozen) → 768-dim histopathology features
+- Fusion module (trainable) → concat + project → 256-dim
+- SAM2 decoder (trainable) → mask prediction
+
+**Advantages over UNI**:
+- ✅ Fully open source - no HuggingFace approval needed
+- ✅ Proven on TCGA data (same source as BCSS)
+- ✅ Smaller model (~100MB vs ~1.3GB)
+
+**Expected Improvement**: Dice 0.42 → **0.60-0.75**
+
+**Files**:
+- `src/ctranspath_encoder.py` - CTransPath encoder + fusion
+- `src/run_path_sam2_ctranspath.py` - Training script
+- `conf/experiment/path_sam2_ctranspath.yaml` - Hydra config
+- `scripts/slurm/run_path_sam2_ctranspath.slurm` - SLURM script
+
+**Commands**:
+```bash
+# Download CTransPath weights (no auth needed!)
+pip install gdown
+gdown 1DoDx_70_TLj98gTf6YTXnu4tFhsFocDX -O models/ctranspath/ctranspath.pth
+
+# Or use download script
+python src/download_ctranspath_weights.py
+
+# Train Path-SAM2 + CTransPath
+sbatch scripts/slurm/run_path_sam2_ctranspath.slurm
+
+# Or locally:
+python src/run_path_sam2_ctranspath.py experiment=path_sam2_ctranspath
+```
+
+---
+
 ## Commands
 
 ```bash
