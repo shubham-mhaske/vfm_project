@@ -510,6 +510,11 @@ class PathSAM2CTransPathEncoder(nn.Module):
         Returns:
             dict with fused features matching SAM2 encoder output format
         """
+        # Ensure all submodules are on the same device as input
+        device = x.device
+        self.ctranspath_encoder = self.ctranspath_encoder.to(device)
+        self.dimension_alignment = self.dimension_alignment.to(device)
+        
         # Get SAM2 features
         sam_output = self.sam_encoder(x)
         
