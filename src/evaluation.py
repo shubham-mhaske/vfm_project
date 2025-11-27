@@ -184,7 +184,7 @@ if __name__ == '__main__':
 
     # Resolve all paths relative to the project root to make execution location-independent
     args.output_dir = os.path.join(project_root, args.output_dir)
-    args.sam_model_cfg = os.path.join(project_root, args.sam_model_cfg)
+
     args.sam_checkpoint = os.path.join(project_root, args.sam_checkpoint)
     args.clip_prompts = os.path.join(project_root, args.clip_prompts)
     args.data_dir = os.path.join(project_root, args.data_dir)
