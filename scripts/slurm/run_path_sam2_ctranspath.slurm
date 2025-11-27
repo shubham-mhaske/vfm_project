@@ -3,11 +3,11 @@
 #SBATCH --output=slurm_logs/path_sam2_ctp_%j.out
 #SBATCH --error=slurm_logs/path_sam2_ctp_%j.err
 #SBATCH --partition=gpu
-#SBATCH --gres=gpu:a100:2
+#SBATCH --gres=gpu:a100:1
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=1
-#SBATCH --cpus-per-task=16
-#SBATCH --mem=128G
+#SBATCH --cpus-per-task=8
+#SBATCH --mem=64G
 #SBATCH --time=24:00:00
 
 ###############################################################################
@@ -79,13 +79,18 @@ IMAGE_COUNT=$(ls -1 "$DATA_DIR/images"/*.png 2>/dev/null | wc -l)
 echo "✓ BCSS dataset: $IMAGE_COUNT images"
 
 # --- Environment Variables ---
+# Single GPU mode (CTransPath fusion not DDP-compatible yet)
 export PYTHONPATH="${PYTHONPATH}:$(pwd):$(pwd)/sam2"
-export CUDA_VISIBLE_DEVICES=0,1
-export MASTER_ADDR=localhost
-export MASTER_PORT=$((12355 + SLURM_JOB_ID % 1000))
-export WORLD_SIZE=2
+export CUDA_VISIBLE_DEVICES=0
 export OMP_NUM_THREADS=8
 export NVIDIA_TF32_OVERRIDE=1
+
+# Force single-process training (no distributed)
+export WORLD_SIZE=1
+export RANK=0
+export LOCAL_RANK=0
+export MASTER_ADDR=localhost
+export MASTER_PORT=12355
 
 # --- Training Config ---
 EXPERIMENT="path_sam2_ctranspath"
@@ -100,15 +105,11 @@ echo "Configuration:"
 echo "  Experiment: $EXPERIMENT"
 echo "  Output: $OUTPUT_DIR"
 echo "  Fusion: concat (SAM2 256-dim + CTransPath 768-dim → 256-dim)"
-echo "  GPUs: 2x A100"
+echo "  GPU: Single A100 (WORLD_SIZE=1)"
 echo ""
 
 # --- Run Training ---
 echo "Starting training..."
-
-# Use single GPU to avoid distributed setup issues
-# (CTransPath fusion module may not be fully DDP-compatible yet)
-export CUDA_VISIBLE_DEVICES=0
 
 python src/run_path_sam2_ctranspath.py \
     experiment=$EXPERIMENT \
