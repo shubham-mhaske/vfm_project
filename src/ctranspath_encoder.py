@@ -538,10 +538,11 @@ class PathSAM2CTransPathEncoder(nn.Module):
         fused_features = self.dimension_alignment(sam_features, ctranspath_features)
         
         # Return in same format as SAM2 encoder
+        # IMPORTANT: Only modify vision_features, NOT backbone_fpn
+        # backbone_fpn contains multi-scale features that SAM2 uses internally
         if isinstance(sam_output, dict):
             sam_output['vision_features'] = fused_features
-            if 'backbone_fpn' in sam_output:
-                sam_output['backbone_fpn'][0] = fused_features.permute(0, 3, 1, 2)
+            # Do NOT modify backbone_fpn - it has specific shape requirements
             return sam_output
         else:
             return fused_features
