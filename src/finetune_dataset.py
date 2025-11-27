@@ -7,8 +7,12 @@ from training.dataset.vos_raw_dataset import VOSRawDataset, VOSFrame, VOSVideo
 # Use the project's prompt helper to generate prompts from masks
 from src.sam_segmentation import get_prompts_from_mask
 
+# Target classes for training - matches evaluation classes
+# BCSS class IDs: 1=tumor, 2=stroma, 3=lymphocyte, 4=necrosis, 18=blood_vessel
+TARGET_CLASS_IDS = {1, 2, 3, 4, 18}
+
 class BCSSSegmentLoader:
-    def __init__(self, mask_path, prompt_type: str = "centroid", use_neg_points: bool = False, num_points: int = 5):
+    def __init__(self, mask_path, prompt_type: str = "centroid", use_neg_points: bool = False, num_points: int = 5, filter_classes: bool = True):
         """SegmentLoader for a single BCSS mask file that also prepares prompts per object.
 
         Args:
@@ -16,11 +20,13 @@ class BCSSSegmentLoader:
             prompt_type: One of {"centroid", "box", "multi_point"}.
             use_neg_points: Whether to include negative clicks sampled outside the bbox (if available).
             num_points: Number of positive points to sample for multi_point prompts.
+            filter_classes: If True, only load target classes (1,2,3,4,18). Default True.
         """
         self.mask_path = mask_path
         self.prompt_type = prompt_type
         self.use_neg_points = use_neg_points
         self.num_points = num_points
+        self.filter_classes = filter_classes
         self._last_prompts = None  # Mapping: obj_id -> {point_coords, point_labels}
 
     def load(self, frame_id):
@@ -32,6 +38,10 @@ class BCSSSegmentLoader:
         
         object_ids = np.unique(masks)
         object_ids = object_ids[object_ids != 0]  # remove background (0)
+        
+        # Filter to only target classes if enabled
+        if self.filter_classes:
+            object_ids = np.array([oid for oid in object_ids if oid in TARGET_CLASS_IDS])
 
         binary_segments = {}
         prompts_per_obj = {}
@@ -95,12 +105,13 @@ class BCSSSegmentLoader:
         return self._last_prompts or {}
 
 class BCSSRawDataset(VOSRawDataset):
-    def __init__(self, img_folder, gt_folder, split='train', prompt_type: str = 'centroid', use_neg_points: bool = False, num_points: int = 5):
+    def __init__(self, img_folder, gt_folder, split='train', prompt_type: str = 'centroid', use_neg_points: bool = False, num_points: int = 5, filter_classes: bool = True):
         self.img_folder = img_folder
         self.gt_folder = gt_folder
         self.prompt_type = prompt_type
         self.use_neg_points = use_neg_points
         self.num_points = num_points
+        self.filter_classes = filter_classes  # Filter to target classes only
         
         all_files = sorted([f for f in os.listdir(img_folder) if f.endswith('.png')])
         
@@ -135,6 +146,7 @@ class BCSSRawDataset(VOSRawDataset):
             prompt_type=self.prompt_type,
             use_neg_points=self.use_neg_points,
             num_points=self.num_points,
+            filter_classes=self.filter_classes,
         )
         
         return video, segment_loader

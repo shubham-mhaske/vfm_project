@@ -44,14 +44,19 @@ class BCSSDataset(Dataset):
             raise ValueError(f"Invalid split: {split}. Must be 'train', 'val', or 'test'.")
 
         # Define tissue class mapping
+        # Note: BCSS uses class ID 18 for blood_vessel, not 5
+        # Class 5 in BCSS is actually 'glandular_secretions'
         self.class_names = {
             0: 'background',
             1: 'tumor',
             2: 'stroma',
             3: 'lymphocyte',
             4: 'necrosis',
-            5: 'blood_vessel'
+            18: 'blood_vessel'  # Fixed: was incorrectly mapped to 5
         }
+        
+        # Target classes for evaluation (excluding background)
+        self.target_class_ids = {1, 2, 3, 4, 18}
     
     def __len__(self):
         return len(self.image_files)

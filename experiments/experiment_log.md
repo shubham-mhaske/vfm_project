@@ -1,48 +1,29 @@
 # Experiment Log
 
----
+Quick reference for experiment results. See `../EXPERIMENTS.md` for full details.
 
-## v1: base_finetune_v1
+## Summary Table
 
-**Date**: 2025-11-21  
-**Status**: ⚠️ Unstable - Collapsed at epoch 50
+| Version | Date | Overall Dice | Status | Notes |
+|---------|------|--------------|--------|-------|
+| v1 | 2025-11-21 | 0.34 | ❌ Failed | Collapsed at epoch 50 |
+| **v2** | 2025-11-22 | **0.42** | ✅ Best | Stable, use as baseline |
+| v3 | 2025-11-26 | 0.40 | ⚠️ Worse | Aggressive augmentation hurt |
 
-**Config**: LR 2e-5, cosine→1e-6, no warmup, loss weights 20:1:1:1, WD 0.05, ColorJitter 0.3, 150 epochs
+## Per-Class Results (v2, Epoch 15)
 
-**Results** (val, 21 samples):
-| Epoch | Dice | IoU |
-|-------|------|-----|
-| 50 | 0.0716 | 0.0431 | 🔴 Collapse
-| 80 | 0.3208 | 0.2067 | Recovered
-| 100 | **0.3354** | **0.2232** | Best
-| 110 | 0.2662 | 0.1721 | Degraded
+| Class | Dice |
+|-------|------|
+| Tumor | 0.54 |
+| Stroma | 0.43 |
+| Necrosis | 0.45 |
+| Lymphocyte | 0.20 |
+| Blood Vessel | 0.03 |
 
-**Issues**: Collapse at epoch 50, oscillating performance, low absolute scores
+## Bug Fixes (2025-11-26)
 
----
+- ✅ Fixed class mapping: blood_vessel is class 18, not 5
+- ✅ Added training filter: only target classes {1,2,3,4,18}
 
-## v2: base_finetune_v2_stable
+**Recommendation**: Re-train with fixes for proper blood_vessel learning.
 
-**Date**: TBD  
-**Status**: ✅ Ready to launch (OOM fixed)
-
-**Changes from v1**:
-- LR: 2e-5→**6e-5**, warmup **175 steps**, end 1e-6→**6e-6**
-- Batch: 4→**6** (50% faster, ~12h, fits A100 40GB)
-- Loss: mask 20→**5**, dice 1→**2**
-- Weight decay: 0.05→**0.01**
-- ColorJitter: 0.3→**0.2**
-- Epochs: 150→**100**, save freq: 10→**5**
-
-**Target**: Dice >0.40, no collapse, stable training
-
-**Launch**: `sbatch experiments/base_finetune_v2_stable/slurm_job.sh`
-
----
-
-## Future Ideas
-
-- LR sweep (find optimal)
-- Smaller model (Hiera B+)
-- Validation loop during training
-- Progressive augmentation
