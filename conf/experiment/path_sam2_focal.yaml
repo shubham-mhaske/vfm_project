@@ -1,0 +1,19 @@
+defaults:
+  - path_sam2_ctranspath_optimized
+
+experiment:
+  name: path_sam2_focal
+
+trainer:
+  loss:
+    all:
+      _target_: src.focal_loss.FocalDiceLoss
+      alpha:
+        1: 1.0
+        2: 1.3
+        3: 5.7
+        4: 4.9
+        18: 67.6
+      gamma: 2.0
+      dice_weight: 2.0
+      focal_weight: 1.0

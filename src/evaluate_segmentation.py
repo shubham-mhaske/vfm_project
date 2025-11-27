@@ -35,128 +35,122 @@ def evaluate_segmentation(args):
     image_dir = os.path.join(project_root, args.image_dir)
     mask_dir = os.path.join(project_root, args.mask_dir)
 
-    # Resolve and prepare output directory if provided and not in print-only mode
     output_dir = None
     if getattr(args, 'output_dir', None) and not getattr(args, 'print_only', False):
         output_dir = os.path.join(project_root, args.output_dir)
         os.makedirs(output_dir, exist_ok=True)
-        if args.verbose:
-            print(f"[INIT] Output directory: {output_dir}", flush=True)
-    elif getattr(args, 'output_dir', None) and getattr(args, 'print_only', False):
-        if args.verbose:
-            print(f"[INIT] print_only=True -> will NOT create or write to output_dir='{args.output_dir}'", flush=True)
 
-    if args.verbose:
-        print("[INIT] Building BCSSDataset...", flush=True)
     bcss_dataset = BCSSDataset(image_dir=image_dir, mask_dir=mask_dir, split=args.split)
-    if args.verbose:
-        print(f"[INIT] Dataset split '{args.split}' size: {len(bcss_dataset)}", flush=True)
-
     device = get_device(force_cpu=args.force_cpu) if hasattr(args, 'force_cpu') else get_device()
     print(f"Using device: {device}", flush=True)
-
-    if args.verbose:
-        print("[INIT] Registering OmegaConf resolvers...", flush=True)
     register_omegaconf_resolvers()
 
     checkpoint_path = os.path.join(project_root, args.checkpoint)
-    if args.verbose:
-        print(f"[LOAD] Loading checkpoint from {checkpoint_path} ...", flush=True)
-    if args.verbose:
-        t_load0 = time.time()
     ckpt = torch.load(checkpoint_path, map_location='cpu', weights_only=False)
-    if args.verbose:
-        print(f"[LOAD] torch.load() completed in {time.time()-t_load0:.2f}s", flush=True)
-    if args.verbose:
-        print("[LOAD] Checkpoint loaded in memory.", flush=True)
 
     if 'model' in ckpt and isinstance(ckpt['model'], dict):
-        print(f"Loading finetuned checkpoint from epoch {ckpt.get('epoch', 'unknown')}", flush=True)
         from sam2.build_sam import build_sam2
         from sam2.sam2_image_predictor import SAM2ImagePredictor
-        import sam2
-        if args.verbose:
-            print("[BUILD] Building SAM2 model (no weights)...", flush=True)
-        
-        if args.verbose:
-            t_build0 = time.time()
         model = build_sam2(args.model_cfg, ckpt_path=None, device=device)
-        if args.verbose:
-            print(f"[BUILD] Model construction time {time.time()-t_build0:.2f}s", flush=True)
-        if args.verbose:
-            print("[LOAD] Loading finetuned state dict into model...", flush=True)
-        if args.verbose:
-            t_sd0 = time.time()
-        missing_keys, unexpected_keys = model.load_state_dict(ckpt['model'], strict=False)
-        if args.verbose:
-            print(f"[LOAD] state_dict load time {time.time()-t_sd0:.2f}s", flush=True)
-        if missing_keys:
-            print(f"Missing keys: {missing_keys}", flush=True)
-        if unexpected_keys:
-            print(f"Unexpected keys: {unexpected_keys}", flush=True)
+        model.load_state_dict(ckpt['model'], strict=False)
         predictor = SAM2ImagePredictor(model)
     else:
-        if args.verbose:
-            print("[BUILD] Using standard predictor loader...", flush=True)
         predictor = get_sam2_predictor(args.model_cfg, checkpoint_path, device)
-    if args.verbose:
-        print("[READY] Predictor initialized.", flush=True)
 
-    num_samples_total = len(bcss_dataset)
-    num_samples = num_samples_total if args.max_samples is None else min(args.max_samples, num_samples_total)
-    if args.max_samples is not None:
-        print(f"[CONFIG] Limiting evaluation to {num_samples} / {num_samples_total} samples", flush=True)
+    num_samples = len(bcss_dataset) if args.max_samples is None else min(args.max_samples, len(bcss_dataset))
+    
+    class_thresholds = {}
+    if args.threshold_config and os.path.exists(args.threshold_config):
+        with open(args.threshold_config, 'r') as f:
+            class_thresholds = json.load(f)
+        print(f"Loaded custom thresholds from: {args.threshold_config}")
 
-    print(f"Prompt type: {args.prompt_type}", flush=True)
-    print(f"Use negative points: {args.use_neg_points}", flush=True)
-    print(f"Evaluating on {num_samples} samples...", flush=True)
-
-    total_dice = 0.0
-    total_iou = 0.0
+    class_names = bcss_dataset.class_names
+    class_dice_scores = {cid: [] for cid in class_names if cid != 0}
+    sample_results = []
 
     loop_start = time.time()
     for i in tqdm(range(num_samples), disable=not args.tqdm):
-        iter_t0 = time.time()
         sample = bcss_dataset[i]
         image = sample['image_np']
         gt_mask = sample['mask'].numpy()
+        unique_classes = np.unique(gt_mask)
 
-        predicted_mask, binary_mask, _, _ = get_predicted_mask(
-            predictor, image, gt_mask,
-            prompt_type=args.prompt_type,
-            use_neg_points=args.use_neg_points
-        )
+        predictor.set_image(image)
 
-        dice, iou = calculate_metrics(predicted_mask, binary_mask)
-        total_dice += dice
-        total_iou += iou
+        for class_id in unique_classes:
+            if class_id == 0: continue
+            
+            class_name = class_names.get(class_id)
+            if not class_name: continue
 
-        if args.verbose and (i + 1) % 10 == 0:
-            print(f"[PROGRESS] Processed {i+1}/{num_samples} | iter {(time.time()-iter_t0):.3f}s", flush=True)
+            binary_gt_mask = (gt_mask == class_id).astype(np.uint8)
+            
+            from src.sam_segmentation import get_prompts_from_mask
+            prompts = get_prompts_from_mask(binary_gt_mask)
 
-    avg_dice = total_dice / num_samples
-    avg_iou = total_iou / num_samples
-    total_loop_time = time.time()-loop_start
-    print(f"Average Dice Score: {avg_dice:.4f}", flush=True)
-    print(f"Average IoU: {avg_iou:.4f}", flush=True)
-    print(f"[TIMING] Total loop time {total_loop_time:.2f}s | per-sample {(total_loop_time/num_samples):.3f}s", flush=True)
+            if args.prompt_type not in prompts:
+                continue
 
-    # Persist metrics only if output directory specified AND not print_only
+            if args.use_tta:
+                from src.tta_utils import predict_with_tta
+                predicted_mask = predict_with_tta(predictor, image, prompts, prompt_type=args.prompt_type, use_neg_points=args.use_neg_points)
+            else:
+                from src.sam_segmentation import get_predicted_mask_from_prompts
+                masks_logits, _, _ = get_predicted_mask_from_prompts(predictor, image, prompts, prompt_type=args.prompt_type, use_neg_points=args.use_neg_points)
+                threshold = class_thresholds.get(class_name, 0.5)
+                predicted_mask = (masks_logits > threshold).astype(np.uint8)
+            
+            dice, iou = calculate_metrics(predicted_mask, binary_gt_mask)
+            class_dice_scores[class_id].append(dice)
+            sample_results.append({'sample_idx': i, 'class_id': class_id, 'dice': dice, 'image_path': bcss_dataset.image_files[i]})
+
+    # --- Metrics Calculation and Reporting ---
+    results = {}
+    for cid, cname in class_names.items():
+        if cid == 0: continue
+        scores = class_dice_scores.get(cid, [])
+        results[cname] = {'dice': np.mean(scores) if scores else 0, 'std': np.std(scores) if scores else 0, 'count': len(scores)}
+    
+    all_scores = [s for scores in class_dice_scores.values() for s in scores]
+    results['overall'] = np.mean(all_scores) if all_scores else 0
+    
+    print("\n--- Per-Class Dice Scores ---")
+    for cname, data in results.items():
+        if cname != 'overall':
+            print(f"{cname:15s}: {data['dice']:.4f} (count: {data['count']})")
+    print(f"---------------------------------")
+    print(f"Overall Avg Dice: {results['overall']:.4f}")
+
+    # --- Save Visualizations ---
+    if args.save_predictions and output_dir is not None:
+        vis_dir = os.path.join(output_dir, 'visualizations')
+        os.makedirs(vis_dir, exist_ok=True)
+        sample_results.sort(key=lambda x: x['dice'])
+        
+        best_samples = sample_results[-3:]
+        worst_samples = sample_results[:3]
+        
+        from sam_segmentation import save_prediction_visualization
+        for res in best_samples + worst_samples:
+            sample = bcss_dataset[res['sample_idx']]
+            image = sample['image_np']
+            gt_mask = (sample['mask'].numpy() == res['class_id']).astype(np.uint8)
+            # Re-predict to get the mask for visualization
+            prompts = get_prompts_from_mask(gt_mask)
+            predicted_mask, _, _ = get_predicted_mask_from_prompts(predictor, image, prompts, args.prompt_type, args.use_neg_points)
+            
+            fname = os.path.basename(res['image_path'])
+            vis_path = os.path.join(vis_dir, f"dice_{res['dice']:.4f}_{class_names[res['class_id']]}_{fname}")
+            save_prediction_visualization(image, gt_mask, (predicted_mask > class_thresholds.get(class_names[res['class_id']], 0.5)), res['dice'], vis_path)
+        print(f"Saved visualizations to {vis_dir}")
+
+    # --- Save Metrics ---
     if output_dir is not None and not getattr(args, 'print_only', False):
         metrics_path = os.path.join(output_dir, 'metrics.json')
         with open(metrics_path, 'w') as f:
-            json.dump({
-                'avg_dice': float(avg_dice),
-                'avg_iou': float(avg_iou),
-                'num_samples': int(num_samples),
-                'prompt_type': args.prompt_type,
-                'use_neg_points': bool(args.use_neg_points),
-                'checkpoint': args.checkpoint,
-                'model_cfg': args.model_cfg,
-                'loop_time_sec': float(total_loop_time),
-                'per_sample_time_sec': float(total_loop_time/num_samples)
-            }, f, indent=2)
-        print(f"[SAVE] Metrics written to {metrics_path}", flush=True)
+            json.dump(results, f, indent=2)
+        print(f"Metrics saved to {metrics_path}")
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description="Evaluate SAM 2 segmentation.")
@@ -192,7 +186,13 @@ if __name__ == '__main__':
                         help='Enable tqdm progress bar (disabled by default in Slurm logs)')
     parser.add_argument('--output_dir', type=str, default=None,
                         help='Directory (relative to project root) to save metrics.json')
+    parser.add_argument('--use_tta', action='store_true',
+                        help='Enable test-time augmentation for more robust predictions.')
+    parser.add_argument('--threshold_config', type=str, default=None,
+                        help='Path to a JSON file with per-class confidence thresholds.')
     parser.add_argument('--print_only', action='store_true',
                         help='Run evaluation and print metrics without writing any files (ignores output_dir).')
+    parser.add_argument('--save_predictions', action='store_true',
+                        help='Save visualizations of predictions to the output directory.')
     args = parser.parse_args()
     evaluate_segmentation(args)

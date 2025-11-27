@@ -198,22 +198,38 @@ def run_and_visualize(predictor, image, gt_mask, class_id, prompt_type, use_neg_
         config_name += "+postprocessed"
 
     print(f"Results for {config_name}: Dice={dice:.4f}, IoU={iou:.4f}")
+    output_filename = f"sam2_segmentation_{config_name}.png"
+    save_prediction_visualization(image, binary_mask, predicted_mask, dice, output_filename, points=points, labels=labels, box=prompts.get('box') if prompt_type == 'box' else None)
+    print(f"Result saved to {output_filename}")
 
-    plt.figure(figsize=(10, 10))
-    plt.imshow(image)
-    show_mask(predicted_mask, plt.gca())
-    show_mask(binary_mask, plt.gca(), random_color=True)
+
+def save_prediction_visualization(image, gt_mask, pred_mask, dice, output_path, points=None, labels=None, box=None):
+    """Saves a visualization of the prediction against the ground truth."""
+    plt.figure(figsize=(15, 5))
     
+    plt.subplot(1, 3, 1)
+    plt.imshow(image)
+    plt.title("Original Image")
+    plt.axis('off')
+
+    plt.subplot(1, 3, 2)
+    plt.imshow(image)
+    show_mask(gt_mask, plt.gca(), random_color=True)
+    plt.title("Ground Truth")
+    plt.axis('off')
+
+    plt.subplot(1, 3, 3)
+    plt.imshow(image)
+    show_mask(pred_mask, plt.gca())
     if points is not None:
         show_points(points, labels, plt.gca())
-    if prompt_type == 'box':
-        show_box(prompts['box'], plt.gca())
-
-    plt.title(f"SAM 2 with {config_name} | Dice: {dice:.4f}, IoU: {iou:.4f}")
+    if box is not None:
+        show_box(box, plt.gca())
+    plt.title(f"Prediction | Dice: {dice:.4f}")
     plt.axis('off')
-    output_filename = f"sam2_segmentation_{config_name}.png"
-    plt.savefig(output_filename, bbox_inches='tight', pad_inches=0)
-    print(f"Result saved to {output_filename}")
+    
+    plt.tight_layout()
+    plt.savefig(output_path)
     plt.close()
 
 def main(args):

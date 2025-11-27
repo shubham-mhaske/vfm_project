@@ -59,138 +59,75 @@
 
 ---
 
-## Bug Fixes Applied (2025-11-26)
-
-### 1. Class Mapping Fix
-- **Before**: `dataset.py` mapped class 5 → blood_vessel (WRONG)
-- **After**: Correctly maps class 18 → blood_vessel
-- **Impact**: Blood vessel evaluation was completely wrong
-
-### 2. Training Class Filtering
-- **Before**: Trained on all 17+ BCSS classes (~36% wasted effort)
-- **After**: Filters to target classes only: {1, 2, 3, 4, 18}
-- **Impact**: 100% training efficiency on relevant classes
+### v4: Path-SAM2 + CTransPath (Baseline)
+**Date**: 2025-11-26
+**Config**: `path_sam2_ctranspath`
+**Architecture**: SAM2 + CTransPath with attention fusion
+**Result**: In progress. Expected Dice ~0.55-0.60
 
 ---
 
-## Next Steps
+### v5: Path-SAM2 + CTransPath Optimized ✨ NEW
+**Date**: 2025-11-27
+**Config**: `path_sam2_ctranspath_optimized`
+**Changes**:
+- AMP bfloat16 enabled
+- CTransPath frozen, `concat` fusion
+- Batch size 6, 12 workers
+- LR 6e-5, 40 epochs
+**Results (Expected)**:
 
-### v4: Re-train with Bug Fixes
-1. Use corrected class mapping (class 18 = blood_vessel)
-2. Train only on target classes {1, 2, 3, 4, 18}
-3. Add class weighting for blood_vessel (67× weight)
-4. Expected improvement: Blood vessel Dice 0.03 → 0.15+
-
-### v5: Path-SAM2 (UNI Encoder Integration) ⭐ NEW
-**Architecture**: SAM2 + UNI encoder fusion (Path-SAM2 style)
-
-**Key Innovation**: Integrate [UNI encoder](https://huggingface.co/MahmoodLab/UNI) 
-trained on >100M histopathology patches for domain-specific features.
-
-**Technical Details**:
-- SAM2 Hiera-L encoder (frozen) → 256-dim visual features
-- UNI ViT-L encoder (frozen) → 1024-dim histopathology features
-- Fusion module (trainable) → combines both encoders → 256-dim
-- SAM2 decoder (trainable) → mask prediction
-
-**Expected Improvement**: Dice 0.42 → **0.65-0.80** (based on Path-SAM2 paper results)
-
-**Paper Reference**: "Path-SAM2: Transfer SAM2 for digital pathology semantic segmentation"
-- 92% Dice on EBHI dataset
-- 97.8% Dice on CRAG dataset
-- 30-36% improvement over baseline SAM2
-
-**Files**:
-- `src/uni_encoder.py` - UNI encoder + fusion module
-- `src/run_path_sam2_training.py` - Training script
-- `conf/experiment/path_sam2_uni_fusion.yaml` - Hydra config
-- `scripts/slurm/run_path_sam2_training.slurm` - SLURM job script
-
-**Commands**:
-```bash
-# Download UNI weights (requires HuggingFace login)
-huggingface-cli login
-python src/download_uni_weights.py
-
-# Train Path-SAM2
-sbatch scripts/slurm/run_path_sam2_training.slurm
-
-# Or locally:
-python src/run_path_sam2_training.py experiment=path_sam2_uni_fusion
-```
+| Class        | Baseline | v5 Expected | Improvement |
+|--------------|----------|-------------|-------------|
+| Tumor        | 0.54     | 0.60-0.62   | +11-15%     |
+| Blood Vessel | 0.03     | 0.10-0.15   | +233-400%   |
+| **Overall**  | **0.42** | **0.55-0.60** | **+31-43%** |
 
 ---
 
-## Future Experiments
-- Gradual encoder unfreezing (epochs 20+)
-- H&E stain normalization augmentation
-- Multi-scale training (512→1024)
-- Alternative architectures if SAM plateaus
+### v6: + Focal Loss ✨ NEW
+**Date**: 2025-11-27
+**Config**: `path_sam2_focal`
+**Changes**:
+- Implemented `FocalDiceLoss` to address class imbalance.
+- Class weights applied, especially for `blood_vessel`.
+**Results (Expected)**:
+- Overall Dice: 0.55-0.60 → **0.65-0.70**
+- Blood Vessel Dice: 0.10-0.15 → **0.25-0.30**
 
 ---
 
-### v6: Path-SAM2 with CTransPath ⭐ READY TO RUN
-**Architecture**: SAM2 + CTransPath encoder fusion
-
-**Key Innovation**: Use [CTransPath](https://github.com/Xiyue-Wang/TransPath) - a Swin Transformer 
-pretrained on 15M TCGA histopathology patches. **No access restrictions!**
-
-**Technical Details**:
-- SAM2 Hiera-L encoder (frozen) → 256-dim visual features
-- CTransPath Swin (frozen) → 768-dim histopathology features
-- Fusion module (trainable) → concat + project → 256-dim
-- SAM2 decoder (trainable) → mask prediction
-
-**Advantages over UNI**:
-- ✅ Fully open source - no HuggingFace approval needed
-- ✅ Proven on TCGA data (same source as BCSS)
-- ✅ Smaller model (~100MB vs ~1.3GB)
-
-**Expected Improvement**: Dice 0.42 → **0.60-0.75**
-
-**Files**:
-- `src/ctranspath_encoder.py` - CTransPath encoder + fusion
-- `src/run_path_sam2_ctranspath.py` - Training script
-- `conf/experiment/path_sam2_ctranspath.yaml` - Hydra config
-- `scripts/slurm/run_path_sam2_ctranspath.slurm` - SLURM script
-
-**Commands**:
-```bash
-# Download CTransPath weights (no auth needed!)
-pip install gdown
-gdown 1DoDx_70_TLj98gTf6YTXnu4tFhsFocDX -O models/ctranspath/ctranspath.pth
-
-# Or use download script
-python src/download_ctranspath_weights.py
-
-# Train Path-SAM2 + CTransPath
-sbatch scripts/slurm/run_path_sam2_ctranspath.slurm
-
-# Or locally:
-python src/run_path_sam2_ctranspath.py experiment=path_sam2_ctranspath
-```
+### v7: + Stain Augmentation ✨ NEW
+**Date**: 2025-11-27
+**Config**: `path_sam2_focal_stain`
+**Changes**:
+- Added Macenko stain normalization and augmentation.
+- Applied directly in the dataset loader.
+**Results (Expected)**:
+- Overall Dice: 0.65-0.70 → **0.68-0.72**
+- Improved generalization across different medical centers.
 
 ---
 
 ## Commands
 
 ```bash
-# Training
-python src/run_finetuning.py experiment=base_finetune_v2_stable
+# Train a specific experiment
+sbatch scripts/slurm/run_path_sam2_ctranspath_optimized.slurm
 
-# Evaluation
-python src/evaluation.py \
-  --sam_checkpoint finetune_logs/*/checkpoints/checkpoint_15.pt \
-  --sam_model_cfg sam2/sam2/configs/sam2.1/sam2.1_hiera_l.yaml \
-  --clip_prompts configs/prompts/hard_coded_prompts_v2.json \
-  --output_dir results/evaluation
+# Run the full evaluation pipeline for an experiment
+bash scripts/evaluation/evaluate_experiment.sh finetune_logs/path_sam2_focal-2025-11-27_12-00-00
 
-# Per-class validation
+# Find optimal thresholds for a checkpoint
+bash scripts/validation/run_threshold_search.sh <path_to_checkpoint.pt>
+
+# Run per-class validation with TTA and optimal thresholds
 python scripts/validation/validate_perclass.py \
-  --checkpoint finetune_logs/*/checkpoints/checkpoint_15.pt \
-  --split val
+  --checkpoint <path_to_checkpoint.pt> \
+  --tta \
+  --threshold_config configs/optimal_thresholds.json
 ```
 
 ---
 
-**Last Updated**: November 26, 2025
+**Last Updated**: November 27, 2025

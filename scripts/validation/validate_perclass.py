@@ -41,7 +41,7 @@ def calculate_dice(pred_mask, gt_mask):
     return dice
 
 
-def validate_perclass(checkpoint_path, model_cfg, data_root, split='val', num_samples=None):
+def validate_perclass(checkpoint_path, model_cfg, data_root, split='val', num_samples=None, tta=False, threshold_config=None):
     """
     Run per-class validation.
     
@@ -51,6 +51,8 @@ def validate_perclass(checkpoint_path, model_cfg, data_root, split='val', num_sa
         data_root: Root directory of BCSS dataset
         split: 'val' or 'test'
         num_samples: Limit number of samples (for quick testing)
+        tta: Whether to use test-time augmentation.
+        threshold_config: Path to JSON file with per-class thresholds.
     
     Returns:
         Dictionary of per-class Dice scores
@@ -58,7 +60,13 @@ def validate_perclass(checkpoint_path, model_cfg, data_root, split='val', num_sa
     print(f"\n{'='*60}")
     print(f"Per-Class Validation: {checkpoint_path}")
     print(f"{'='*60}\n")
-    
+
+    class_thresholds = {}
+    if threshold_config and os.path.exists(threshold_config):
+        with open(threshold_config, 'r') as f:
+            class_thresholds = json.load(f)
+        print(f"Loaded custom thresholds from: {threshold_config}")
+
     # Load SAM2 model
     print("Loading SAM2 model...")
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -67,15 +75,11 @@ def validate_perclass(checkpoint_path, model_cfg, data_root, split='val', num_sa
     model = build_sam2(model_cfg, ckpt_path=None, device=device)
 
     # Check if this is a Path-SAM2 CTransPath model by looking at the checkpoint keys
-    # This is a bit of a hack, but avoids adding more command-line args.
-    # A better way would be a flag like --model_type=path_sam2_ctranspath
     ckpt = torch.load(checkpoint_path, map_location='cpu')
     is_path_sam2_ctranspath = any("image_encoder.sam_encoder" in k for k in ckpt['model'].keys())
 
     if is_path_sam2_ctranspath:
         print("Path-SAM2 CTransPath model detected. Rebuilding with custom encoder...")
-        # We don't have the CTransPath checkpoint path here, but it's not needed for inference
-        # if the weights are already in the main checkpoint.
         model.image_encoder = PathSAM2CTransPathEncoder(sam_encoder=model.image_encoder, ctranspath_checkpoint=None, freeze_sam=True, freeze_ctranspath=True)
 
     # Now load the state dict
@@ -125,7 +129,8 @@ def validate_perclass(checkpoint_path, model_cfg, data_root, split='val', num_sa
             if class_id == 0:  # Skip background
                 continue
             
-            if class_id not in class_names:
+            class_name = class_names.get(class_id)
+            if not class_name:
                 continue  # Skip unknown classes
             
             # Initialize list for this class if not seen before
@@ -142,14 +147,26 @@ def validate_perclass(checkpoint_path, model_cfg, data_root, split='val', num_sa
             
             y_min, x_min = coords.min(axis=0)
             y_max, x_max = coords.max(axis=0)
-            box = np.array([x_min, y_min, x_max, y_max])
-            
+            box = np.array([[x_min, y_min], [x_max, y_max]])
+
             # Get SAM prediction
-            masks, _, _ = predictor.predict(
-                box=box,
-                multimask_output=False
-            )
-            pred_mask = masks[0].astype(np.uint8)
+            if tta:
+                from src.tta_utils import predict_with_tta
+                prompts = {'box': box}
+                # TTA returns a binary mask, so thresholds are applied inside
+                pred_mask = predict_with_tta(
+                    predictor, image_np, prompts, prompt_type='box', use_neg_points=False
+                )
+            else:
+                masks_logits, _, _ = predictor.predict(
+                    box=box,
+                    multimask_output=False,
+                    return_logits=True
+                )
+                
+                # Get threshold for the current class
+                threshold = class_thresholds.get(class_name, 0.5)
+                pred_mask = (masks_logits[0] > threshold).astype(np.uint8)
             
             # Calculate Dice
             dice = calculate_dice(pred_mask, binary_gt_mask)
@@ -209,6 +226,10 @@ if __name__ == '__main__':
                         help='Limit number of samples (for quick testing)')
     parser.add_argument('--output', type=str, default=None,
                         help='Output JSON file for results')
+    parser.add_argument('--tta', action='store_true',
+                        help='Enable test-time augmentation for more robust predictions (4x slower).')
+    parser.add_argument('--threshold_config', type=str, default=None,
+                        help='Path to a JSON file with per-class confidence thresholds.')
     
     args = parser.parse_args()
     
@@ -230,7 +251,9 @@ if __name__ == '__main__':
         model_cfg=args.model_cfg,
         data_root=args.data_root,
         split=args.split,
-        num_samples=args.num_samples
+        num_samples=args.num_samples,
+        tta=args.tta,
+        threshold_config=args.threshold_config
     )
     
     # Save results if requested

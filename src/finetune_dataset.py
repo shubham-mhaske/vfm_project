@@ -4,6 +4,7 @@ import torch
 from PIL import Image
 from training.dataset.vos_raw_dataset import VOSRawDataset, VOSFrame, VOSVideo
 
+
 # Use the project's prompt helper to generate prompts from masks
 from src.sam_segmentation import get_prompts_from_mask
 
