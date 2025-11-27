@@ -1090,3 +1090,234 @@ INFO 2025-11-27 14:10:35,580 trainer.py: 835: Losses and meters: {'Losses/train_
 INFO 2025-11-27 14:10:56,591 train_utils.py: 278: Train Epoch: [21][ 0/21] | Batch Time: 19.18 (19.18) | Data Time: 18.79 (18.79) | Mem (GB): 9.00 (9.00/9.00) | Time Elapsed: 00d 00h 35m | Losses/train_all_loss: 2.49e+00 (2.49e+00)
 WARNING 2025-11-27 14:10:59,183 transforms.py: 418: Skip RandomAffine for zero-area mask in first frame after 2 tentatives
 WARNING 2025-11-27 14:11:12,176 transforms.py: 418: Skip RandomAffine for zero-area mask in first frame after 2 tentatives
+WARNING 2025-11-27 14:11:38,301 transforms.py: 418: Skip RandomAffine for zero-area mask in first frame after 2 tentatives
+INFO 2025-11-27 14:12:05,834 train_utils.py: 278: Train Epoch: [21][20/21] | Batch Time: 0.30 (4.21) | Data Time: 0.00 (3.89) | Mem (GB): 9.00 (9.00/9.00) | Time Elapsed: 00d 00h 36m | Losses/train_all_loss: 2.38e+00 (2.48e+00)
+INFO 2025-11-27 14:12:05,911 trainer.py: 955: Estimated time remaining: 00d 00h 41m
+INFO 2025-11-27 14:12:05,912 trainer.py: 897: Synchronizing meters
+INFO 2025-11-27 14:12:05,912 trainer.py: 835: Losses and meters: {'Losses/train_all_loss': 2.482212407248361, 'Losses/train_all_loss_mask': 0.04580839430647237, 'Losses/train_all_loss_dice': 0.7130799321901231, 'Losses/train_all_loss_iou': 0.11392956191585177, 'Losses/train_all_loss_class': 1.0947307276216945e-06, 'Losses/train_all_core_loss': 2.482212407248361, 'Trainer/where': 0.4390476190476191, 'Trainer/epoch': 21, 'Trainer/steps_train': 462}
+WARNING 2025-11-27 14:12:13,390 transforms.py: 418: Skip RandomAffine for zero-area mask in first frame after 2 tentatives
+INFO 2025-11-27 14:12:34,798 train_utils.py: 278: Train Epoch: [22][ 0/21] | Batch Time: 27.15 (27.15) | Data Time: 26.76 (26.76) | Mem (GB): 9.00 (9.00/9.00) | Time Elapsed: 00d 00h 37m | Losses/train_all_loss: 2.51e+00 (2.51e+00)
+WARNING 2025-11-27 14:12:35,527 transforms.py: 418: Skip RandomAffine for zero-area mask in first frame after 2 tentatives
+INFO 2025-11-27 14:13:26,039 train_utils.py: 278: Train Epoch: [22][20/21] | Batch Time: 0.30 (3.73) | Data Time: 0.00 (3.41) | Mem (GB): 9.00 (9.00/9.00) | Time Elapsed: 00d 00h 38m | Losses/train_all_loss: 2.44e+00 (2.52e+00)
+INFO 2025-11-27 14:13:26,117 trainer.py: 955: Estimated time remaining: 00d 00h 35m
+INFO 2025-11-27 14:13:26,117 trainer.py: 897: Synchronizing meters
+INFO 2025-11-27 14:13:26,118 trainer.py: 835: Losses and meters: {'Losses/train_all_loss': 2.5192390396481468, 'Losses/train_all_loss_mask': 0.05162429437041283, 'Losses/train_all_loss_dice': 0.7111779195921761, 'Losses/train_all_loss_iou': 0.1275836733125505, 'Losses/train_all_loss_class': 1.8660539090001185e-07, 'Losses/train_all_core_loss': 2.5192390396481468, 'Trainer/where': 0.45904761904761904, 'Trainer/epoch': 22, 'Trainer/steps_train': 483}
+WARNING 2025-11-27 14:13:41,723 transforms.py: 418: Skip RandomAffine for zero-area mask in first frame after 2 tentatives
+INFO 2025-11-27 14:13:47,795 train_utils.py: 278: Train Epoch: [23][ 0/21] | Batch Time: 19.70 (19.70) | Data Time: 19.30 (19.30) | Mem (GB): 9.00 (9.00/9.00) | Time Elapsed: 00d 00h 38m | Losses/train_all_loss: 2.56e+00 (2.56e+00)
+WARNING 2025-11-27 14:13:53,899 transforms.py: 418: Skip RandomAffine for zero-area mask in first frame after 2 tentatives
+WARNING 2025-11-27 14:14:33,853 transforms.py: 418: Skip RandomAffine for zero-area mask in first frame after 2 tentatives
+INFO 2025-11-27 14:14:49,434 train_utils.py: 278: Train Epoch: [23][20/21] | Batch Time: 0.30 (3.87) | Data Time: 0.00 (3.55) | Mem (GB): 9.00 (9.00/9.00) | Time Elapsed: 00d 00h 39m | Losses/train_all_loss: 2.45e+00 (2.48e+00)
+INFO 2025-11-27 14:14:49,509 trainer.py: 955: Estimated time remaining: 00d 00h 35m
+INFO 2025-11-27 14:14:49,509 trainer.py: 897: Synchronizing meters
+INFO 2025-11-27 14:14:49,510 trainer.py: 835: Losses and meters: {'Losses/train_all_loss': 2.4812820071265813, 'Losses/train_all_loss_mask': 0.043404441149461834, 'Losses/train_all_loss_dice': 0.7181752891767592, 'Losses/train_all_loss_iou': 0.10973384390984263, 'Losses/train_all_loss_class': 1.1856729101708144e-07, 'Losses/train_all_core_loss': 2.4812820071265813, 'Trainer/where': 0.47904761904761906, 'Trainer/epoch': 23, 'Trainer/steps_train': 504}
+WARNING 2025-11-27 14:15:16,769 transforms.py: 418: Skip RandomAffine for zero-area mask in first frame after 2 tentatives
+INFO 2025-11-27 14:15:22,897 train_utils.py: 278: Train Epoch: [24][ 0/21] | Batch Time: 26.44 (26.44) | Data Time: 26.03 (26.03) | Mem (GB): 9.00 (9.00/9.00) | Time Elapsed: 00d 00h 40m | Losses/train_all_loss: 2.46e+00 (2.46e+00)
+INFO 2025-11-27 14:16:26,185 train_utils.py: 278: Train Epoch: [24][20/21] | Batch Time: 14.17 (4.27) | Data Time: 13.82 (3.95) | Mem (GB): 9.00 (9.00/9.00) | Time Elapsed: 00d 00h 41m | Losses/train_all_loss: 2.49e+00 (2.49e+00)
+INFO 2025-11-27 14:16:26,267 trainer.py: 955: Estimated time remaining: 00d 00h 37m
+INFO 2025-11-27 14:16:26,268 trainer.py: 897: Synchronizing meters
+INFO 2025-11-27 14:16:26,268 trainer.py: 835: Losses and meters: {'Losses/train_all_loss': 2.4865149089268277, 'Losses/train_all_loss_mask': 0.04774869747814678, 'Losses/train_all_loss_dice': 0.7098882028034755, 'Losses/train_all_loss_iou': 0.11810673631372906, 'Losses/train_all_loss_class': 7.402138425221289e-08, 'Losses/train_all_core_loss': 2.4865149089268277, 'Trainer/where': 0.4990476190476191, 'Trainer/epoch': 24, 'Trainer/steps_train': 525}
+WARNING 2025-11-27 14:16:48,340 transforms.py: 418: Skip RandomAffine for zero-area mask in first frame after 2 tentatives
+INFO 2025-11-27 14:16:58,958 train_utils.py: 278: Train Epoch: [25][ 0/21] | Batch Time: 29.31 (29.31) | Data Time: 28.92 (28.92) | Mem (GB): 9.00 (9.00/9.00) | Time Elapsed: 00d 00h 41m | Losses/train_all_loss: 2.64e+00 (2.64e+00)
+WARNING 2025-11-27 14:17:00,651 transforms.py: 418: Skip RandomAffine for zero-area mask in first frame after 2 tentatives
+WARNING 2025-11-27 14:17:30,586 transforms.py: 418: Skip RandomAffine for zero-area mask in first frame after 2 tentatives
+INFO 2025-11-27 14:17:58,908 train_utils.py: 278: Train Epoch: [25][20/21] | Batch Time: 0.30 (4.25) | Data Time: 0.00 (3.93) | Mem (GB): 9.00 (9.00/9.00) | Time Elapsed: 00d 00h 42m | Losses/train_all_loss: 2.28e+00 (2.51e+00)
+INFO 2025-11-27 14:17:58,987 trainer.py: 955: Estimated time remaining: 00d 00h 35m
+INFO 2025-11-27 14:17:58,988 trainer.py: 897: Synchronizing meters
+INFO 2025-11-27 14:17:58,988 trainer.py: 835: Losses and meters: {'Losses/train_all_loss': 2.5064178989047097, 'Losses/train_all_loss_mask': 0.04842135966533706, 'Losses/train_all_loss_dice': 0.7160548511005583, 'Losses/train_all_loss_iou': 0.11614423032317843, 'Losses/train_all_loss_class': 2.309429347712087e-06, 'Losses/train_all_core_loss': 2.5064178989047097, 'Trainer/where': 0.5190476190476191, 'Trainer/epoch': 25, 'Trainer/steps_train': 546}
+WARNING 2025-11-27 14:18:22,183 transforms.py: 418: Skip RandomAffine for zero-area mask in first frame after 2 tentatives
+INFO 2025-11-27 14:18:33,842 train_utils.py: 278: Train Epoch: [26][ 0/21] | Batch Time: 33.03 (33.03) | Data Time: 32.68 (32.68) | Mem (GB): 9.00 (9.00/9.00) | Time Elapsed: 00d 00h 43m | Losses/train_all_loss: 2.86e+00 (2.86e+00)
+WARNING 2025-11-27 14:18:36,317 transforms.py: 418: Skip RandomAffine for zero-area mask in first frame after 2 tentatives
+WARNING 2025-11-27 14:18:48,130 transforms.py: 418: Skip RandomAffine for zero-area mask in first frame after 2 tentatives
+WARNING 2025-11-27 14:18:50,408 transforms.py: 418: Skip RandomAffine for zero-area mask in first frame after 2 tentatives
+WARNING 2025-11-27 14:18:57,312 transforms.py: 418: Skip RandomAffine for zero-area mask in first frame after 2 tentatives
+WARNING 2025-11-27 14:19:05,342 transforms.py: 418: Skip RandomAffine for zero-area mask in first frame after 2 tentatives
+INFO 2025-11-27 14:19:48,757 train_utils.py: 278: Train Epoch: [26][20/21] | Batch Time: 0.30 (5.14) | Data Time: 0.00 (4.82) | Mem (GB): 9.00 (9.00/9.00) | Time Elapsed: 00d 00h 44m | Losses/train_all_loss: 2.64e+00 (2.51e+00)
+INFO 2025-11-27 14:19:48,845 trainer.py: 955: Estimated time remaining: 00d 00h 41m
+INFO 2025-11-27 14:19:48,846 trainer.py: 897: Synchronizing meters
+INFO 2025-11-27 14:19:48,846 trainer.py: 835: Losses and meters: {'Losses/train_all_loss': 2.5107376121339344, 'Losses/train_all_loss_mask': 0.04991853112975756, 'Losses/train_all_loss_dice': 0.7136898778733753, 'Losses/train_all_loss_iou': 0.1200578785723164, 'Losses/train_all_loss_class': 1.7448317395161012e-05, 'Losses/train_all_core_loss': 2.5107376121339344, 'Trainer/where': 0.539047619047619, 'Trainer/epoch': 26, 'Trainer/steps_train': 567}
+INFO 2025-11-27 14:20:17,519 train_utils.py: 278: Train Epoch: [27][ 0/21] | Batch Time: 26.80 (26.80) | Data Time: 26.41 (26.41) | Mem (GB): 9.00 (9.00/9.00) | Time Elapsed: 00d 00h 45m | Losses/train_all_loss: 2.30e+00 (2.30e+00)
+WARNING 2025-11-27 14:20:41,134 transforms.py: 418: Skip RandomAffine for zero-area mask in first frame after 2 tentatives
+WARNING 2025-11-27 14:20:42,945 transforms.py: 418: Skip RandomAffine for zero-area mask in first frame after 2 tentatives
+WARNING 2025-11-27 14:21:21,507 transforms.py: 418: Skip RandomAffine for zero-area mask in first frame after 2 tentatives
+INFO 2025-11-27 14:21:22,474 train_utils.py: 278: Train Epoch: [27][20/21] | Batch Time: 0.30 (4.37) | Data Time: 0.00 (4.05) | Mem (GB): 9.00 (8.95/9.00) | Time Elapsed: 00d 00h 46m | Losses/train_all_loss: 2.54e+00 (2.52e+00)
+INFO 2025-11-27 14:21:22,550 trainer.py: 955: Estimated time remaining: 00d 00h 33m
+INFO 2025-11-27 14:21:22,550 trainer.py: 897: Synchronizing meters
+INFO 2025-11-27 14:21:22,551 trainer.py: 835: Losses and meters: {'Losses/train_all_loss': 2.522238231840588, 'Losses/train_all_loss_mask': 0.04859406146265212, 'Losses/train_all_loss_dice': 0.71722240958895, 'Losses/train_all_loss_iou': 0.1276006762470518, 'Losses/train_all_loss_class': 7.362797022863227e-08, 'Losses/train_all_core_loss': 2.522238231840588, 'Trainer/where': 0.559047619047619, 'Trainer/epoch': 27, 'Trainer/steps_train': 588}
+WARNING 2025-11-27 14:21:48,372 transforms.py: 418: Skip RandomAffine for zero-area mask in first frame after 2 tentatives
+INFO 2025-11-27 14:21:52,009 train_utils.py: 278: Train Epoch: [28][ 0/21] | Batch Time: 27.11 (27.11) | Data Time: 26.74 (26.74) | Mem (GB): 9.00 (9.00/9.00) | Time Elapsed: 00d 00h 46m | Losses/train_all_loss: 2.29e+00 (2.29e+00)
+WARNING 2025-11-27 14:22:13,277 transforms.py: 418: Skip RandomAffine for zero-area mask in first frame after 2 tentatives
+WARNING 2025-11-27 14:22:16,809 transforms.py: 418: Skip RandomAffine for zero-area mask in first frame after 2 tentatives
+INFO 2025-11-27 14:23:17,305 train_utils.py: 278: Train Epoch: [28][20/21] | Batch Time: 0.30 (5.35) | Data Time: 0.00 (5.03) | Mem (GB): 9.00 (9.00/9.00) | Time Elapsed: 00d 00h 48m | Losses/train_all_loss: 2.60e+00 (2.45e+00)
+INFO 2025-11-27 14:23:17,378 trainer.py: 955: Estimated time remaining: 00d 00h 39m
+INFO 2025-11-27 14:23:17,378 trainer.py: 897: Synchronizing meters
+INFO 2025-11-27 14:23:17,378 trainer.py: 835: Losses and meters: {'Losses/train_all_loss': 2.4525127637953985, 'Losses/train_all_loss_mask': 0.046373240561002775, 'Losses/train_all_loss_dice': 0.700204732872191, 'Losses/train_all_loss_iou': 0.12001666852406093, 'Losses/train_all_loss_class': 1.5743624008428864e-05, 'Losses/train_all_core_loss': 2.4525127637953985, 'Trainer/where': 0.579047619047619, 'Trainer/epoch': 28, 'Trainer/steps_train': 609}
+INFO 2025-11-27 14:23:47,856 train_utils.py: 278: Train Epoch: [29][ 0/21] | Batch Time: 28.63 (28.63) | Data Time: 28.27 (28.27) | Mem (GB): 9.00 (9.00/9.00) | Time Elapsed: 00d 00h 48m | Losses/train_all_loss: 2.58e+00 (2.58e+00)
+WARNING 2025-11-27 14:24:03,958 transforms.py: 418: Skip RandomAffine for zero-area mask in first frame after 2 tentatives
+WARNING 2025-11-27 14:24:39,664 transforms.py: 418: Skip RandomAffine for zero-area mask in first frame after 2 tentatives
+INFO 2025-11-27 14:24:45,553 train_utils.py: 278: Train Epoch: [29][20/21] | Batch Time: 15.23 (4.11) | Data Time: 14.85 (3.80) | Mem (GB): 9.00 (9.00/9.00) | Time Elapsed: 00d 00h 49m | Losses/train_all_loss: 2.40e+00 (2.50e+00)
+INFO 2025-11-27 14:24:45,638 trainer.py: 955: Estimated time remaining: 00d 00h 28m
+INFO 2025-11-27 14:24:45,638 trainer.py: 897: Synchronizing meters
+INFO 2025-11-27 14:24:45,638 trainer.py: 835: Losses and meters: {'Losses/train_all_loss': 2.4965846879141673, 'Losses/train_all_loss_mask': 0.047928152251101676, 'Losses/train_all_loss_dice': 0.7132940065293085, 'Losses/train_all_loss_iou': 0.11702881416394598, 'Losses/train_all_loss_class': 3.311482487503742e-05, 'Losses/train_all_core_loss': 2.4965846879141673, 'Trainer/where': 0.599047619047619, 'Trainer/epoch': 29, 'Trainer/steps_train': 630}
+INFO 2025-11-27 14:25:02,112 train_utils.py: 278: Train Epoch: [30][ 0/21] | Batch Time: 13.13 (13.13) | Data Time: 12.68 (12.68) | Mem (GB): 9.00 (9.00/9.00) | Time Elapsed: 00d 00h 49m | Losses/train_all_loss: 2.40e+00 (2.40e+00)
+WARNING 2025-11-27 14:25:08,025 transforms.py: 418: Skip RandomAffine for zero-area mask in first frame after 2 tentatives
+WARNING 2025-11-27 14:25:16,080 transforms.py: 418: Skip RandomAffine for zero-area mask in first frame after 2 tentatives
+WARNING 2025-11-27 14:25:24,380 transforms.py: 418: Skip RandomAffine for zero-area mask in first frame after 2 tentatives
+WARNING 2025-11-27 14:25:33,518 transforms.py: 418: Skip RandomAffine for zero-area mask in first frame after 2 tentatives
+WARNING 2025-11-27 14:25:42,138 transforms.py: 418: Skip RandomAffine for zero-area mask in first frame after 2 tentatives
+INFO 2025-11-27 14:26:31,909 train_utils.py: 278: Train Epoch: [30][20/21] | Batch Time: 0.30 (4.90) | Data Time: 0.00 (4.58) | Mem (GB): 9.00 (9.00/9.00) | Time Elapsed: 00d 00h 51m | Losses/train_all_loss: 2.53e+00 (2.45e+00)
+INFO 2025-11-27 14:26:31,995 trainer.py: 955: Estimated time remaining: 00d 00h 32m
+INFO 2025-11-27 14:26:31,996 trainer.py: 897: Synchronizing meters
+INFO 2025-11-27 14:26:31,996 trainer.py: 835: Losses and meters: {'Losses/train_all_loss': 2.4466106664566767, 'Losses/train_all_loss_mask': 0.04514096083030814, 'Losses/train_all_loss_dice': 0.7015724522726876, 'Losses/train_all_loss_iou': 0.11618507688953764, 'Losses/train_all_loss_class': 3.4425534306336574e-06, 'Losses/train_all_core_loss': 2.4466106664566767, 'Trainer/where': 0.6190476190476191, 'Trainer/epoch': 30, 'Trainer/steps_train': 651}
+INFO 2025-11-27 14:26:47,477 train_utils.py: 278: Train Epoch: [31][ 0/21] | Batch Time: 13.58 (13.58) | Data Time: 13.22 (13.22) | Mem (GB): 9.00 (9.00/9.00) | Time Elapsed: 00d 00h 51m | Losses/train_all_loss: 2.17e+00 (2.17e+00)
+WARNING 2025-11-27 14:26:51,802 transforms.py: 418: Skip RandomAffine for zero-area mask in first frame after 2 tentatives
+INFO 2025-11-27 14:28:14,145 train_utils.py: 278: Train Epoch: [31][20/21] | Batch Time: 22.57 (4.77) | Data Time: 22.20 (4.45) | Mem (GB): 9.00 (9.00/9.00) | Time Elapsed: 00d 00h 52m | Losses/train_all_loss: 2.35e+00 (2.42e+00)
+INFO 2025-11-27 14:28:14,211 trainer.py: 955: Estimated time remaining: 00d 00h 30m
+INFO 2025-11-27 14:28:14,211 trainer.py: 897: Synchronizing meters
+INFO 2025-11-27 14:28:14,211 trainer.py: 835: Losses and meters: {'Losses/train_all_loss': 2.4215080283937, 'Losses/train_all_loss_mask': 0.044536334418115164, 'Losses/train_all_loss_dice': 0.6922936950411115, 'Losses/train_all_loss_iou': 0.12194522470235825, 'Losses/train_all_loss_class': 4.9044595992885403e-08, 'Losses/train_all_core_loss': 2.4215080283937, 'Trainer/where': 0.6390476190476191, 'Trainer/epoch': 31, 'Trainer/steps_train': 672}
+INFO 2025-11-27 14:28:38,382 train_utils.py: 278: Train Epoch: [32][ 0/21] | Batch Time: 22.38 (22.38) | Data Time: 21.98 (21.98) | Mem (GB): 9.00 (9.00/9.00) | Time Elapsed: 00d 00h 53m | Losses/train_all_loss: 2.49e+00 (2.49e+00)
+WARNING 2025-11-27 14:28:52,501 transforms.py: 418: Skip RandomAffine for zero-area mask in first frame after 2 tentatives
+INFO 2025-11-27 14:29:43,445 train_utils.py: 278: Train Epoch: [32][20/21] | Batch Time: 0.30 (4.16) | Data Time: 0.00 (3.85) | Mem (GB): 9.00 (9.00/9.00) | Time Elapsed: 00d 00h 54m | Losses/train_all_loss: 2.44e+00 (2.44e+00)
+INFO 2025-11-27 14:29:43,518 trainer.py: 955: Estimated time remaining: 00d 00h 24m
+INFO 2025-11-27 14:29:43,518 trainer.py: 897: Synchronizing meters
+INFO 2025-11-27 14:29:43,519 trainer.py: 835: Losses and meters: {'Losses/train_all_loss': 2.443525711695353, 'Losses/train_all_loss_mask': 0.05274368893532526, 'Losses/train_all_loss_dice': 0.6859090612048194, 'Losses/train_all_loss_iou': 0.1220663468397799, 'Losses/train_all_loss_class': 1.3744648054941117e-05, 'Losses/train_all_core_loss': 2.443525711695353, 'Trainer/where': 0.659047619047619, 'Trainer/epoch': 32, 'Trainer/steps_train': 693}
+INFO 2025-11-27 14:30:10,848 train_utils.py: 278: Train Epoch: [33][ 0/21] | Batch Time: 25.54 (25.54) | Data Time: 25.17 (25.17) | Mem (GB): 9.00 (9.00/9.00) | Time Elapsed: 00d 00h 54m | Losses/train_all_loss: 2.55e+00 (2.55e+00)
+INFO 2025-11-27 14:31:25,144 train_utils.py: 278: Train Epoch: [33][20/21] | Batch Time: 0.30 (4.75) | Data Time: 0.00 (4.43) | Mem (GB): 9.00 (9.00/9.00) | Time Elapsed: 00d 00h 56m | Losses/train_all_loss: 2.25e+00 (2.45e+00)
+INFO 2025-11-27 14:31:25,215 trainer.py: 955: Estimated time remaining: 00d 00h 26m
+INFO 2025-11-27 14:31:25,215 trainer.py: 897: Synchronizing meters
+INFO 2025-11-27 14:31:25,216 trainer.py: 835: Losses and meters: {'Losses/train_all_loss': 2.4450548603421165, 'Losses/train_all_loss_mask': 0.04779800879103797, 'Losses/train_all_loss_dice': 0.6972890382721311, 'Losses/train_all_loss_iou': 0.11419759229535148, 'Losses/train_all_loss_class': 1.0743157980349267e-07, 'Losses/train_all_core_loss': 2.4450548603421165, 'Trainer/where': 0.679047619047619, 'Trainer/epoch': 33, 'Trainer/steps_train': 714}
+INFO 2025-11-27 14:32:00,256 train_utils.py: 278: Train Epoch: [34][ 0/21] | Batch Time: 33.28 (33.28) | Data Time: 32.93 (32.93) | Mem (GB): 9.00 (9.00/9.00) | Time Elapsed: 00d 00h 56m | Losses/train_all_loss: 2.32e+00 (2.32e+00)
+WARNING 2025-11-27 14:32:17,187 transforms.py: 418: Skip RandomAffine for zero-area mask in first frame after 2 tentatives
+INFO 2025-11-27 14:32:41,921 train_utils.py: 278: Train Epoch: [34][20/21] | Batch Time: 0.30 (3.57) | Data Time: 0.00 (3.26) | Mem (GB): 9.00 (9.00/9.00) | Time Elapsed: 00d 00h 57m | Losses/train_all_loss: 2.32e+00 (2.44e+00)
+INFO 2025-11-27 14:32:41,999 trainer.py: 955: Estimated time remaining: 00d 00h 18m
+INFO 2025-11-27 14:32:42,000 trainer.py: 897: Synchronizing meters
+INFO 2025-11-27 14:32:42,000 trainer.py: 835: Losses and meters: {'Losses/train_all_loss': 2.4396410442533947, 'Losses/train_all_loss_mask': 0.04688818468934014, 'Losses/train_all_loss_dice': 0.6976642239661444, 'Losses/train_all_loss_iou': 0.1121958236963976, 'Losses/train_all_loss_class': 1.158948473336556e-05, 'Losses/train_all_core_loss': 2.4396410442533947, 'Trainer/where': 0.699047619047619, 'Trainer/epoch': 34, 'Trainer/steps_train': 735}
+WARNING 2025-11-27 14:32:48,899 transforms.py: 418: Skip RandomAffine for zero-area mask in first frame after 2 tentatives
+INFO 2025-11-27 14:32:58,651 train_utils.py: 278: Train Epoch: [35][ 0/21] | Batch Time: 12.87 (12.87) | Data Time: 12.50 (12.50) | Mem (GB): 9.00 (9.00/9.00) | Time Elapsed: 00d 00h 57m | Losses/train_all_loss: 2.39e+00 (2.39e+00)
+WARNING 2025-11-27 14:33:42,867 transforms.py: 418: Skip RandomAffine for zero-area mask in first frame after 2 tentatives
+INFO 2025-11-27 14:34:15,006 train_utils.py: 278: Train Epoch: [35][20/21] | Batch Time: 13.26 (4.25) | Data Time: 12.90 (3.92) | Mem (GB): 9.00 (8.95/9.00) | Time Elapsed: 00d 00h 58m | Losses/train_all_loss: 2.26e+00 (2.45e+00)
+INFO 2025-11-27 14:34:15,087 trainer.py: 955: Estimated time remaining: 00d 00h 20m
+INFO 2025-11-27 14:34:15,088 trainer.py: 897: Synchronizing meters
+INFO 2025-11-27 14:34:15,088 trainer.py: 835: Losses and meters: {'Losses/train_all_loss': 2.4525170099167597, 'Losses/train_all_loss_mask': 0.04831129135120483, 'Losses/train_all_loss_dice': 0.6942723677271888, 'Losses/train_all_loss_iou': 0.1281430142975989, 'Losses/train_all_loss_class': 3.847640754154706e-07, 'Losses/train_all_core_loss': 2.4525170099167597, 'Trainer/where': 0.7190476190476189, 'Trainer/epoch': 35, 'Trainer/steps_train': 756}
+INFO 2025-11-27 14:34:39,324 train_utils.py: 278: Train Epoch: [36][ 0/21] | Batch Time: 22.17 (22.17) | Data Time: 21.78 (21.78) | Mem (GB): 9.00 (9.00/9.00) | Time Elapsed: 00d 00h 59m | Losses/train_all_loss: 2.39e+00 (2.39e+00)
+WARNING 2025-11-27 14:34:39,958 transforms.py: 418: Skip RandomAffine for zero-area mask in first frame after 2 tentatives
+WARNING 2025-11-27 14:35:20,184 transforms.py: 418: Skip RandomAffine for zero-area mask in first frame after 2 tentatives
+INFO 2025-11-27 14:35:34,758 train_utils.py: 278: Train Epoch: [36][20/21] | Batch Time: 0.29 (3.70) | Data Time: 0.00 (3.36) | Mem (GB): 9.00 (9.00/9.00) | Time Elapsed: 00d 01h 00m | Losses/train_all_loss: 2.45e+00 (2.44e+00)
+INFO 2025-11-27 14:35:34,847 trainer.py: 955: Estimated time remaining: 00d 00h 16m
+INFO 2025-11-27 14:35:34,848 trainer.py: 897: Synchronizing meters
+INFO 2025-11-27 14:35:34,848 trainer.py: 835: Losses and meters: {'Losses/train_all_loss': 2.443554844175066, 'Losses/train_all_loss_mask': 0.046576764789365586, 'Losses/train_all_loss_dice': 0.6947431706246876, 'Losses/train_all_loss_iou': 0.12643758420433318, 'Losses/train_all_loss_class': 3.965453847353832e-06, 'Losses/train_all_core_loss': 2.443554844175066, 'Trainer/where': 0.739047619047619, 'Trainer/epoch': 36, 'Trainer/steps_train': 777}
+INFO 2025-11-27 14:36:19,448 train_utils.py: 278: Train Epoch: [37][ 0/21] | Batch Time: 42.82 (42.82) | Data Time: 42.43 (42.43) | Mem (GB): 9.00 (9.00/9.00) | Time Elapsed: 00d 01h 01m | Losses/train_all_loss: 2.48e+00 (2.48e+00)
+WARNING 2025-11-27 14:36:26,738 transforms.py: 418: Skip RandomAffine for zero-area mask in first frame after 2 tentatives
+WARNING 2025-11-27 14:36:33,098 transforms.py: 418: Skip RandomAffine for zero-area mask in first frame after 2 tentatives
+WARNING 2025-11-27 14:37:06,731 transforms.py: 418: Skip RandomAffine for zero-area mask in first frame after 2 tentatives
+INFO 2025-11-27 14:37:12,994 train_utils.py: 278: Train Epoch: [37][20/21] | Batch Time: 0.30 (4.59) | Data Time: 0.00 (4.28) | Mem (GB): 9.00 (9.00/9.00) | Time Elapsed: 00d 01h 01m | Losses/train_all_loss: 2.38e+00 (2.42e+00)
+INFO 2025-11-27 14:37:13,071 trainer.py: 955: Estimated time remaining: 00d 00h 19m
+INFO 2025-11-27 14:37:13,071 trainer.py: 897: Synchronizing meters
+INFO 2025-11-27 14:37:13,071 trainer.py: 835: Losses and meters: {'Losses/train_all_loss': 2.423566523052397, 'Losses/train_all_loss_mask': 0.04895835742354393, 'Losses/train_all_loss_dice': 0.6810087958971659, 'Losses/train_all_loss_iou': 0.13574193027757464, 'Losses/train_all_loss_class': 6.421494654806374e-06, 'Losses/train_all_core_loss': 2.423566523052397, 'Trainer/where': 0.759047619047619, 'Trainer/epoch': 37, 'Trainer/steps_train': 798}
+INFO 2025-11-27 14:37:59,039 train_utils.py: 278: Train Epoch: [38][ 0/21] | Batch Time: 43.93 (43.93) | Data Time: 43.57 (43.57) | Mem (GB): 9.00 (9.00/9.00) | Time Elapsed: 00d 01h 02m | Losses/train_all_loss: 2.34e+00 (2.34e+00)
+WARNING 2025-11-27 14:38:19,406 transforms.py: 418: Skip RandomAffine for zero-area mask in first frame after 2 tentatives
+INFO 2025-11-27 14:39:01,022 train_utils.py: 278: Train Epoch: [38][20/21] | Batch Time: 0.30 (5.04) | Data Time: 0.00 (4.72) | Mem (GB): 9.00 (9.00/9.00) | Time Elapsed: 00d 01h 03m | Losses/train_all_loss: 2.50e+00 (2.40e+00)
+INFO 2025-11-27 14:39:01,100 trainer.py: 955: Estimated time remaining: 00d 00h 19m
+INFO 2025-11-27 14:39:01,101 trainer.py: 897: Synchronizing meters
+INFO 2025-11-27 14:39:01,101 trainer.py: 835: Losses and meters: {'Losses/train_all_loss': 2.3997089749290827, 'Losses/train_all_loss_mask': 0.04979005979285354, 'Losses/train_all_loss_dice': 0.673555504708063, 'Losses/train_all_loss_iou': 0.13008337290514083, 'Losses/train_all_loss_class': 8.785257620613245e-06, 'Losses/train_all_core_loss': 2.3997089749290827, 'Trainer/where': 0.779047619047619, 'Trainer/epoch': 38, 'Trainer/steps_train': 819}
+WARNING 2025-11-27 14:39:15,877 transforms.py: 418: Skip RandomAffine for zero-area mask in first frame after 2 tentatives
+WARNING 2025-11-27 14:39:23,151 transforms.py: 418: Skip RandomAffine for zero-area mask in first frame after 2 tentatives
+INFO 2025-11-27 14:39:44,670 train_utils.py: 278: Train Epoch: [39][ 0/21] | Batch Time: 41.51 (41.51) | Data Time: 41.14 (41.14) | Mem (GB): 9.00 (9.00/9.00) | Time Elapsed: 00d 01h 04m | Losses/train_all_loss: 2.44e+00 (2.44e+00)
+WARNING 2025-11-27 14:39:49,957 transforms.py: 418: Skip RandomAffine for zero-area mask in first frame after 2 tentatives
+INFO 2025-11-27 14:40:39,840 train_utils.py: 278: Train Epoch: [39][20/21] | Batch Time: 0.30 (4.60) | Data Time: 0.00 (4.29) | Mem (GB): 9.00 (9.00/9.00) | Time Elapsed: 00d 01h 05m | Losses/train_all_loss: 2.49e+00 (2.45e+00)
+INFO 2025-11-27 14:40:40,007 trainer.py: 955: Estimated time remaining: 00d 00h 16m
+INFO 2025-11-27 14:40:40,008 trainer.py: 897: Synchronizing meters
+INFO 2025-11-27 14:40:40,008 trainer.py: 835: Losses and meters: {'Losses/train_all_loss': 2.445342915398734, 'Losses/train_all_loss_mask': 0.047657175965252374, 'Losses/train_all_loss_dice': 0.6964481813567025, 'Losses/train_all_loss_iou': 0.11769799178554899, 'Losses/train_all_loss_class': 1.451695895158626e-05, 'Losses/train_all_core_loss': 2.445342915398734, 'Trainer/where': 0.799047619047619, 'Trainer/epoch': 39, 'Trainer/steps_train': 840}
+WARNING 2025-11-27 14:41:11,483 transforms.py: 418: Skip RandomAffine for zero-area mask in first frame after 2 tentatives
+INFO 2025-11-27 14:41:21,324 train_utils.py: 278: Train Epoch: [40][ 0/21] | Batch Time: 30.02 (30.02) | Data Time: 29.64 (29.64) | Mem (GB): 9.00 (9.00/9.00) | Time Elapsed: 00d 01h 06m | Losses/train_all_loss: 2.16e+00 (2.16e+00)
+WARNING 2025-11-27 14:41:49,974 transforms.py: 418: Skip RandomAffine for zero-area mask in first frame after 2 tentatives
+WARNING 2025-11-27 14:42:21,151 transforms.py: 418: Skip RandomAffine for zero-area mask in first frame after 2 tentatives
+INFO 2025-11-27 14:42:22,531 train_utils.py: 278: Train Epoch: [40][20/21] | Batch Time: 0.30 (4.34) | Data Time: 0.00 (3.25) | Mem (GB): 9.00 (9.00/9.00) | Time Elapsed: 00d 01h 07m | Losses/train_all_loss: 2.32e+00 (2.43e+00)
+INFO 2025-11-27 14:42:22,609 trainer.py: 955: Estimated time remaining: 00d 00h 13m
+INFO 2025-11-27 14:42:22,610 trainer.py: 897: Synchronizing meters
+INFO 2025-11-27 14:42:22,610 trainer.py: 835: Losses and meters: {'Losses/train_all_loss': 2.4281749725341797, 'Losses/train_all_loss_mask': 0.04650077649525234, 'Losses/train_all_loss_dice': 0.6912958792277745, 'Losses/train_all_loss_iou': 0.12178234294766471, 'Losses/train_all_loss_class': 1.1060667406401874e-06, 'Losses/train_all_core_loss': 2.4281749725341797, 'Trainer/where': 0.819047619047619, 'Trainer/epoch': 40, 'Trainer/steps_train': 861}
+WARNING 2025-11-27 14:42:27,864 transforms.py: 418: Skip RandomAffine for zero-area mask in first frame after 2 tentatives
+INFO 2025-11-27 14:42:38,106 train_utils.py: 278: Train Epoch: [41][ 0/21] | Batch Time: 12.94 (12.94) | Data Time: 12.57 (12.57) | Mem (GB): 9.00 (9.00/9.00) | Time Elapsed: 00d 01h 07m | Losses/train_all_loss: 2.51e+00 (2.51e+00)
+WARNING 2025-11-27 14:43:04,290 transforms.py: 418: Skip RandomAffine for zero-area mask in first frame after 2 tentatives
+WARNING 2025-11-27 14:43:40,018 transforms.py: 418: Skip RandomAffine for zero-area mask in first frame after 2 tentatives
+INFO 2025-11-27 14:43:50,810 train_utils.py: 278: Train Epoch: [41][20/21] | Batch Time: 0.30 (4.08) | Data Time: 0.00 (3.76) | Mem (GB): 9.00 (9.00/9.00) | Time Elapsed: 00d 01h 08m | Losses/train_all_loss: 2.65e+00 (2.46e+00)
+INFO 2025-11-27 14:43:50,883 trainer.py: 955: Estimated time remaining: 00d 00h 11m
+INFO 2025-11-27 14:43:50,883 trainer.py: 897: Synchronizing meters
+INFO 2025-11-27 14:43:50,884 trainer.py: 835: Losses and meters: {'Losses/train_all_loss': 2.456038304737636, 'Losses/train_all_loss_mask': 0.05073597024948824, 'Losses/train_all_loss_dice': 0.6881945814405169, 'Losses/train_all_loss_iou': 0.13776869291350954, 'Losses/train_all_loss_class': 6.012524812418736e-06, 'Losses/train_all_core_loss': 2.456038304737636, 'Trainer/where': 0.8390476190476189, 'Trainer/epoch': 41, 'Trainer/steps_train': 882}
+INFO 2025-11-27 14:44:03,336 train_utils.py: 278: Train Epoch: [42][ 0/21] | Batch Time: 10.62 (10.62) | Data Time: 10.27 (10.27) | Mem (GB): 9.00 (9.00/9.00) | Time Elapsed: 00d 01h 08m | Losses/train_all_loss: 2.26e+00 (2.26e+00)
+WARNING 2025-11-27 14:44:05,561 transforms.py: 418: Skip RandomAffine for zero-area mask in first frame after 2 tentatives
+WARNING 2025-11-27 14:44:20,905 transforms.py: 418: Skip RandomAffine for zero-area mask in first frame after 2 tentatives
+WARNING 2025-11-27 14:44:48,780 transforms.py: 418: Skip RandomAffine for zero-area mask in first frame after 2 tentatives
+WARNING 2025-11-27 14:44:49,438 transforms.py: 418: Skip RandomAffine for zero-area mask in first frame after 2 tentatives
+INFO 2025-11-27 14:45:20,738 train_utils.py: 278: Train Epoch: [42][20/21] | Batch Time: 0.30 (4.19) | Data Time: 0.00 (3.87) | Mem (GB): 9.00 (8.95/9.00) | Time Elapsed: 00d 01h 10m | Losses/train_all_loss: 2.36e+00 (2.41e+00)
+INFO 2025-11-27 14:45:20,817 trainer.py: 955: Estimated time remaining: 00d 00h 10m
+INFO 2025-11-27 14:45:20,818 trainer.py: 897: Synchronizing meters
+INFO 2025-11-27 14:45:20,818 trainer.py: 835: Losses and meters: {'Losses/train_all_loss': 2.4050417627607072, 'Losses/train_all_loss_mask': 0.04735881604609035, 'Losses/train_all_loss_dice': 0.683203379313151, 'Losses/train_all_loss_iou': 0.11862861116727193, 'Losses/train_all_loss_class': 8.922427387101731e-06, 'Losses/train_all_core_loss': 2.4050417627607072, 'Trainer/where': 0.859047619047619, 'Trainer/epoch': 42, 'Trainer/steps_train': 903}
+WARNING 2025-11-27 14:45:41,297 transforms.py: 418: Skip RandomAffine for zero-area mask in first frame after 2 tentatives
+INFO 2025-11-27 14:45:43,016 train_utils.py: 278: Train Epoch: [43][ 0/21] | Batch Time: 19.52 (19.52) | Data Time: 19.16 (19.16) | Mem (GB): 9.00 (9.00/9.00) | Time Elapsed: 00d 01h 10m | Losses/train_all_loss: 2.35e+00 (2.35e+00)
+INFO 2025-11-27 14:46:55,813 train_utils.py: 278: Train Epoch: [43][20/21] | Batch Time: 0.30 (4.40) | Data Time: 0.00 (4.08) | Mem (GB): 9.00 (9.00/9.00) | Time Elapsed: 00d 01h 11m | Losses/train_all_loss: 2.60e+00 (2.47e+00)
+INFO 2025-11-27 14:46:55,891 trainer.py: 955: Estimated time remaining: 00d 00h 09m
+INFO 2025-11-27 14:46:55,892 trainer.py: 897: Synchronizing meters
+INFO 2025-11-27 14:46:55,892 trainer.py: 835: Losses and meters: {'Losses/train_all_loss': 2.4706415789467946, 'Losses/train_all_loss_mask': 0.04813692789702188, 'Losses/train_all_loss_dice': 0.7042546499343145, 'Losses/train_all_loss_iou': 0.11719289067245665, 'Losses/train_all_loss_class': 1.475715674057835e-07, 'Losses/train_all_core_loss': 2.4706415789467946, 'Trainer/where': 0.879047619047619, 'Trainer/epoch': 43, 'Trainer/steps_train': 924}
+INFO 2025-11-27 14:47:17,621 train_utils.py: 278: Train Epoch: [44][ 0/21] | Batch Time: 18.73 (18.73) | Data Time: 18.32 (18.32) | Mem (GB): 9.00 (9.00/9.00) | Time Elapsed: 00d 01h 12m | Losses/train_all_loss: 2.63e+00 (2.63e+00)
+WARNING 2025-11-27 14:47:19,168 transforms.py: 418: Skip RandomAffine for zero-area mask in first frame after 2 tentatives
+INFO 2025-11-27 14:48:23,136 train_utils.py: 278: Train Epoch: [44][20/21] | Batch Time: 1.48 (4.01) | Data Time: 1.18 (3.69) | Mem (GB): 9.00 (9.00/9.00) | Time Elapsed: 00d 01h 13m | Losses/train_all_loss: 2.46e+00 (2.44e+00)
+INFO 2025-11-27 14:48:23,211 trainer.py: 955: Estimated time remaining: 00d 00h 07m
+INFO 2025-11-27 14:48:23,212 trainer.py: 897: Synchronizing meters
+INFO 2025-11-27 14:48:23,212 trainer.py: 835: Losses and meters: {'Losses/train_all_loss': 2.4426431882949102, 'Losses/train_all_loss_mask': 0.047962675314574016, 'Losses/train_all_loss_dice': 0.6946406506356739, 'Losses/train_all_loss_iou': 0.11890738634836107, 'Losses/train_all_loss_class': 4.6167865219715054e-07, 'Losses/train_all_core_loss': 2.4426431882949102, 'Trainer/where': 0.899047619047619, 'Trainer/epoch': 44, 'Trainer/steps_train': 945}
+WARNING 2025-11-27 14:48:32,120 transforms.py: 418: Skip RandomAffine for zero-area mask in first frame after 2 tentatives
+INFO 2025-11-27 14:48:49,288 train_utils.py: 278: Train Epoch: [45][ 0/21] | Batch Time: 22.44 (22.44) | Data Time: 22.06 (22.06) | Mem (GB): 9.00 (9.00/9.00) | Time Elapsed: 00d 01h 13m | Losses/train_all_loss: 2.65e+00 (2.65e+00)
+WARNING 2025-11-27 14:49:16,670 transforms.py: 418: Skip RandomAffine for zero-area mask in first frame after 2 tentatives
+INFO 2025-11-27 14:50:11,498 train_utils.py: 278: Train Epoch: [45][20/21] | Batch Time: 0.29 (4.98) | Data Time: 0.00 (4.66) | Mem (GB): 9.00 (9.00/9.00) | Time Elapsed: 00d 01h 14m | Losses/train_all_loss: 2.38e+00 (2.41e+00)
+INFO 2025-11-27 14:50:11,584 trainer.py: 955: Estimated time remaining: 00d 00h 06m
+INFO 2025-11-27 14:50:11,584 trainer.py: 897: Synchronizing meters
+INFO 2025-11-27 14:50:11,584 trainer.py: 835: Losses and meters: {'Losses/train_all_loss': 2.4139222985222224, 'Losses/train_all_loss_mask': 0.04596925447029727, 'Losses/train_all_loss_dice': 0.6857471693129766, 'Losses/train_all_loss_iou': 0.1268253035488583, 'Losses/train_all_loss_class': 9.227162990814508e-06, 'Losses/train_all_core_loss': 2.4139222985222224, 'Trainer/where': 0.919047619047619, 'Trainer/epoch': 45, 'Trainer/steps_train': 966}
+WARNING 2025-11-27 14:50:33,037 transforms.py: 418: Skip RandomAffine for zero-area mask in first frame after 2 tentatives
+INFO 2025-11-27 14:50:35,651 train_utils.py: 278: Train Epoch: [46][ 0/21] | Batch Time: 22.22 (22.22) | Data Time: 21.80 (21.80) | Mem (GB): 9.00 (9.00/9.00) | Time Elapsed: 00d 01h 15m | Losses/train_all_loss: 2.59e+00 (2.59e+00)
+WARNING 2025-11-27 14:50:38,300 transforms.py: 418: Skip RandomAffine for zero-area mask in first frame after 2 tentatives
+WARNING 2025-11-27 14:51:08,780 transforms.py: 418: Skip RandomAffine for zero-area mask in first frame after 2 tentatives
+INFO 2025-11-27 14:51:52,145 train_utils.py: 278: Train Epoch: [46][20/21] | Batch Time: 10.53 (4.70) | Data Time: 10.15 (4.38) | Mem (GB): 9.00 (9.00/9.00) | Time Elapsed: 00d 01h 16m | Losses/train_all_loss: 2.16e+00 (2.48e+00)
+INFO 2025-11-27 14:51:52,229 trainer.py: 955: Estimated time remaining: 00d 00h 04m
+INFO 2025-11-27 14:51:52,230 trainer.py: 897: Synchronizing meters
+INFO 2025-11-27 14:51:52,230 trainer.py: 835: Losses and meters: {'Losses/train_all_loss': 2.483660720643543, 'Losses/train_all_loss_mask': 0.04843181992570559, 'Losses/train_all_loss_dice': 0.7064856347583589, 'Losses/train_all_loss_iou': 0.12204271448510033, 'Losses/train_all_loss_class': 2.003383870114027e-06, 'Losses/train_all_core_loss': 2.483660720643543, 'Trainer/where': 0.939047619047619, 'Trainer/epoch': 46, 'Trainer/steps_train': 987}
+INFO 2025-11-27 14:52:32,138 train_utils.py: 278: Train Epoch: [47][ 0/21] | Batch Time: 38.04 (38.04) | Data Time: 37.65 (37.65) | Mem (GB): 9.00 (9.00/9.00) | Time Elapsed: 00d 01h 17m | Losses/train_all_loss: 2.30e+00 (2.30e+00)
+INFO 2025-11-27 14:53:21,730 train_utils.py: 278: Train Epoch: [47][20/21] | Batch Time: 1.25 (4.17) | Data Time: 0.96 (3.86) | Mem (GB): 9.00 (9.00/9.00) | Time Elapsed: 00d 01h 18m | Losses/train_all_loss: 2.66e+00 (2.41e+00)
+INFO 2025-11-27 14:53:21,803 trainer.py: 955: Estimated time remaining: 00d 00h 02m
+INFO 2025-11-27 14:53:21,803 trainer.py: 897: Synchronizing meters
+INFO 2025-11-27 14:53:21,804 trainer.py: 835: Losses and meters: {'Losses/train_all_loss': 2.4114766234443303, 'Losses/train_all_loss_mask': 0.046945225624811085, 'Losses/train_all_loss_dice': 0.6875007294473194, 'Losses/train_all_loss_iou': 0.11423420515798387, 'Losses/train_all_loss_class': 1.4093948411166476e-05, 'Losses/train_all_core_loss': 2.4114766234443303, 'Trainer/where': 0.9590476190476189, 'Trainer/epoch': 47, 'Trainer/steps_train': 1008}
+INFO 2025-11-27 14:53:59,563 train_utils.py: 278: Train Epoch: [48][ 0/21] | Batch Time: 35.69 (35.69) | Data Time: 35.32 (35.32) | Mem (GB): 9.00 (9.00/9.00) | Time Elapsed: 00d 01h 18m | Losses/train_all_loss: 2.70e+00 (2.70e+00)
+WARNING 2025-11-27 14:54:05,355 transforms.py: 418: Skip RandomAffine for zero-area mask in first frame after 2 tentatives
+INFO 2025-11-27 14:54:57,815 train_utils.py: 278: Train Epoch: [48][20/21] | Batch Time: 0.30 (4.47) | Data Time: 0.00 (4.16) | Mem (GB): 9.00 (9.00/9.00) | Time Elapsed: 00d 01h 19m | Losses/train_all_loss: 2.58e+00 (2.42e+00)
+INFO 2025-11-27 14:54:57,894 trainer.py: 955: Estimated time remaining: 00d 00h 01m
+INFO 2025-11-27 14:54:57,895 trainer.py: 897: Synchronizing meters
+INFO 2025-11-27 14:54:57,895 trainer.py: 835: Losses and meters: {'Losses/train_all_loss': 2.423987343197777, 'Losses/train_all_loss_mask': 0.04910745258842196, 'Losses/train_all_loss_dice': 0.6846404132388887, 'Losses/train_all_loss_iou': 0.12449867296076957, 'Losses/train_all_loss_class': 3.0138915856656046e-05, 'Losses/train_all_core_loss': 2.423987343197777, 'Trainer/where': 0.9790476190476189, 'Trainer/epoch': 48, 'Trainer/steps_train': 1029}
+INFO 2025-11-27 14:55:22,528 train_utils.py: 278: Train Epoch: [49][ 0/21] | Batch Time: 22.74 (22.74) | Data Time: 22.38 (22.38) | Mem (GB): 9.00 (9.00/9.00) | Time Elapsed: 00d 01h 20m | Losses/train_all_loss: 2.40e+00 (2.40e+00)
+WARNING 2025-11-27 14:55:26,533 transforms.py: 418: Skip RandomAffine for zero-area mask in first frame after 2 tentatives
+INFO 2025-11-27 14:56:23,854 train_utils.py: 278: Train Epoch: [49][20/21] | Batch Time: 0.30 (4.00) | Data Time: 0.00 (3.68) | Mem (GB): 9.00 (9.00/9.00) | Time Elapsed: 00d 01h 21m | Losses/train_all_loss: 2.34e+00 (2.43e+00)
+INFO 2025-11-27 14:56:23,928 trainer.py: 955: Estimated time remaining: 00d 00h 00m
+INFO 2025-11-27 14:56:23,929 trainer.py: 897: Synchronizing meters
+INFO 2025-11-27 14:56:23,929 trainer.py: 835: Losses and meters: {'Losses/train_all_loss': 2.4261477561224076, 'Losses/train_all_loss_mask': 0.04970095111500649, 'Losses/train_all_loss_dice': 0.6815977380389259, 'Losses/train_all_loss_iou': 0.13284412168321155, 'Losses/train_all_loss_class': 5.660201196929411e-06, 'Losses/train_all_core_loss': 2.4261477561224076, 'Trainer/where': 0.999047619047619, 'Trainer/epoch': 49, 'Trainer/steps_train': 1050}
+
+============================================================
+Training Complete!
+Output: /scratch/user/shubhammhaske/vfm_project
+============================================================
+
+==============================================
+Complete!
+Exit: 0
+End: Thu Nov 27 14:57:13 CST 2025
+Output: finetune_logs/path_sam2_ctranspath-17213024
+==============================================
+
+Running evaluation on: finetune_logs/path_sam2_ctranspath-17213024/checkpoints/checkpoint_50.pt
+Using Nvidia CUDA backend.
+================================================================================
+Starting quantitative evaluation...
+  SAM Config:     configs/sam2.1/sam2.1_hiera_l.yaml
+  SAM Checkpoint: /scratch/user/shubhammhaske/vfm_project/finetune_logs/path_sam2_ctranspath-17213024/checkpoints/checkpoint_50.pt
+  CLIP Prompts:   /scratch/user/shubhammhaske/vfm_project/configs/prompts/hard_coded_prompts_v2.json
+  Output Dir:     /scratch/user/shubhammhaske/vfm_project/results/path_sam2_ctp_eval_17213024
+================================================================================
+Using Nvidia CUDA backend.
+Using device: cuda
+Loading models...
