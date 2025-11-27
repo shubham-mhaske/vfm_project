@@ -260,7 +260,7 @@ trainer:
       pred_obj_scores: true
 
   distributed:
-    backend: nccl
+    backend: gloo
     find_unused_parameters: true
 
   logging:
