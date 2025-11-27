@@ -410,22 +410,30 @@ class CTransPathDimensionAlignment(nn.Module):
         Fuse SAM2 and CTransPath features.
         
         Args:
-            sam_features: [B, 64, 64, 256] from SAM2 encoder
+            sam_features: [B, 256, 64, 64] from SAM2 encoder (channel-first)
             ctranspath_features: [B, 4096, 768] from CTransPath
             
         Returns:
-            fused: [B, 64, 64, 256] fused features
+            fused: [B, 256, 64, 64] fused features (channel-first to match SAM2)
         """
         B = sam_features.shape[0]
         
-        # Reshape CTransPath features to spatial
+        # Reshape CTransPath features to spatial [B, 768, 64, 64]
         ctp_spatial = ctranspath_features.transpose(1, 2).view(B, self.ctranspath_dim, 64, 64)
         
-        # Reshape SAM features to channel-last → channel-first
-        if sam_features.dim() == 4 and sam_features.shape[-1] == self.sam_dim:
-            sam_spatial = sam_features.permute(0, 3, 1, 2)  # [B, 256, 64, 64]
+        # SAM2 features are already channel-first [B, 256, 64, 64]
+        # Check format and convert if needed
+        if sam_features.dim() == 4:
+            if sam_features.shape[1] == self.sam_dim:
+                # Already channel-first [B, 256, H, W]
+                sam_spatial = sam_features
+            elif sam_features.shape[-1] == self.sam_dim:
+                # Channel-last [B, H, W, 256] - convert to channel-first
+                sam_spatial = sam_features.permute(0, 3, 1, 2)
+            else:
+                raise ValueError(f"Unexpected SAM features shape: {sam_features.shape}")
         else:
-            sam_spatial = sam_features
+            raise ValueError(f"Expected 4D tensor, got {sam_features.dim()}D")
         
         if self.fusion_type == 'concat':
             # Concatenate along channel dimension
@@ -449,9 +457,8 @@ class CTransPathDimensionAlignment(nn.Module):
             fused = fused + self.ffn(fused)
             fused = fused.transpose(1, 2).view(B, self.output_dim, 64, 64)
         
-        # Return in channel-last format to match SAM2 expectations
-        fused = fused.permute(0, 2, 3, 1)  # [B, 64, 64, 256]
-        
+        # Return in channel-first format to match SAM2 vision_features [B, 256, 64, 64]
+        # fused is already [B, 256, 64, 64] from the fusion operations
         return fused
 
 
