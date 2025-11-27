@@ -106,14 +106,15 @@ echo ""
 # --- Run Training ---
 echo "Starting training..."
 
-torchrun \
-    --nproc_per_node=2 \
-    --master_port=$MASTER_PORT \
-    src/run_path_sam2_ctranspath.py \
+# Use single GPU to avoid distributed setup issues
+# (CTransPath fusion module may not be fully DDP-compatible yet)
+export CUDA_VISIBLE_DEVICES=0
+
+python src/run_path_sam2_ctranspath.py \
     experiment=$EXPERIMENT \
     data_root=$DATA_ROOT \
     hydra.run.dir=$OUTPUT_DIR \
-    scratch.train_batch_size=3 \
+    scratch.train_batch_size=4 \
     scratch.num_train_workers=8 \
     scratch.num_epochs=50
 

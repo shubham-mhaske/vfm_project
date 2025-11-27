@@ -168,12 +168,22 @@ def main(cfg: DictConfig) -> None:
     print("\n--- Configuration ---")
     print(OmegaConf.to_yaml(cfg))
     
-    # Distributed setup
-    os.environ["MASTER_ADDR"] = "localhost"
-    os.environ["MASTER_PORT"] = str(12355)
-    os.environ["RANK"] = "0"
-    os.environ["LOCAL_RANK"] = "0"
-    os.environ["WORLD_SIZE"] = "1"
+    # Distributed setup - only set if not already set by torchrun
+    if "MASTER_ADDR" not in os.environ:
+        os.environ["MASTER_ADDR"] = "localhost"
+    if "MASTER_PORT" not in os.environ:
+        os.environ["MASTER_PORT"] = str(12355)
+    if "RANK" not in os.environ:
+        os.environ["RANK"] = "0"
+    if "LOCAL_RANK" not in os.environ:
+        os.environ["LOCAL_RANK"] = "0"
+    if "WORLD_SIZE" not in os.environ:
+        os.environ["WORLD_SIZE"] = "1"
+    
+    print(f"\nDistributed Setup:")
+    print(f"  RANK: {os.environ.get('RANK', 'N/A')}")
+    print(f"  WORLD_SIZE: {os.environ.get('WORLD_SIZE', 'N/A')}")
+    print(f"  LOCAL_RANK: {os.environ.get('LOCAL_RANK', 'N/A')}")
 
     # Instantiate trainer
     print("\nInstantiating trainer...")
