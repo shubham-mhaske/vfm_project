@@ -220,7 +220,7 @@ trainer:
 
   optim:
     amp:
-      enabled: true
+      enabled: false
       amp_dtype: bfloat16
     optimizer:
       _target_: torch.optim.AdamW
