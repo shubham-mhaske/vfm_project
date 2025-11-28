@@ -4,6 +4,7 @@
 #SBATCH --error=slurm_logs/tta_eval_%j.err
 #SBATCH --partition=gpu
 #SBATCH --gres=gpu:a100:1
+#SBATCH --ntasks=1
 #SBATCH --cpus-per-task=8
 #SBATCH --mem=64GB
 #SBATCH --time=1:00:00
