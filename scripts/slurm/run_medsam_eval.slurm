@@ -1,9 +1,9 @@
 #!/bin/bash
 #SBATCH --job-name=medsam_eval
-#SBATCH --time=02:00:00
+#SBATCH --time=01:00:00
 #SBATCH --ntasks=1
-#SBATCH --cpus-per-task=4
-#SBATCH --mem=32G
+#SBATCH --cpus-per-task=16
+#SBATCH --mem=64G
 #SBATCH --gres=gpu:a100:1
 #SBATCH --partition=gpu
 #SBATCH --output=slurm_logs/medsam_eval_%j.out
