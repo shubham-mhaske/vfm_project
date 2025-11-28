@@ -1,0 +1,81 @@
+# @package _global_
+# SAM2 with LoRA adapters - Parameter-efficient fine-tuning
+#
+# Key differences from standard fine-tuning:
+# - Original SAM2 weights are FROZEN
+# - Only train small LoRA matrices (~0.2% of params)
+# - Prevents catastrophic forgetting
+#
+# Usage: python src/run_finetuning.py experiment=sam2_lora
+
+defaults:
+  - override /optimizer: adamw
+
+# Experiment metadata
+experiment_name: sam2_lora_adapter
+description: "LoRA adapter fine-tuning - freezes original weights, adds ~0.2% trainable params"
+
+# LoRA Configuration
+lora:
+  enabled: true
+  rank: 8                    # Rank of LoRA matrices (4, 8, 16)
+  alpha: 8.0                 # Scaling factor (typically same as rank)
+  dropout: 0.1               # Dropout for regularization
+  target_modules: "image_encoder"  # Where to apply LoRA
+  trainable_output_head: true      # Keep final MLP heads trainable
+
+# Model - use SAM2 with LoRA wrapper
+scratch:
+  model:
+    _target_: src.lora_adapter.apply_lora_to_sam2
+    r: ${lora.rank}
+    alpha: ${lora.alpha}
+    dropout: ${lora.dropout}
+    target_modules: ${lora.target_modules}
+    trainable_output_head: ${lora.trainable_output_head}
+
+# Training configuration - optimized for LoRA
+  train_batch_size: 4
+  num_train_workers: 4
+  
+  # Higher LR is OK for LoRA since we're training fewer params
+  lr: 1.0e-4
+  min_lr: 1.0e-6
+  weight_decay: 0.01
+  
+  num_epochs: 20
+  warmup_steps: 100  # Shorter warmup since fewer params
+  
+  # Augmentation - moderate
+  augmentation:
+    color_jitter: 0.15
+    random_rotation: 90
+    random_flip: true
+    normalize: true
+  
+  # Loss configuration
+  loss:
+    use_focal: true
+    focal_gamma: 2.0
+    dice_weight: 3.0
+    mask_weight: 1.0
+    iou_weight: 1.0
+
+# Class weights for BCSS (based on frequency analysis)
+class_weights:
+  tumor: 1.0
+  stroma: 1.3
+  lymphocyte: 5.7
+  necrosis: 4.9
+  blood_vessel: 67.6
+
+# Checkpointing
+checkpoint:
+  save_every: 5
+  eval_every: 2
+  keep_best: true
+
+# Hardware
+amp:
+  enabled: true
+  dtype: bfloat16
