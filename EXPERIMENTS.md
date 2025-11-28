@@ -109,9 +109,55 @@
 
 ---
 
+## SAM2-Only Improvements (Post-CTransPath Analysis)
+
+After Path-SAM2 + CTransPath achieved only 0.366 Dice (vs 0.517 zeroshot), we're exploring 
+SAM2-only approaches that preserve pretrained knowledge.
+
+### v8: SAM2 LoRA-Light ✨ NEW
+**Date**: 2025-11-27
+**Config**: `sam2_lora_light`
+**Hypothesis**: Finetuning is hurting zeroshot performance. Use minimal adaptation.
+**Key Changes**:
+- LR: 5e-6 (12x smaller than v2's 6e-5)
+- Epochs: 30 (shorter to prevent overfitting)
+- Warmup: 25% of training (longer for stability)
+- Augmentation: Minimal (ColorJitter 0.1 vs 0.2)
+- Loss weights: Dice 5, mask 2 (emphasize boundaries)
+- Weight decay: 0.001 (very low - preserve pretrained)
+**Expected Results**:
+- Preserve zeroshot capabilities while improving minority classes
+- Target: Dice > 0.50 (vs v2's 0.42)
+
+---
+
+### v9: SAM2 Box+Focal ✨ NEW  
+**Date**: 2025-11-27
+**Config**: `sam2_box_focal`
+**Hypothesis**: Point prompts are ambiguous for histopathology. Box prompts + focal loss.
+**Key Changes**:
+- Prompting: Box-only (no point prompts)
+- Loss: FocalDiceLoss with class weights
+- Class weights: tumor 1.0, stroma 1.3, lymph 5.7, necrosis 4.9, blood_vessel **67.6**
+- LR: 3e-5 (moderate)
+- Epochs: 50
+**Expected Results**:
+- Better minority class performance (blood_vessel target: 0.15+)
+- Overall target: Dice > 0.48
+
+---
+
 ## Commands
 
 ```bash
+# --- SAM2-Only Experiments (New) ---
+# v8: LoRA-Light (minimal adaptation)
+sbatch scripts/slurm/run_sam2_lora_light.slurm
+
+# v9: Box+Focal (box prompts + class weighting)
+sbatch scripts/slurm/run_sam2_box_focal.slurm
+
+# --- Previous Experiments ---
 # Train a specific experiment
 sbatch scripts/slurm/run_path_sam2_ctranspath_optimized.slurm
 
