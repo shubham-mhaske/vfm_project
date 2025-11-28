@@ -51,13 +51,13 @@ def predict_with_tta(
         aug_image = image.copy()
         aug_prompts = {k: (v[0].copy(), v[1].copy()) if isinstance(v, tuple) else v.copy() for k, v in prompts.items()}
 
-        # Augment image
+        # Augment image (use .copy() to ensure contiguous array with positive strides)
         if aug_type == 'hflip':
-            aug_image = np.fliplr(aug_image)
+            aug_image = np.fliplr(aug_image).copy()
         elif aug_type == 'vflip':
-            aug_image = np.flipud(aug_image)
+            aug_image = np.flipud(aug_image).copy()
         elif aug_type == 'rot90':
-            aug_image = np.rot90(aug_image)
+            aug_image = np.rot90(aug_image).copy()
 
         # Augment prompts
         for p_type, p_val in aug_prompts.items():
