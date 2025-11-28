@@ -34,15 +34,16 @@ cd "$PROJECT_ROOT" || { echo "ERROR: Project not found at $PROJECT_ROOT"; exit 1
 # Create log directory
 mkdir -p slurm_logs
 
-# Load modules for Grace cluster
+# Load modules and activate environment (use saved module collection)
 module purge
-module load GCC/11.3.0
-module load CUDA/11.7.0
-module load Python/3.10.4
-module load cuDNN/8.4.1.50-CUDA-11.7.0
+module restore dl
 
-# Activate conda environment
-source activate vfm || conda activate vfm || { echo "ERROR: Failed to activate vfm environment"; exit 1; }
+# Activate virtual environment
+source $SCRATCH/vfm_env/bin/activate
+export LD_LIBRARY_PATH=$CONDA_PREFIX/lib:$LD_LIBRARY_PATH
+
+# Set PYTHONPATH for imports
+export PYTHONPATH="$PROJECT_ROOT:$PROJECT_ROOT/sam2:$PROJECT_ROOT/MedSAM:$PYTHONPATH"
 
 # Check MedSAM is set up
 if [ ! -d "MedSAM" ]; then
