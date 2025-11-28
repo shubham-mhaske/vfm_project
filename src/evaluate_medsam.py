@@ -378,11 +378,11 @@ def evaluate_medsam(args):
             dice, iou = calculate_metrics(predicted_mask, binary_gt_mask)
             class_dice_scores[class_id].append(dice)
             sample_results.append({
-                'sample_idx': i,
-                'class_id': class_id,
+                'sample_idx': int(i),
+                'class_id': int(class_id),
                 'class_name': class_name,
-                'dice': dice,
-                'iou': iou,
+                'dice': float(dice),
+                'iou': float(iou),
                 'image_path': bcss_dataset.image_files[i]
             })
     
