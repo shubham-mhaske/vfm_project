@@ -10,6 +10,7 @@
 | 🥈 Box + TTA | 0.563 | +8.9% |
 | 🥉 Box + Neg Points | 0.560 | +8.4% |
 | Box baseline | 0.553 | +7.0% |
+| **MedSAM Box** | **0.522** | **-0.9%** ⚠️ |
 | Multi-point prompt | 0.418 | -19.2% |
 | Centroid (single point) | 0.335 | -35.1% |
 | v2 Finetuned (best finetune) | 0.42 | -18.8% |
