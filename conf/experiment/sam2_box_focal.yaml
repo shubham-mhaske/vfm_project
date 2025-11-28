@@ -200,7 +200,7 @@ trainer:
             split: train
             prompt_type: box          # BOX prompts only
             use_neg_points: false     # No negative points needed for box
-            num_points: 0             # No points
+            num_points: 1             # Must be >0 to avoid division by zero in prompt generation
           sampler:
             _target_: training.dataset.vos_sampler.RandomUniformSampler
             num_frames: ${scratch.num_frames}
