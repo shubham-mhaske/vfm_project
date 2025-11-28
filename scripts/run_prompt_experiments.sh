@@ -12,8 +12,10 @@ echo "SAM2 Prompt Engineering Experiments"
 echo "=============================================="
 
 # Base settings
+# NOTE: model_cfg should be relative to sam2 package (e.g., "configs/sam2.1/sam2.1_hiera_l.yaml")
+# The evaluate_segmentation.py script handles the path correctly
 CHECKPOINT="sam2/checkpoints/sam2.1_hiera_large.pt"
-MODEL_CFG="sam2/sam2/configs/sam2.1/sam2.1_hiera_l.yaml"
+MODEL_CFG="configs/sam2.1/sam2.1_hiera_l.yaml"
 COMMON_ARGS="--model_cfg $MODEL_CFG --checkpoint $CHECKPOINT --split test --tqdm"
 
 # Create results directory

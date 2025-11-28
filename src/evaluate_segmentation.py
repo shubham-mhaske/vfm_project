@@ -146,6 +146,7 @@ def convert_pathsam_to_standard_sam(state_dict: dict) -> dict:
 def evaluate_segmentation(args):
     """Runs the SAM 2 segmentation and evaluation on the full test set (or a subset)."""
     project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+    sam2_root = os.path.join(project_root, 'sam2')
     image_dir = os.path.join(project_root, args.image_dir)
     mask_dir = os.path.join(project_root, args.mask_dir)
 
@@ -165,7 +166,12 @@ def evaluate_segmentation(args):
     # Determine checkpoint type and load appropriately
     state_dict = ckpt.get('model', ckpt) if isinstance(ckpt, dict) else ckpt
     
-    if isinstance(state_dict, dict) and is_pathsam_ctranspath_checkpoint(state_dict):
+    # Change to sam2 directory for Hydra config resolution
+    orig_cwd = os.getcwd()
+    os.chdir(sam2_root)
+    
+    try:
+        if isinstance(state_dict, dict) and is_pathsam_ctranspath_checkpoint(state_dict):
         # Path-SAM2 + CTransPath checkpoint detected
         print("\n" + "="*60)
         print("[Checkpoint] Detected Path-SAM2 + CTransPath checkpoint!")
@@ -196,18 +202,21 @@ def evaluate_segmentation(args):
             converted_state = convert_pathsam_to_standard_sam(state_dict)
             model.load_state_dict(converted_state, strict=False)
             predictor = SAM2ImagePredictor(model)
-    elif 'model' in ckpt and isinstance(ckpt['model'], dict):
-        # Standard finetuned SAM2 checkpoint
-        print("[Checkpoint] Standard finetuned SAM2 checkpoint detected")
-        from sam2.build_sam import build_sam2
-        from sam2.sam2_image_predictor import SAM2ImagePredictor
-        model = build_sam2(args.model_cfg, ckpt_path=None, device=device)
-        model.load_state_dict(ckpt['model'], strict=False)
-        predictor = SAM2ImagePredictor(model)
-    else:
-        # Original SAM2 checkpoint format
-        print("[Checkpoint] Original SAM2 checkpoint format detected")
-        predictor = get_sam2_predictor(args.model_cfg, checkpoint_path, device)
+        elif 'model' in ckpt and isinstance(ckpt['model'], dict):
+            # Standard finetuned SAM2 checkpoint
+            print("[Checkpoint] Standard finetuned SAM2 checkpoint detected")
+            from sam2.build_sam import build_sam2
+            from sam2.sam2_image_predictor import SAM2ImagePredictor
+            model = build_sam2(args.model_cfg, ckpt_path=None, device=device)
+            model.load_state_dict(ckpt['model'], strict=False)
+            predictor = SAM2ImagePredictor(model)
+        else:
+            # Original SAM2 checkpoint format
+            print("[Checkpoint] Original SAM2 checkpoint format detected")
+            predictor = get_sam2_predictor(args.model_cfg, checkpoint_path, device)
+    finally:
+        # Restore original working directory
+        os.chdir(orig_cwd)
 
     num_samples = len(bcss_dataset) if args.max_samples is None else min(args.max_samples, len(bcss_dataset))
     
