@@ -172,36 +172,36 @@ def evaluate_segmentation(args):
     
     try:
         if isinstance(state_dict, dict) and is_pathsam_ctranspath_checkpoint(state_dict):
-        # Path-SAM2 + CTransPath checkpoint detected
-        print("\n" + "="*60)
-        print("[Checkpoint] Detected Path-SAM2 + CTransPath checkpoint!")
-        print("="*60)
-        
-        if args.use_pathsam:
-            # Load full Path-SAM2 model with CTransPath fusion
-            ctranspath_ckpt = os.path.join(project_root, args.ctranspath_checkpoint)
-            if not os.path.exists(ctranspath_ckpt):
-                raise FileNotFoundError(
-                    f"CTransPath checkpoint not found at: {ctranspath_ckpt}\n"
-                    f"Please provide --ctranspath_checkpoint or use --no_pathsam to load as standard SAM2"
+            # Path-SAM2 + CTransPath checkpoint detected
+            print("\n" + "="*60)
+            print("[Checkpoint] Detected Path-SAM2 + CTransPath checkpoint!")
+            print("="*60)
+            
+            if args.use_pathsam:
+                # Load full Path-SAM2 model with CTransPath fusion
+                ctranspath_ckpt = os.path.join(project_root, args.ctranspath_checkpoint)
+                if not os.path.exists(ctranspath_ckpt):
+                    raise FileNotFoundError(
+                        f"CTransPath checkpoint not found at: {ctranspath_ckpt}\n"
+                        f"Please provide --ctranspath_checkpoint or use --no_pathsam to load as standard SAM2"
+                    )
+                predictor = load_pathsam_ctranspath_model(
+                    args.model_cfg, 
+                    checkpoint_path, 
+                    ctranspath_ckpt, 
+                    device,
+                    fusion_type=args.fusion_type
                 )
-            predictor = load_pathsam_ctranspath_model(
-                args.model_cfg, 
-                checkpoint_path, 
-                ctranspath_ckpt, 
-                device,
-                fusion_type=args.fusion_type
-            )
-        else:
-            # Convert to standard SAM2 format (loses CTransPath features)
-            print("[Checkpoint] Converting to standard SAM2 format (--no_pathsam mode)")
-            print("[Checkpoint] WARNING: CTransPath fusion features will be ignored!")
-            from sam2.build_sam import build_sam2
-            from sam2.sam2_image_predictor import SAM2ImagePredictor
-            model = build_sam2(args.model_cfg, ckpt_path=None, device=device)
-            converted_state = convert_pathsam_to_standard_sam(state_dict)
-            model.load_state_dict(converted_state, strict=False)
-            predictor = SAM2ImagePredictor(model)
+            else:
+                # Convert to standard SAM2 format (loses CTransPath features)
+                print("[Checkpoint] Converting to standard SAM2 format (--no_pathsam mode)")
+                print("[Checkpoint] WARNING: CTransPath fusion features will be ignored!")
+                from sam2.build_sam import build_sam2
+                from sam2.sam2_image_predictor import SAM2ImagePredictor
+                model = build_sam2(args.model_cfg, ckpt_path=None, device=device)
+                converted_state = convert_pathsam_to_standard_sam(state_dict)
+                model.load_state_dict(converted_state, strict=False)
+                predictor = SAM2ImagePredictor(model)
         elif 'model' in ckpt and isinstance(ckpt['model'], dict):
             # Standard finetuned SAM2 checkpoint
             print("[Checkpoint] Standard finetuned SAM2 checkpoint detected")
