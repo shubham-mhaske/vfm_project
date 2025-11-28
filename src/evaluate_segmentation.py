@@ -29,6 +29,120 @@ print("[BOOT] Importing training utils (OmegaConf resolvers)...", flush=True)
 from training.utils.train_utils import register_omegaconf_resolvers
 print(f"[BOOT] Imports done in {time.time()-boot_t0:.2f}s", flush=True)
 
+
+def is_pathsam_ctranspath_checkpoint(state_dict: dict) -> bool:
+    """
+    Detect if checkpoint contains Path-SAM2 + CTransPath weights.
+    
+    Returns True if the checkpoint has keys like:
+        image_encoder.sam_encoder.trunk.*
+        image_encoder.ctranspath_encoder.*
+        image_encoder.dimension_alignment.*
+    """
+    pathsam_indicators = [
+        'image_encoder.sam_encoder.',
+        'image_encoder.ctranspath_encoder.',
+        'image_encoder.dimension_alignment.'
+    ]
+    for key in state_dict.keys():
+        for indicator in pathsam_indicators:
+            if key.startswith(indicator):
+                return True
+    return False
+
+
+def load_pathsam_ctranspath_model(model_cfg: str, checkpoint_path: str, 
+                                   ctranspath_ckpt: str, device: str,
+                                   fusion_type: str = 'concat'):
+    """
+    Load a Path-SAM2 + CTransPath model with the correct architecture.
+    
+    Args:
+        model_cfg: Path to SAM2 model config
+        checkpoint_path: Path to finetuned Path-SAM2 checkpoint
+        ctranspath_ckpt: Path to CTransPath pretrained weights
+        device: Device to load model on
+        fusion_type: Fusion type used during training ('concat' or 'attention')
+    
+    Returns:
+        SAM2ImagePredictor with Path-SAM2 + CTransPath encoder
+    """
+    from sam2.build_sam import build_sam2
+    from sam2.sam2_image_predictor import SAM2ImagePredictor
+    from src.ctranspath_encoder import PathSAM2CTransPathEncoder
+    
+    print(f"[PathSAM2] Building base SAM2 model from config: {model_cfg}")
+    
+    # Build base SAM2 model (without loading checkpoint - we'll load our finetuned weights)
+    model = build_sam2(model_cfg, ckpt_path=None, device=device)
+    
+    # Wrap the image encoder with PathSAM2CTransPathEncoder
+    print(f"[PathSAM2] Integrating CTransPath encoder...")
+    print(f"[PathSAM2]   CTransPath checkpoint: {ctranspath_ckpt}")
+    print(f"[PathSAM2]   Fusion type: {fusion_type}")
+    
+    model.image_encoder = PathSAM2CTransPathEncoder(
+        sam_encoder=model.image_encoder,
+        ctranspath_checkpoint=ctranspath_ckpt,
+        freeze_sam=True,
+        freeze_ctranspath=True,
+        fusion_type=fusion_type
+    )
+    
+    # Load the finetuned checkpoint
+    print(f"[PathSAM2] Loading finetuned weights from: {checkpoint_path}")
+    ckpt = torch.load(checkpoint_path, map_location='cpu', weights_only=False)
+    state_dict = ckpt.get('model', ckpt)
+    
+    # Load state dict with strict=False to handle any minor mismatches
+    missing, unexpected = model.load_state_dict(state_dict, strict=False)
+    
+    if missing:
+        print(f"[PathSAM2] Warning: {len(missing)} missing keys (expected for frozen components)")
+    if unexpected:
+        print(f"[PathSAM2] Warning: {len(unexpected)} unexpected keys")
+    
+    print(f"[PathSAM2] Model loaded successfully!")
+    model = model.to(device)
+    model.eval()
+    
+    return SAM2ImagePredictor(model)
+
+
+def convert_pathsam_to_standard_sam(state_dict: dict) -> dict:
+    """
+    Convert Path-SAM2 checkpoint keys to standard SAM2 format.
+    
+    This allows loading Path-SAM2 checkpoints into vanilla SAM2 by:
+    1. Remapping image_encoder.sam_encoder.* -> image_encoder.*
+    2. Dropping CTransPath and fusion layer weights
+    
+    Note: This loses the CTransPath features! Use load_pathsam_ctranspath_model()
+    for full Path-SAM2 inference.
+    """
+    new_state = {}
+    dropped_keys = 0
+    
+    for key, value in state_dict.items():
+        if key.startswith('image_encoder.sam_encoder.'):
+            # Remap: image_encoder.sam_encoder.trunk.* -> image_encoder.trunk.*
+            new_key = key.replace('image_encoder.sam_encoder.', 'image_encoder.')
+            new_state[new_key] = value
+        elif key.startswith('image_encoder.ctranspath_encoder.'):
+            # Drop CTransPath weights
+            dropped_keys += 1
+            continue
+        elif key.startswith('image_encoder.dimension_alignment.'):
+            # Drop fusion layer weights
+            dropped_keys += 1
+            continue
+        else:
+            # Keep other keys as-is (mask decoder, memory modules, etc.)
+            new_state[key] = value
+    
+    print(f"[Checkpoint] Converted Path-SAM2 -> SAM2: kept {len(new_state)} keys, dropped {dropped_keys} CTransPath/fusion keys")
+    return new_state
+
 def evaluate_segmentation(args):
     """Runs the SAM 2 segmentation and evaluation on the full test set (or a subset)."""
     project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
@@ -47,14 +161,52 @@ def evaluate_segmentation(args):
 
     checkpoint_path = os.path.join(project_root, args.checkpoint)
     ckpt = torch.load(checkpoint_path, map_location='cpu', weights_only=False)
-
-    if 'model' in ckpt and isinstance(ckpt['model'], dict):
+    
+    # Determine checkpoint type and load appropriately
+    state_dict = ckpt.get('model', ckpt) if isinstance(ckpt, dict) else ckpt
+    
+    if isinstance(state_dict, dict) and is_pathsam_ctranspath_checkpoint(state_dict):
+        # Path-SAM2 + CTransPath checkpoint detected
+        print("\n" + "="*60)
+        print("[Checkpoint] Detected Path-SAM2 + CTransPath checkpoint!")
+        print("="*60)
+        
+        if args.use_pathsam:
+            # Load full Path-SAM2 model with CTransPath fusion
+            ctranspath_ckpt = os.path.join(project_root, args.ctranspath_checkpoint)
+            if not os.path.exists(ctranspath_ckpt):
+                raise FileNotFoundError(
+                    f"CTransPath checkpoint not found at: {ctranspath_ckpt}\n"
+                    f"Please provide --ctranspath_checkpoint or use --no_pathsam to load as standard SAM2"
+                )
+            predictor = load_pathsam_ctranspath_model(
+                args.model_cfg, 
+                checkpoint_path, 
+                ctranspath_ckpt, 
+                device,
+                fusion_type=args.fusion_type
+            )
+        else:
+            # Convert to standard SAM2 format (loses CTransPath features)
+            print("[Checkpoint] Converting to standard SAM2 format (--no_pathsam mode)")
+            print("[Checkpoint] WARNING: CTransPath fusion features will be ignored!")
+            from sam2.build_sam import build_sam2
+            from sam2.sam2_image_predictor import SAM2ImagePredictor
+            model = build_sam2(args.model_cfg, ckpt_path=None, device=device)
+            converted_state = convert_pathsam_to_standard_sam(state_dict)
+            model.load_state_dict(converted_state, strict=False)
+            predictor = SAM2ImagePredictor(model)
+    elif 'model' in ckpt and isinstance(ckpt['model'], dict):
+        # Standard finetuned SAM2 checkpoint
+        print("[Checkpoint] Standard finetuned SAM2 checkpoint detected")
         from sam2.build_sam import build_sam2
         from sam2.sam2_image_predictor import SAM2ImagePredictor
         model = build_sam2(args.model_cfg, ckpt_path=None, device=device)
         model.load_state_dict(ckpt['model'], strict=False)
         predictor = SAM2ImagePredictor(model)
     else:
+        # Original SAM2 checkpoint format
+        print("[Checkpoint] Original SAM2 checkpoint format detected")
         predictor = get_sam2_predictor(args.model_cfg, checkpoint_path, device)
 
     num_samples = len(bcss_dataset) if args.max_samples is None else min(args.max_samples, len(bcss_dataset))
@@ -194,5 +346,19 @@ if __name__ == '__main__':
                         help='Run evaluation and print metrics without writing any files (ignores output_dir).')
     parser.add_argument('--save_predictions', action='store_true',
                         help='Save visualizations of predictions to the output directory.')
+    
+    # Path-SAM2 + CTransPath options
+    parser.add_argument('--use_pathsam', action='store_true', default=True,
+                        help='Use full Path-SAM2 + CTransPath model for inference (default: True). '
+                             'Use --no_pathsam to convert to standard SAM2.')
+    parser.add_argument('--no_pathsam', action='store_false', dest='use_pathsam',
+                        help='Convert Path-SAM2 checkpoint to standard SAM2 (loses CTransPath features)')
+    parser.add_argument('--ctranspath_checkpoint', type=str, 
+                        default='models/ctranspath/ctranspath.pth',
+                        help='Path to CTransPath pretrained weights (relative to project root)')
+    parser.add_argument('--fusion_type', type=str, default='concat',
+                        choices=['concat', 'attention'],
+                        help='Fusion type used in Path-SAM2 training (concat or attention)')
+    
     args = parser.parse_args()
     evaluate_segmentation(args)
