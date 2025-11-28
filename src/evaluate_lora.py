@@ -194,10 +194,10 @@ def evaluate_lora(args):
             class_iou_scores[class_id].append(iou)
             sample_results.append({
                 'sample_idx': i,
-                'class_id': class_id,
+                'class_id': int(class_id),
                 'class_name': class_name,
-                'dice': dice,
-                'iou': iou,
+                'dice': float(dice),
+                'iou': float(iou),
                 'filename': dataset.image_files[i]
             })
     

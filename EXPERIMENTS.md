@@ -1,8 +1,8 @@
 # Experiment Tracker: SAM2 Histopathology Segmentation
 
-## 🚨 Critical Finding: Finetuning HURTS Zeroshot Performance
+## 🚨 Critical Finding: ALL Finetuning HURTS Zeroshot Performance
 
-**All finetuning approaches tested so far have REDUCED performance compared to zeroshot SAM2.**
+**Every finetuning approach tested - including LoRA - has REDUCED performance compared to zeroshot SAM2.**
 
 | Approach | Overall Dice | vs Zeroshot |
 |----------|--------------|-------------|
@@ -11,16 +11,20 @@
 | Path-SAM2 + CTransPath | 0.366 | -29% |
 | SAM2 LoRA-Light | 0.355 | -31% |
 | SAM2 Box+Focal (ep15) | 0.372 | -28% |
+| **LoRA Adapter r=8** | **0.266** | **-49%** ❌ |
 
 **Root Cause Analysis:**
 1. **Dataset size**: Only 85 training images vs SAM's billions of training samples
-2. **Catastrophic forgetting**: Full/partial finetuning destroys pretrained knowledge
+2. **Catastrophic forgetting**: Even LoRA with 0.88% trainable params causes forgetting
 3. **Domain mismatch**: Histopathology has very different visual patterns than natural images
+4. **Training-Eval mismatch**: LoRA training used simplified forward pass (backbone features only)
+
+**Conclusion: Zeroshot SAM2 remains the best approach for this dataset size.**
 
 **Recommended Next Steps:**
-1. ✨ **LoRA Adapters** (src/lora_adapter.py) - Add ~0.2% trainable params, keep original frozen
-2. **Test-Time Adaptation (TTA)** - Augment at inference, no training
-3. **Prompt Engineering** - Better prompts may outperform finetuning
+1. **Test-Time Adaptation (TTA)** - Augment at inference, no training
+2. **Prompt Engineering** - Better prompts may outperform any finetuning
+3. **Larger Dataset** - Need 1000+ images for any finetuning to help
 
 ---
 
@@ -169,6 +173,40 @@
 | **Overall** | **0.372** | - |
 
 **Analysis**: Best finetuned minority class performance, but still 28% worse than zeroshot overall.
+
+---
+
+### LoRA Adapter r=8 ❌ WORST RESULT
+**Date**: 2025-11-27  
+**Config**: src/train_with_lora.py
+- LoRA rank: 8, alpha: 8.0
+- Trainable params: 1,997,060 (0.88% of 224M)
+- Target modules: image_encoder only
+- LR: 1e-4, epochs: 20
+- Loss: SimpleDiceBCELoss
+
+**Training Progress**:
+- Best Val Dice: 0.8949 (epoch 4-8)
+- Final Val Dice: 0.8922 (overfitting after epoch 8)
+
+**Test Set Evaluation (full SAM2 predictor)**:
+
+| Class | Dice | Std |
+|-------|------|-----|
+| Tumor | 0.410 | 0.138 |
+| Stroma | 0.452 | 0.202 |
+| Lymphocyte | 0.177 | 0.143 |
+| Necrosis | 0.106 | 0.102 |
+| Blood Vessel | 0.008 | 0.007 |
+| **Overall** | **0.266** | - |
+
+**Analysis**: 
+- ⚠️ **Worst result of all experiments** (49% worse than zeroshot)
+- Training showed high Val Dice (0.89) but used simplified backbone-only forward pass
+- Full SAM2 predictor evaluation reveals LoRA weights hurt mask decoder's ability to generate masks
+- Even 0.88% trainable params causes catastrophic forgetting
+
+**Key Insight**: The training loss (backbone features → mask) doesn't match the evaluation pipeline (full SAM2 predictor with prompts). LoRA adapters modified the image encoder features in ways incompatible with the frozen mask decoder.
 
 ---
 
