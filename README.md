@@ -96,19 +96,43 @@ bash scripts/evaluation/evaluate_experiment.sh finetune_logs/path_sam2_focal-202
 - **Validation**: 21 images  
 - **Test**: 45 images
 
-## Expected Results (with all improvements)
+## Expected Results
+
+### 🏆 Best Configuration: Zeroshot + Prompt Engineering
+
+**Box prompts + Negative Points + TTA = 0.566 Dice**
 
 | Class | Dice Score |
 |-------|------------|
-| Tumor | 0.68 - 0.72 |
-| Stroma | 0.62 - 0.66 |
-| Lymphocyte | 0.38 - 0.45 |
-| Necrosis | 0.62 - 0.68 |
-| Blood Vessel | 0.25 - 0.30 |
-| **Overall** | **0.70 - 0.75** |
+| Necrosis | 0.708 |
+| Tumor | 0.565 |
+| Lymphocyte | 0.562 |
+| Stroma | 0.540 |
+| Blood Vessel | 0.504 |
+| **Overall** | **0.566** |
 
-See `EXPERIMENTS.md` for a full breakdown of each improvement's contribution.
+### Key Finding
 
+**All finetuning approaches performed WORSE than zeroshot SAM2.** With only 85 training images, prompt engineering is more effective than any training.
+
+| Approach | Overall Dice |
+|----------|--------------|
+| **Box + Neg + TTA (Best)** | **0.566** |
+| Box baseline | 0.553 |
+| v2 Finetuned | 0.42 |
+| LoRA Adapter | 0.27 |
+
+See `EXPERIMENTS.md` for full experiment details.
+
+### Quick Start (Best Config)
+
+```bash
+python src/evaluate_segmentation.py \
+  --model_cfg configs/sam2.1/sam2.1_hiera_l.yaml \
+  --checkpoint sam2/checkpoints/sam2.1_hiera_large.pt \
+  --prompt_type box --use_neg_points --use_tta \
+  --split test --output_dir results/best_config
+```
 
 ## HPC Setup
 

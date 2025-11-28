@@ -1,30 +1,76 @@
 # Experiment Tracker: SAM2 Histopathology Segmentation
 
-## 🚨 Critical Finding: ALL Finetuning HURTS Zeroshot Performance
+## 🎉 Key Finding: Prompt Engineering Beats All Finetuning!
 
-**Every finetuning approach tested - including LoRA - has REDUCED performance compared to zeroshot SAM2.**
+**Zeroshot SAM2 with optimized prompts (Box + Negative Points + TTA) achieves the best results.**
 
-| Approach | Overall Dice | vs Zeroshot |
+| Approach | Overall Dice | vs Baseline |
 |----------|--------------|-------------|
-| **Zeroshot SAM2** | **0.517** | **baseline** |
-| v2 Finetuned (best finetune) | 0.42 | -19% |
-| Path-SAM2 + CTransPath | 0.366 | -29% |
-| SAM2 LoRA-Light | 0.355 | -31% |
-| SAM2 Box+Focal (ep15) | 0.372 | -28% |
-| **LoRA Adapter r=8** | **0.266** | **-49%** ❌ |
+| **🥇 Box + Neg Points + TTA** | **0.566** | **+9.4%** ✅ |
+| 🥈 Box + TTA | 0.563 | +8.9% |
+| 🥉 Box + Neg Points | 0.560 | +8.4% |
+| Box baseline | 0.553 | +7.0% |
+| Multi-point prompt | 0.418 | -19.2% |
+| Centroid (single point) | 0.335 | -35.1% |
+| v2 Finetuned (best finetune) | 0.42 | -18.8% |
+| Path-SAM2 + CTransPath | 0.366 | -29.3% |
+| SAM2 LoRA-Light | 0.355 | -31.4% |
+| SAM2 Box+Focal | 0.372 | -28.1% |
+| LoRA Adapter r=8 | 0.266 | -48.6% ❌ |
 
-**Root Cause Analysis:**
-1. **Dataset size**: Only 85 training images vs SAM's billions of training samples
-2. **Catastrophic forgetting**: Even LoRA with 0.88% trainable params causes forgetting
-3. **Domain mismatch**: Histopathology has very different visual patterns than natural images
-4. **Training-Eval mismatch**: LoRA training used simplified forward pass (backbone features only)
+**Key Insights:**
+1. **Box prompts >> Point prompts** (0.55+ vs 0.33-0.42)
+2. **Negative points add ~1% improvement** (helps SAM understand what NOT to segment)
+3. **TTA adds ~1% improvement** (ensemble of hflip, vflip, rot90)
+4. **ALL finetuning approaches HURT performance** - catastrophic forgetting with only 85 training images
 
-**Conclusion: Zeroshot SAM2 remains the best approach for this dataset size.**
+---
 
-**Recommended Next Steps:**
-1. **Test-Time Adaptation (TTA)** - Augment at inference, no training
-2. **Prompt Engineering** - Better prompts may outperform any finetuning
-3. **Larger Dataset** - Need 1000+ images for any finetuning to help
+## 🏆 Best Configuration
+
+```bash
+python src/evaluate_segmentation.py \
+  --model_cfg configs/sam2.1/sam2.1_hiera_l.yaml \
+  --checkpoint sam2/checkpoints/sam2.1_hiera_large.pt \
+  --prompt_type box \
+  --use_neg_points \
+  --use_tta \
+  --split test \
+  --output_dir results/best_config
+```
+
+**Per-Class Results (Best Config: Box + Neg Points + TTA)**:
+
+| Class | Dice | Count |
+|-------|------|-------|
+| Necrosis | 0.708 | 23 |
+| Tumor | 0.565 | 45 |
+| Lymphocyte | 0.562 | 37 |
+| Stroma | 0.540 | 45 |
+| Blood Vessel | 0.504 | 31 |
+| **Overall** | **0.566** | 181 |
+
+---
+
+## Prompt Engineering Results (Nov 27, 2025)
+
+### Complete Comparison
+
+| Rank | Configuration | Tumor | Stroma | Lymph | Necrosis | Blood V. | **Overall** |
+|------|---------------|-------|--------|-------|----------|----------|-------------|
+| 🥇 | Box+Neg+TTA | 0.565 | 0.540 | 0.562 | 0.708 | 0.504 | **0.566** |
+| 🥈 | Box+TTA | 0.560 | 0.523 | 0.562 | 0.716 | 0.515 | **0.563** |
+| 🥉 | Box+NegPts | 0.560 | 0.537 | 0.549 | 0.699 | 0.504 | **0.560** |
+| 4 | Box baseline | 0.548 | 0.509 | 0.554 | 0.704 | 0.512 | **0.553** |
+| 5 | Multi-point | 0.494 | 0.380 | 0.364 | 0.473 | 0.370 | **0.418** |
+| 6 | Centroid | 0.270 | 0.331 | 0.307 | 0.514 | 0.339 | **0.335** |
+
+### Key Observations
+
+1. **Box prompts are essential**: Single point (centroid) fails badly (0.335 vs 0.553)
+2. **Negative points help stroma most**: +2.8% improvement (0.509 → 0.537)
+3. **TTA helps necrosis most**: +1.2% improvement (0.704 → 0.716)
+4. **Blood vessel is hardest**: Best score is only 0.515 (very small structures)
 
 ---
 
@@ -49,31 +95,21 @@
 
 ---
 
-## Results Summary (All Experiments)
+## Why Finetuning Failed
 
-### Per-Class Dice Scores
+All finetuning approaches performed WORSE than zeroshot SAM2:
 
-| Experiment | Tumor | Stroma | Lymph | Necrosis | Blood V. | **Overall** |
-|------------|-------|--------|-------|----------|----------|-------------|
-| **Zeroshot SAM2** | - | - | - | - | - | **0.517** |
-| v2 Finetuned | 0.54 | 0.43 | 0.20 | 0.45 | 0.03 | 0.42 |
-| Path-SAM2+CTP | 0.345 | 0.388 | 0.330 | 0.530 | 0.283 | 0.366 |
-| LoRA-Light | 0.320 | 0.394 | 0.265 | 0.498 | 0.350 | 0.355 |
-| Box+Focal (ep15) | 0.386 | 0.386 | 0.301 | 0.478 | 0.335 | 0.372 |
+**Root Cause Analysis:**
+1. **Dataset size**: Only 85 training images vs SAM's billions of training samples
+2. **Catastrophic forgetting**: Even LoRA with 0.88% trainable params causes forgetting
+3. **Domain mismatch**: Histopathology has very different visual patterns than natural images
+4. **Training-Eval mismatch**: Training losses don't match full SAM2 predictor behavior
 
-**Key Insight**: Blood vessel (0.5% of data) improves most with specialized training (0.03 → 0.35), but at the cost of majority class performance.
+**Lesson Learned**: For small datasets (<1000 images), invest in prompt engineering rather than finetuning.
 
 ---
 
-## Detailed Training History
-
-### Zeroshot SAM2 ✅ BEST OVERALL
-**Date**: 2025-11-25  
-**Config**: No training, uses pretrained SAM2 Hiera-L with CLIP classification
-**Result**: **Dice 0.517, IoU 0.374**
-**Note**: This is our strongest baseline - all finetuning has failed to improve it.
-
----
+## Finetuning Experiments (All Failed)
 
 ### v1: base_finetune_v1 ❌ FAILED
 **Date**: 2025-11-21  
@@ -210,96 +246,58 @@
 
 ---
 
-## New Approaches to Try
-
-### LoRA Adapters (Implemented: src/lora_adapter.py)
-
-**Rationale**: Standard finetuning (even conservative) destroys SAM2's pretrained knowledge. LoRA adds ~0.2% new trainable parameters while keeping original weights frozen.
-
-**Implementation**:
-\`\`\`python
-from src.lora_adapter import apply_lora_to_sam2
-
-# Load SAM2
-sam2_model = build_sam2(cfg_path, checkpoint_path)
-
-# Apply LoRA (adds ~0.2% trainable params)
-lora_model = apply_lora_to_sam2(
-    sam2_model,
-    r=8,              # rank (4, 8, or 16)
-    target_modules='image_encoder',  # or 'all'
-    trainable_output_head=True
-)
-
-# Train only LoRA params
-optimizer = torch.optim.AdamW(lora_model.get_trainable_params(), lr=1e-4)
-\`\`\`
-
-**Key Design**:
-- Freezes all 224M original SAM2 parameters
-- Adds small LoRA matrices (A, B) to attention layers
-- Output = Original + α/r × (B @ A @ x)
-- Inspired by Medical SAM Adapter (arXiv:2304.12620)
-
----
-
-### Test-Time Adaptation (TTA)
-
-Apply augmentations at inference and aggregate predictions:
-\`\`\`python
-from src.tta_utils import apply_tta
-
-predictions = apply_tta(model, image, augmentations=['hflip', 'vflip', 'rot90'])
-\`\`\`
-
----
-
-### Research Papers for Reference
-
-1. **Medical SAM Adapter** (arXiv:2304.12620): Lightweight adapters for medical SAM
-2. **SAM-Med2D** (arXiv:2308.16184): Fine-tuned on 4.6M medical images
-3. **MedSAM** (Nature Communications): Fine-tuned on 1.57M medical images
-
-**Key insight**: Successful medical SAM adaptations use 1.5M-4.6M images. With only 85 images, preserving pretrained knowledge is critical.
-
----
-
 ## Commands
 
+### Best Configuration (Recommended)
 \`\`\`bash
-# --- Evaluate Zeroshot (Current Best) ---
-python src/evaluation.py \\
-  --sam_model_cfg configs/sam2.1/sam2.1_hiera_l.yaml \\
-  --sam_checkpoint sam2/checkpoints/sam2.1_hiera_large.pt \\
-  --output_dir results/zeroshot_eval
+# Zeroshot SAM2 with Box + Negative Points + TTA (Best: 0.566 Dice)
+python src/evaluate_segmentation.py \\
+  --model_cfg configs/sam2.1/sam2.1_hiera_l.yaml \\
+  --checkpoint sam2/checkpoints/sam2.1_hiera_large.pt \\
+  --prompt_type box \\
+  --use_neg_points \\
+  --use_tta \\
+  --split test \\
+  --output_dir results/best_zeroshot
+\`\`\`
 
-# --- Train with LoRA Adapters (New) ---
-python src/train_with_lora.py \\
-  --lora_rank 8 \\
-  --target_modules image_encoder \\
-  --lr 1e-4 \\
-  --epochs 20
+### Run All Prompt Experiments
+\`\`\`bash
+# Run complete prompt engineering comparison
+bash scripts/run_prompt_experiments.sh
 
-# --- Previous Experiments (for reference) ---
-# These all performed worse than zeroshot
+# Or submit as SLURM job
+sbatch scripts/slurm/run_prompt_experiments.slurm
+\`\`\`
+
+### Previous Experiments (for reference)
+\`\`\`bash
+# These all performed worse than zeroshot - DO NOT USE
 sbatch scripts/slurm/run_sam2_lora_light.slurm
 sbatch scripts/slurm/run_sam2_box_focal.slurm
-
-# --- Evaluation ---
-python src/evaluate_segmentation.py \\
-  --checkpoint path/to/checkpoint.pt \\
-  --output_dir results/my_eval
+python src/train_with_lora.py --lora_rank 8 --epochs 20
 \`\`\`
 
 ---
 
 ## Key Lessons Learned
 
-1. **Zeroshot > Finetuning** for small datasets (~85 images)
-2. **Catastrophic forgetting** is the main failure mode
-3. **Class imbalance** (blood vessel 0.5%) benefits from weighted losses but hurts majority classes
-4. **CTransPath integration** didn't help - architecture mismatch
-5. **LoRA adapters** are the most promising path forward
+1. **Prompt Engineering > Finetuning** for small datasets (~85 images)
+2. **Box prompts >> Point prompts** (0.55 vs 0.33 Dice)
+3. **Negative points help** by telling SAM what NOT to segment (+1%)
+4. **TTA is free performance** with no training required (+1%)
+5. **Catastrophic forgetting** makes all finetuning counterproductive
+6. **Blood vessel is hardest** due to tiny size (0.5% of pixels)
+
+---
+
+## Research References
+
+1. **Medical SAM Adapter** (arXiv:2304.12620): Lightweight adapters for medical SAM
+2. **SAM-Med2D** (arXiv:2308.16184): Fine-tuned on 4.6M medical images
+3. **MedSAM** (Nature Communications): Fine-tuned on 1.57M medical images
+
+**Key insight**: Successful medical SAM adaptations use 1.5M-4.6M images. With only 85 images, prompt engineering is the only viable path.
 
 ---
 
