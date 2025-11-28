@@ -1,0 +1,44 @@
+# @package _global_
+
+# SAM2-only with BOX prompting strategy (simple version)
+# Uses standard loss, just tests box prompts instead of mixed
+
+defaults:
+  - base_finetune_v2_stable
+
+experiment:
+  name: sam2_box_simple
+
+# Override dataset to use box prompts
+trainer:
+  data:
+    train:
+      _target_: training.dataset.sam2_datasets.TorchTrainMixedDataset
+      phases_per_epoch: ${scratch.phases_per_epoch}
+      batch_sizes:
+        - ${scratch.train_batch_size}
+      datasets:
+        - _target_: training.dataset.vos_dataset.VOSDataset
+          transforms: ${vos.train_transforms}
+          training: true
+          video_dataset:
+            _target_: src.finetune_dataset.BCSSRawDataset
+            img_folder: ${data_root}/images
+            gt_folder: ${data_root}/masks
+            split: train
+            prompt_type: box          # BOX prompts instead of mixed
+            use_neg_points: false
+            num_points: 5             # Keep >0 to avoid division error
+          sampler:
+            _target_: training.dataset.vos_sampler.RandomUniformSampler
+            num_frames: ${scratch.num_frames}
+            max_num_objects: ${scratch.max_num_objects}
+          multiplier: 1
+      shuffle: true
+      num_workers: ${scratch.num_train_workers}
+      pin_memory: true
+      drop_last: true
+      collate_fn:
+        _target_: training.utils.data_utils.collate_fn
+        _partial_: true
+        dict_key: all
