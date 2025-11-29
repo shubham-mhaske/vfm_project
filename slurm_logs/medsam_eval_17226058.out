@@ -1,0 +1,83 @@
+============================================================
+SLURM Job: MedSAM Evaluation on HPRC Grace
+Job ID: 17226058
+Node: g078
+GPU: NVIDIA A100-PCIE-40GB
+Started: Fri Nov 28 19:15:26 CST 2025
+============================================================
+
+Configuration:
+  Checkpoint: models/medsam_checkpoints/medsam_vit_b.pth
+  Dataset: BCSS test split (45 samples)
+
+
+>>> Experiment 2: MedSAM Box Prompt + TTA
+    Expected time: ~10-15 minutes on A100 (4x augmentations)
+Using Nvidia CUDA backend.
+Loaded 45 samples from test split
+Using Nvidia CUDA backend.
+Using device: cuda
+[MedSAM] Loading model from: /scratch/user/shubhammhaske/vfm_project/models/medsam_checkpoints/medsam_vit_b.pth
+[MedSAM] Model loaded successfully on cuda
+
+============================================================
+MedSAM Evaluation
+============================================================
+Checkpoint: models/medsam_checkpoints/medsam_vit_b.pth
+Dataset: BCSS test split (45 samples)
+TTA: Enabled
+============================================================
+
+
+Evaluation completed in 3995.7s (88.79s per sample)
+
+============================================================
+Results: Per-Class Dice Scores
+============================================================
+tumor          : 0.5753 ± 0.1614 (n=45)
+stroma         : 0.5054 ± 0.1665 (n=45)
+lymphocyte     : 0.5487 ± 0.2033 (n=37)
+necrosis       : 0.6474 ± 0.1756 (n=23)
+blood_vessel   : 0.4267 ± 0.1934 (n=31)
+----------------------------------------
+OVERALL        : 0.5362
+============================================================
+
+Metrics saved to: /scratch/user/shubhammhaske/vfm_project/results/medsam_box_tta/metrics.json
+Sample results saved to: /scratch/user/shubhammhaske/vfm_project/results/medsam_box_tta/sample_results.json
+
+Experiment 2 Result:
+  Overall Dice: 0.5362
+
+============================================================
+MedSAM Evaluation Complete!
+Finished: Fri Nov 28 20:25:55 CST 2025
+============================================================
+
+Results Summary:
+================
+
+MedSAM Box Baseline:
+  Tumor:        0.5728
+  Stroma:       0.4864
+  Lymphocyte:   0.5417
+  Necrosis:     0.6150
+  Blood Vessel: 0.4070
+  OVERALL:      0.5219
+
+MedSAM Box + TTA:
+  Tumor:        0.5753
+  Stroma:       0.5054
+  Lymphocyte:   0.5487
+  Necrosis:     0.6474
+  Blood Vessel: 0.4267
+  OVERALL:      0.5362
+
+Comparison with SAM2 (from local tests):
+  SAM2 Box+Neg+TTA: 0.566 (BEST)
+  SAM2 Box baseline: 0.553
+  MedSAM Box baseline: 0.522 (7.8% worse than SAM2)
+
+Results saved to:
+  results/medsam_box_baseline/metrics.json
+  results/medsam_box_tta/metrics.json

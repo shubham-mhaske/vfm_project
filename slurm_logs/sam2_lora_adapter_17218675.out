@@ -1,0 +1,130 @@
+==========================================
+SAM2 LoRA Adapter Training
+==========================================
+Job ID: 17218675
+Node: g069
+Start time: Thu Nov 27 20:46:50 CST 2025
+
+Configuration:
+  LoRA Rank: 8
+  Learning Rate: 1e-4
+  Epochs: 20
+  Batch Size: 4
+  Warmup Epochs: 2
+  Target Modules: image_encoder
+
+Key features:
+  - Freezes 224M original SAM2 params
+  - Adds ~2M trainable LoRA params (0.9%)
+  - Uses Dice + BCE loss
+  - Cosine LR schedule with warmup
+
+Starting LoRA adapter training...
+Using device: cuda
+
+=== Loading SAM2 Model ===
+Loading SAM2 from /scratch/user/shubhammhaske/vfm_project/sam2/checkpoints/sam2.1_hiera_large.pt...
+
+=== Applying LoRA Adapters ===
+[LoRA] Image encoder: 96 layers
+[LoRA] Added 96 LoRA layers with rank=8
+[LoRA] Total parameters: 225,751,858
+[LoRA] Trainable parameters: 1,997,060
+[LoRA] Trainable percentage: 0.88%
+
+=== Creating Dataloaders ===
+Train batches: 21, Val batches: 6
+
+=== Starting Training ===
+
+Epoch 1/20
+Warmup LR: 5.00e-05
+Train Loss: 1.0194, Train Dice: 0.8635
+
+Epoch 2/20
+Warmup LR: 1.00e-04
+Train Loss: 0.8286, Train Dice: 0.9500
+Val Loss: 0.7199, Val Dice: 0.8949
+[LoRA] Saved 222 trainable parameter tensors to /scratch/user/shubhammhaske/vfm_project/finetune_logs/lora/lora_r8_20251127_204826/best_lora_weights.pt
+New best model saved! Dice: 0.8949
+
+Epoch 3/20
+Train Loss: 0.4208, Train Dice: 0.9499
+
+Epoch 4/20
+Train Loss: 0.4036, Train Dice: 0.9512
+Val Loss: 0.6705, Val Dice: 0.8949
+
+Epoch 5/20
+Train Loss: 0.3914, Train Dice: 0.9506
+[LoRA] Saved 222 trainable parameter tensors to /scratch/user/shubhammhaske/vfm_project/finetune_logs/lora/lora_r8_20251127_204826/lora_weights_epoch5.pt
+
+Epoch 6/20
+Train Loss: 0.3670, Train Dice: 0.9546
+Val Loss: 0.6812, Val Dice: 0.8949
+
+Epoch 7/20
+Train Loss: 0.3853, Train Dice: 0.9497
+
+Epoch 8/20
+Train Loss: 0.3573, Train Dice: 0.9508
+Val Loss: 0.6593, Val Dice: 0.8949
+
+Epoch 9/20
+Train Loss: 0.3373, Train Dice: 0.9461
+
+Epoch 10/20
+Train Loss: 0.3115, Train Dice: 0.9527
+Val Loss: 0.7217, Val Dice: 0.8896
+[LoRA] Saved 222 trainable parameter tensors to /scratch/user/shubhammhaske/vfm_project/finetune_logs/lora/lora_r8_20251127_204826/lora_weights_epoch10.pt
+
+Epoch 11/20
+Train Loss: 0.3034, Train Dice: 0.9528
+
+Epoch 12/20
+Train Loss: 0.2733, Train Dice: 0.9560
+Val Loss: 0.7542, Val Dice: 0.8949
+
+Epoch 13/20
+Train Loss: 0.2481, Train Dice: 0.9584
+
+Epoch 14/20
+Train Loss: 0.2366, Train Dice: 0.9615
+Val Loss: 0.7104, Val Dice: 0.8939
+
+Epoch 15/20
+Train Loss: 0.2248, Train Dice: 0.9628
+[LoRA] Saved 222 trainable parameter tensors to /scratch/user/shubhammhaske/vfm_project/finetune_logs/lora/lora_r8_20251127_204826/lora_weights_epoch15.pt
+
+Epoch 16/20
+Train Loss: 0.2188, Train Dice: 0.9626
+Val Loss: 0.7573, Val Dice: 0.8919
+
+Epoch 17/20
+Train Loss: 0.2145, Train Dice: 0.9626
+
+Epoch 18/20
+Train Loss: 0.2107, Train Dice: 0.9621
+Val Loss: 0.7777, Val Dice: 0.8922
+
+Epoch 19/20
+Train Loss: 0.2007, Train Dice: 0.9628
+
+Epoch 20/20
+Train Loss: 0.1969, Train Dice: 0.9657
+Val Loss: 0.7638, Val Dice: 0.8922
+[LoRA] Saved 222 trainable parameter tensors to /scratch/user/shubhammhaske/vfm_project/finetune_logs/lora/lora_r8_20251127_204826/lora_weights_epoch20.pt
+[LoRA] Saved 222 trainable parameter tensors to /scratch/user/shubhammhaske/vfm_project/finetune_logs/lora/lora_r8_20251127_204826/final_lora_weights.pt
+
+=== Training Complete ===
+Best validation Dice: 0.8949
+Outputs saved to: /scratch/user/shubhammhaske/vfm_project/finetune_logs/lora/lora_r8_20251127_204826
+
+==========================================
+Training completed at Thu Nov 27 20:55:31 CST 2025
+Exit code: 0
+==========================================
+
+Training successful! Outputs saved to finetune_logs/lora/
+To evaluate, run:
+  python src/evaluate_segmentation.py --checkpoint finetune_logs/lora/<run_dir>/best_lora_weights.pt

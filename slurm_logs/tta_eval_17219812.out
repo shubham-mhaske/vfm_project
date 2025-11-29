@@ -1,0 +1,67 @@
+========================================
+SAM2 TTA Experiments
+Job ID: 17219812
+Node: g064
+Started: Thu Nov 27 21:41:10 CST 2025
+========================================
+GPU: NVIDIA A100-PCIE-40GB
+
+[1/2] Box + TTA...
+[BOOT] Starting evaluate_segmentation.py
+[BOOT] Importing torch...
+[BOOT] Importing numpy...
+[BOOT] Importing tqdm...
+[BOOT] Importing dataset module...
+[BOOT] Importing sam_segmentation helpers...
+[BOOT] Importing argparse...
+[BOOT] Importing device_utils...
+Using Nvidia CUDA backend.
+[BOOT] Importing training utils (OmegaConf resolvers)...
+[BOOT] Imports done in 163.59s
+Using Nvidia CUDA backend.
+Using device: cuda
+[Checkpoint] Standard finetuned SAM2 checkpoint detected
+
+--- Per-Class Dice Scores ---
+tumor          : 0.5598 (count: 45)
+stroma         : 0.5227 (count: 45)
+lymphocyte     : 0.5620 (count: 37)
+necrosis       : 0.7159 (count: 23)
+blood_vessel   : 0.5151 (count: 31)
+---------------------------------
+Overall Avg Dice: 0.5632
+Metrics saved to /scratch/user/shubhammhaske/vfm_project/results/prompt_experiments_20251127_212048/box_tta/metrics.json
+
+[2/2] Box + Neg Points + TTA...
+[BOOT] Starting evaluate_segmentation.py
+[BOOT] Importing torch...
+[BOOT] Importing numpy...
+[BOOT] Importing tqdm...
+[BOOT] Importing dataset module...
+[BOOT] Importing sam_segmentation helpers...
+[BOOT] Importing argparse...
+[BOOT] Importing device_utils...
+Using Nvidia CUDA backend.
+[BOOT] Importing training utils (OmegaConf resolvers)...
+[BOOT] Imports done in 3.65s
+Using Nvidia CUDA backend.
+Using device: cuda
+[Checkpoint] Standard finetuned SAM2 checkpoint detected
+
+--- Per-Class Dice Scores ---
+tumor          : 0.5648 (count: 45)
+stroma         : 0.5399 (count: 45)
+lymphocyte     : 0.5617 (count: 37)
+necrosis       : 0.7078 (count: 23)
+blood_vessel   : 0.5044 (count: 31)
+---------------------------------
+Overall Avg Dice: 0.5658
+Metrics saved to /scratch/user/shubhammhaske/vfm_project/results/prompt_experiments_20251127_212048/box_neg_tta/metrics.json
+
+========================================
+Completed: Thu Nov 27 22:03:10 CST 2025
+========================================
+
+RESULTS:
+box_tta              : Dice = 0.5632
+box_neg_tta          : Dice = 0.5658
