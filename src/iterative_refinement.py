@@ -5,6 +5,10 @@ Feeds the predicted mask back to SAM2 for refinement, improving boundary accurac
 """
 import numpy as np
 import torch
+import torch.nn.functional as F
+
+# SAM2 expects mask_input at this resolution
+SAM2_MASK_INPUT_SIZE = 256
 
 
 def predict_with_refinement(
@@ -51,7 +55,7 @@ def predict_with_refinement(
     # Iterative refinement
     for iteration in range(num_iterations - 1):
         # Convert mask to proper format for SAM2's mask_input
-        # SAM2 expects mask_input of shape [1, 1, H, W] with logits
+        # SAM2 expects mask_input of shape [1, 256, 256] with logits (numpy array)
         h, w = current_mask.shape
         
         # Convert to logits-like format (SAM2 expects logits, not binary)
@@ -59,7 +63,18 @@ def predict_with_refinement(
         mask_input = current_mask.astype(np.float32)
         mask_input = (mask_input - 0.5) * 20  # Scale to logit range [-10, 10]
         mask_input = mask_input[np.newaxis, np.newaxis, :, :]  # [1, 1, H, W]
-        mask_input = torch.from_numpy(mask_input).to(predictor.device)
+        mask_input = torch.from_numpy(mask_input).float()
+        
+        # Resize to SAM2's expected 256x256 resolution
+        mask_input = F.interpolate(
+            mask_input, 
+            size=(SAM2_MASK_INPUT_SIZE, SAM2_MASK_INPUT_SIZE), 
+            mode='bilinear', 
+            align_corners=False
+        )
+        
+        # Convert back to numpy array with shape [1, 256, 256] as SAM2 expects
+        mask_input = mask_input.squeeze(0).numpy()  # [1, 256, 256]
         
         # Get refined prediction with mask input
         refined_mask = _predict_with_mask_input(
@@ -77,10 +92,13 @@ def _predict_with_mask_input(
     prompts: dict,
     prompt_type: str,
     use_neg_points: bool,
-    mask_input: torch.Tensor
+    mask_input: np.ndarray
 ) -> np.ndarray:
     """
     Internal function to get prediction with mask input.
+    
+    Args:
+        mask_input: numpy array of shape [1, 256, 256] with logits
     """
     point_coords, point_labels, box = None, None, None
     
@@ -112,7 +130,7 @@ def _predict_with_mask_input(
             point_coords=point_coords,
             point_labels=point_labels,
             box=box,
-            mask_input=mask_input,
+            mask_input=mask_input,  # numpy array [1, 256, 256]
             multimask_output=False
         )
     
@@ -168,7 +186,18 @@ def predict_with_tta_and_refinement(
         # Convert to logits format
         mask_input = (current_mask - 0.5) * 20
         mask_input = mask_input[np.newaxis, np.newaxis, :, :]
-        mask_input = torch.from_numpy(mask_input).to(predictor.device)
+        mask_input = torch.from_numpy(mask_input).float()
+        
+        # Resize to SAM2's expected 256x256 resolution
+        mask_input = F.interpolate(
+            mask_input,
+            size=(SAM2_MASK_INPUT_SIZE, SAM2_MASK_INPUT_SIZE),
+            mode='bilinear',
+            align_corners=False
+        )
+        
+        # Convert back to numpy array with shape [1, 256, 256] as SAM2 expects
+        mask_input = mask_input.squeeze(0).numpy()  # [1, 256, 256]
         
         refined_mask = _predict_with_mask_input(
             predictor, prompts, prompt_type, use_neg_points, mask_input
