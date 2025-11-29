@@ -10,13 +10,14 @@
 | 🥈 Box + TTA | 0.563 | +8.9% |
 | 🥉 Box + Neg Points | 0.560 | +8.4% |
 | Box baseline | 0.553 | +7.0% |
-| **MedSAM Box** | **0.522** | **-0.9%** ⚠️ |
+| MedSAM Box + TTA | 0.536 | +3.7% |
+| **MedSAM Box** | **0.522** | **+0.9%** |
 | Multi-point prompt | 0.418 | -19.2% |
-| Centroid (single point) | 0.335 | -35.1% |
 | v2 Finetuned (best finetune) | 0.42 | -18.8% |
 | Path-SAM2 + CTransPath | 0.366 | -29.3% |
 | SAM2 LoRA-Light | 0.355 | -31.4% |
 | SAM2 Box+Focal | 0.372 | -28.1% |
+| Centroid (single point) | 0.335 | -35.1% |
 | LoRA Adapter r=8 | 0.266 | -48.6% ❌ |
 
 **Key Insights:**
@@ -247,6 +248,45 @@ All finetuning approaches performed WORSE than zeroshot SAM2:
 
 ---
 
+## MedSAM Evaluation (Nov 28, 2025)
+
+### Background
+**MedSAM** (Nature Communications 2024) is SAM fine-tuned on 1.57M medical image-mask pairs across 10 modalities. We tested if this medical pretraining helps histopathology segmentation.
+
+### Configuration
+- **Model**: SAM ViT-B (86M params) - smaller than SAM2 Hiera-L (224M params)
+- **Checkpoint**: `medsam_vit_b.pth` (358MB)
+- **Prompts**: Box-only (MedSAM doesn't support negative points)
+- **TTA**: Horizontal flip, vertical flip, 90° rotation
+
+### Results
+
+| Configuration | Tumor | Stroma | Lymph | Necrosis | Blood V. | **Overall** |
+|---------------|-------|--------|-------|----------|----------|-------------|
+| MedSAM Box | 0.573 | 0.486 | 0.542 | 0.615 | 0.407 | **0.522** |
+| MedSAM Box+TTA | 0.575 | 0.505 | 0.549 | 0.647 | 0.427 | **0.536** |
+| SAM2 Box+Neg+TTA | 0.565 | 0.540 | 0.562 | 0.708 | 0.504 | **0.566** |
+
+### Analysis
+
+❌ **MedSAM performs worse than SAM2 on histopathology:**
+
+| Method | Overall Dice | vs SAM2 Best |
+|--------|--------------|--------------|
+| SAM2 Box+Neg+TTA | 0.566 | - (baseline) |
+| MedSAM Box+TTA | 0.536 | **-5.3%** |
+| MedSAM Box | 0.522 | **-7.8%** |
+
+**Why MedSAM underperforms:**
+1. **Smaller model**: MedSAM uses ViT-B (86M) vs SAM2's Hiera-L (224M)
+2. **Training domain mismatch**: MedSAM trained mostly on radiology (CT/MRI), not histopathology
+3. **No negative points**: MedSAM only supports box prompts, can't use negative point refinement
+4. **TTA helps**: +2.7% improvement, but still can't match SAM2
+
+**Conclusion**: SAM2 with Box+Neg+TTA remains the best approach. MedSAM's medical pretraining doesn't transfer well to histopathology.
+
+---
+
 ## Commands
 
 ### Best Configuration (Recommended)
@@ -279,6 +319,22 @@ sbatch scripts/slurm/run_sam2_box_focal.slurm
 python src/train_with_lora.py --lora_rank 8 --epochs 20
 \`\`\`
 
+### MedSAM Evaluation
+\`\`\`bash
+# MedSAM Box baseline (0.522 Dice - 7.8% worse than SAM2)
+python src/evaluate_medsam.py \\
+  --checkpoint models/medsam_checkpoints/medsam_vit_b.pth \\
+  --split test \\
+  --output_dir results/medsam_box_baseline
+
+# MedSAM Box + TTA (0.536 Dice - 5.3% worse than SAM2)
+python src/evaluate_medsam.py \\
+  --checkpoint models/medsam_checkpoints/medsam_vit_b.pth \\
+  --split test \\
+  --use_tta \\
+  --output_dir results/medsam_box_tta
+\`\`\`
+
 ---
 
 ## Key Lessons Learned
@@ -298,8 +354,8 @@ python src/train_with_lora.py --lora_rank 8 --epochs 20
 2. **SAM-Med2D** (arXiv:2308.16184): Fine-tuned on 4.6M medical images
 3. **MedSAM** (Nature Communications): Fine-tuned on 1.57M medical images
 
-**Key insight**: Successful medical SAM adaptations use 1.5M-4.6M images. With only 85 images, prompt engineering is the only viable path.
+**Key insight**: Successful medical SAM adaptations use 1.5M-4.6M images. With only 85 images, prompt engineering is the only viable path. Even MedSAM (trained on 1.57M images) underperforms on histopathology due to domain mismatch with radiology.
 
 ---
 
-**Last Updated**: November 27, 2025
+**Last Updated**: November 28, 2025
