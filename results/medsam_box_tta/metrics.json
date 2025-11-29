@@ -1,0 +1,37 @@
+{
+  "tumor": {
+    "dice": 0.5753490068647183,
+    "std": 0.16135617691214016,
+    "count": 45
+  },
+  "stroma": {
+    "dice": 0.505350299340894,
+    "std": 0.16648465157602552,
+    "count": 45
+  },
+  "lymphocyte": {
+    "dice": 0.5486569575187467,
+    "std": 0.203252843900076,
+    "count": 37
+  },
+  "necrosis": {
+    "dice": 0.6474458862471871,
+    "std": 0.17562060833865584,
+    "count": 23
+  },
+  "blood_vessel": {
+    "dice": 0.4266524823463488,
+    "std": 0.1933769945765846,
+    "count": 31
+  },
+  "overall": 0.5361837488611508,
+  "overall_std": 0.19081431047752753,
+  "_metadata": {
+    "model": "MedSAM",
+    "checkpoint": "models/medsam_checkpoints/medsam_vit_b.pth",
+    "split": "test",
+    "num_samples": 45,
+    "tta": true,
+    "timestamp": "2025-11-28 20:25:20"
+  }
+}

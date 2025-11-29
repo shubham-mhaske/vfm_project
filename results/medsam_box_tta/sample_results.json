@@ -1,0 +1,1450 @@
+[
+  {
+    "sample_idx": 0,
+    "class_id": 1,
+    "class_name": "tumor",
+    "dice": 0.8020691860201294,
+    "iou": 0.6695455001741086,
+    "image_path": "TCGA-E2-A14N-DX1_xmin21383_ymin66838_MPP-0.2500.png"
+  },
+  {
+    "sample_idx": 0,
+    "class_id": 2,
+    "class_name": "stroma",
+    "dice": 0.3387876834610188,
+    "iou": 0.20394002626157925,
+    "image_path": "TCGA-E2-A14N-DX1_xmin21383_ymin66838_MPP-0.2500.png"
+  },
+  {
+    "sample_idx": 0,
+    "class_id": 3,
+    "class_name": "lymphocyte",
+    "dice": 0.7414046525209413,
+    "iou": 0.5890730916858703,
+    "image_path": "TCGA-E2-A14N-DX1_xmin21383_ymin66838_MPP-0.2500.png"
+  },
+  {
+    "sample_idx": 0,
+    "class_id": 4,
+    "class_name": "necrosis",
+    "dice": 0.6598989531437335,
+    "iou": 0.49242477251382333,
+    "image_path": "TCGA-E2-A14N-DX1_xmin21383_ymin66838_MPP-0.2500.png"
+  },
+  {
+    "sample_idx": 0,
+    "class_id": 18,
+    "class_name": "blood_vessel",
+    "dice": 0.7499129378778273,
+    "iou": 0.599888568244807,
+    "image_path": "TCGA-E2-A14N-DX1_xmin21383_ymin66838_MPP-0.2500.png"
+  },
+  {
+    "sample_idx": 1,
+    "class_id": 1,
+    "class_name": "tumor",
+    "dice": 0.6123194689942464,
+    "iou": 0.44125391638265155,
+    "image_path": "TCGA-E2-A14R-DX1_xmin7751_ymin59308_MPP-0.2500.png"
+  },
+  {
+    "sample_idx": 1,
+    "class_id": 2,
+    "class_name": "stroma",
+    "dice": 0.26833659792336506,
+    "iou": 0.15495886648731622,
+    "image_path": "TCGA-E2-A14R-DX1_xmin7751_ymin59308_MPP-0.2500.png"
+  },
+  {
+    "sample_idx": 1,
+    "class_id": 3,
+    "class_name": "lymphocyte",
+    "dice": 0.37685172068756156,
+    "iou": 0.2321733174292585,
+    "image_path": "TCGA-E2-A14R-DX1_xmin7751_ymin59308_MPP-0.2500.png"
+  },
+  {
+    "sample_idx": 2,
+    "class_id": 1,
+    "class_name": "tumor",
+    "dice": 0.7641530777384865,
+    "iou": 0.6183234055720588,
+    "image_path": "TCGA-E2-A14X-DX1_xmin88836_ymin66393_MPP-0.2500.png"
+  },
+  {
+    "sample_idx": 2,
+    "class_id": 2,
+    "class_name": "stroma",
+    "dice": 0.21956076964392082,
+    "iou": 0.12331831713234591,
+    "image_path": "TCGA-E2-A14X-DX1_xmin88836_ymin66393_MPP-0.2500.png"
+  },
+  {
+    "sample_idx": 2,
+    "class_id": 3,
+    "class_name": "lymphocyte",
+    "dice": 0.6690286110059089,
+    "iou": 0.5026619028313908,
+    "image_path": "TCGA-E2-A14X-DX1_xmin88836_ymin66393_MPP-0.2500.png"
+  },
+  {
+    "sample_idx": 2,
+    "class_id": 4,
+    "class_name": "necrosis",
+    "dice": 0.6901618904523502,
+    "iou": 0.5269062530870295,
+    "image_path": "TCGA-E2-A14X-DX1_xmin88836_ymin66393_MPP-0.2500.png"
+  },
+  {
+    "sample_idx": 2,
+    "class_id": 18,
+    "class_name": "blood_vessel",
+    "dice": 0.35361287213139064,
+    "iou": 0.21478112051882545,
+    "image_path": "TCGA-E2-A14X-DX1_xmin88836_ymin66393_MPP-0.2500.png"
+  },
+  {
+    "sample_idx": 3,
+    "class_id": 1,
+    "class_name": "tumor",
+    "dice": 0.6653328050755613,
+    "iou": 0.49850090539853914,
+    "image_path": "TCGA-E2-A150-DX1_xmin42083_ymin62113_MPP-0.2500.png"
+  },
+  {
+    "sample_idx": 3,
+    "class_id": 2,
+    "class_name": "stroma",
+    "dice": 0.4965561153968512,
+    "iou": 0.33027911482570754,
+    "image_path": "TCGA-E2-A150-DX1_xmin42083_ymin62113_MPP-0.2500.png"
+  },
+  {
+    "sample_idx": 3,
+    "class_id": 3,
+    "class_name": "lymphocyte",
+    "dice": 0.32338469703488626,
+    "iou": 0.19287948551046663,
+    "image_path": "TCGA-E2-A150-DX1_xmin42083_ymin62113_MPP-0.2500.png"
+  },
+  {
+    "sample_idx": 3,
+    "class_id": 4,
+    "class_name": "necrosis",
+    "dice": 0.5720352900327509,
+    "iou": 0.40059483686110897,
+    "image_path": "TCGA-E2-A150-DX1_xmin42083_ymin62113_MPP-0.2500.png"
+  },
+  {
+    "sample_idx": 3,
+    "class_id": 18,
+    "class_name": "blood_vessel",
+    "dice": 0.35609888894560426,
+    "iou": 0.21661819348561848,
+    "image_path": "TCGA-E2-A150-DX1_xmin42083_ymin62113_MPP-0.2500.png"
+  },
+  {
+    "sample_idx": 4,
+    "class_id": 1,
+    "class_name": "tumor",
+    "dice": 0.2540562889426894,
+    "iou": 0.1455123022201201,
+    "image_path": "TCGA-E2-A158-DX1_xmin56083_ymin25872_MPP-0.2500.png"
+  },
+  {
+    "sample_idx": 4,
+    "class_id": 2,
+    "class_name": "stroma",
+    "dice": 0.7770420526894366,
+    "iou": 0.6353792085805147,
+    "image_path": "TCGA-E2-A158-DX1_xmin56083_ymin25872_MPP-0.2500.png"
+  },
+  {
+    "sample_idx": 4,
+    "class_id": 3,
+    "class_name": "lymphocyte",
+    "dice": 0.44139046466057835,
+    "iou": 0.2831950239316712,
+    "image_path": "TCGA-E2-A158-DX1_xmin56083_ymin25872_MPP-0.2500.png"
+  },
+  {
+    "sample_idx": 4,
+    "class_id": 18,
+    "class_name": "blood_vessel",
+    "dice": 0.2691179909694364,
+    "iou": 0.15548026356814734,
+    "image_path": "TCGA-E2-A158-DX1_xmin56083_ymin25872_MPP-0.2500.png"
+  },
+  {
+    "sample_idx": 5,
+    "class_id": 1,
+    "class_name": "tumor",
+    "dice": 0.5769750281407908,
+    "iou": 0.40545671337514333,
+    "image_path": "TCGA-E2-A159-DX1_xmin38620_ymin28700_MPP-0.2500.png"
+  },
+  {
+    "sample_idx": 5,
+    "class_id": 2,
+    "class_name": "stroma",
+    "dice": 0.49814744606691536,
+    "iou": 0.33168864996923686,
+    "image_path": "TCGA-E2-A159-DX1_xmin38620_ymin28700_MPP-0.2500.png"
+  },
+  {
+    "sample_idx": 5,
+    "class_id": 4,
+    "class_name": "necrosis",
+    "dice": 0.4972024747934244,
+    "iou": 0.33085127334441056,
+    "image_path": "TCGA-E2-A159-DX1_xmin38620_ymin28700_MPP-0.2500.png"
+  },
+  {
+    "sample_idx": 6,
+    "class_id": 1,
+    "class_name": "tumor",
+    "dice": 0.5806799449801964,
+    "iou": 0.40912544209212504,
+    "image_path": "TCGA-E2-A1AZ-DX1_xmin50286_ymin17075_MPP-0.2500.png"
+  },
+  {
+    "sample_idx": 6,
+    "class_id": 2,
+    "class_name": "stroma",
+    "dice": 0.5651815798152087,
+    "iou": 0.39390460274577355,
+    "image_path": "TCGA-E2-A1AZ-DX1_xmin50286_ymin17075_MPP-0.2500.png"
+  },
+  {
+    "sample_idx": 6,
+    "class_id": 3,
+    "class_name": "lymphocyte",
+    "dice": 0.7801569338316885,
+    "iou": 0.6395551653068493,
+    "image_path": "TCGA-E2-A1AZ-DX1_xmin50286_ymin17075_MPP-0.2500.png"
+  },
+  {
+    "sample_idx": 6,
+    "class_id": 18,
+    "class_name": "blood_vessel",
+    "dice": 0.6755073631767895,
+    "iou": 0.5100121694877752,
+    "image_path": "TCGA-E2-A1AZ-DX1_xmin50286_ymin17075_MPP-0.2500.png"
+  },
+  {
+    "sample_idx": 7,
+    "class_id": 1,
+    "class_name": "tumor",
+    "dice": 0.5005118416141073,
+    "iou": 0.3337884589584741,
+    "image_path": "TCGA-E2-A1B6-DX1_xmin16266_ymin50634_MPP-0.2500.png"
+  },
+  {
+    "sample_idx": 7,
+    "class_id": 2,
+    "class_name": "stroma",
+    "dice": 0.26600067497560453,
+    "iou": 0.1534029864584072,
+    "image_path": "TCGA-E2-A1B6-DX1_xmin16266_ymin50634_MPP-0.2500.png"
+  },
+  {
+    "sample_idx": 7,
+    "class_id": 3,
+    "class_name": "lymphocyte",
+    "dice": 0.6473885287613971,
+    "iou": 0.47862120241267464,
+    "image_path": "TCGA-E2-A1B6-DX1_xmin16266_ymin50634_MPP-0.2500.png"
+  },
+  {
+    "sample_idx": 7,
+    "class_id": 4,
+    "class_name": "necrosis",
+    "dice": 0.6012539512916893,
+    "iou": 0.4298521177928794,
+    "image_path": "TCGA-E2-A1B6-DX1_xmin16266_ymin50634_MPP-0.2500.png"
+  },
+  {
+    "sample_idx": 7,
+    "class_id": 18,
+    "class_name": "blood_vessel",
+    "dice": 0.3861065105320861,
+    "iou": 0.2392391524296823,
+    "image_path": "TCGA-E2-A1B6-DX1_xmin16266_ymin50634_MPP-0.2500.png"
+  },
+  {
+    "sample_idx": 8,
+    "class_id": 1,
+    "class_name": "tumor",
+    "dice": 0.7262028234784182,
+    "iou": 0.5701086773182326,
+    "image_path": "TCGA-E2-A1L7-DX1_xmin51554_ymin15424_MPP-0.2500.png"
+  },
+  {
+    "sample_idx": 8,
+    "class_id": 2,
+    "class_name": "stroma",
+    "dice": 0.5432168722823932,
+    "iou": 0.3728879487597239,
+    "image_path": "TCGA-E2-A1L7-DX1_xmin51554_ymin15424_MPP-0.2500.png"
+  },
+  {
+    "sample_idx": 8,
+    "class_id": 3,
+    "class_name": "lymphocyte",
+    "dice": 0.47844745557678264,
+    "iou": 0.3144468834352021,
+    "image_path": "TCGA-E2-A1L7-DX1_xmin51554_ymin15424_MPP-0.2500.png"
+  },
+  {
+    "sample_idx": 8,
+    "class_id": 18,
+    "class_name": "blood_vessel",
+    "dice": 0.27233570277197894,
+    "iou": 0.15763230345671458,
+    "image_path": "TCGA-E2-A1L7-DX1_xmin51554_ymin15424_MPP-0.2500.png"
+  },
+  {
+    "sample_idx": 9,
+    "class_id": 1,
+    "class_name": "tumor",
+    "dice": 0.6196343256985313,
+    "iou": 0.448891433070513,
+    "image_path": "TCGA-E2-A1LH-DX1_xmin22770_ymin24149_MPP-0.2500.png"
+  },
+  {
+    "sample_idx": 9,
+    "class_id": 2,
+    "class_name": "stroma",
+    "dice": 0.46791807822403636,
+    "iou": 0.30541322338797233,
+    "image_path": "TCGA-E2-A1LH-DX1_xmin22770_ymin24149_MPP-0.2500.png"
+  },
+  {
+    "sample_idx": 9,
+    "class_id": 18,
+    "class_name": "blood_vessel",
+    "dice": 0.7388702046400274,
+    "iou": 0.5858795877779787,
+    "image_path": "TCGA-E2-A1LH-DX1_xmin22770_ymin24149_MPP-0.2500.png"
+  },
+  {
+    "sample_idx": 10,
+    "class_id": 1,
+    "class_name": "tumor",
+    "dice": 0.5072651518647795,
+    "iou": 0.33982267681261275,
+    "image_path": "TCGA-E2-A1LI-DX1_xmin44715_ymin18434_MPP-0.2500.png"
+  },
+  {
+    "sample_idx": 10,
+    "class_id": 2,
+    "class_name": "stroma",
+    "dice": 0.3333335517315232,
+    "iou": 0.20000015724671727,
+    "image_path": "TCGA-E2-A1LI-DX1_xmin44715_ymin18434_MPP-0.2500.png"
+  },
+  {
+    "sample_idx": 10,
+    "class_id": 3,
+    "class_name": "lymphocyte",
+    "dice": 0.2590618025628682,
+    "iou": 0.148805858211531,
+    "image_path": "TCGA-E2-A1LI-DX1_xmin44715_ymin18434_MPP-0.2500.png"
+  },
+  {
+    "sample_idx": 10,
+    "class_id": 4,
+    "class_name": "necrosis",
+    "dice": 0.6575156520505977,
+    "iou": 0.48977528345483484,
+    "image_path": "TCGA-E2-A1LI-DX1_xmin44715_ymin18434_MPP-0.2500.png"
+  },
+  {
+    "sample_idx": 10,
+    "class_id": 18,
+    "class_name": "blood_vessel",
+    "dice": 0.4641350448153842,
+    "iou": 0.30219782230762193,
+    "image_path": "TCGA-E2-A1LI-DX1_xmin44715_ymin18434_MPP-0.2500.png"
+  },
+  {
+    "sample_idx": 11,
+    "class_id": 1,
+    "class_name": "tumor",
+    "dice": 0.777494070111805,
+    "iou": 0.635983884497731,
+    "image_path": "TCGA-E2-A1LK-DX1_xmin75611_ymin27593_MPP-0.2500.png"
+  },
+  {
+    "sample_idx": 11,
+    "class_id": 2,
+    "class_name": "stroma",
+    "dice": 0.629552665063303,
+    "iou": 0.45937749595637173,
+    "image_path": "TCGA-E2-A1LK-DX1_xmin75611_ymin27593_MPP-0.2500.png"
+  },
+  {
+    "sample_idx": 11,
+    "class_id": 3,
+    "class_name": "lymphocyte",
+    "dice": 0.7207508418918799,
+    "iou": 0.5634170930061798,
+    "image_path": "TCGA-E2-A1LK-DX1_xmin75611_ymin27593_MPP-0.2500.png"
+  },
+  {
+    "sample_idx": 11,
+    "class_id": 4,
+    "class_name": "necrosis",
+    "dice": 0.7594688123646555,
+    "iou": 0.612212590811463,
+    "image_path": "TCGA-E2-A1LK-DX1_xmin75611_ymin27593_MPP-0.2500.png"
+  },
+  {
+    "sample_idx": 11,
+    "class_id": 18,
+    "class_name": "blood_vessel",
+    "dice": 0.0,
+    "iou": 0.0,
+    "image_path": "TCGA-E2-A1LK-DX1_xmin75611_ymin27593_MPP-0.2500.png"
+  },
+  {
+    "sample_idx": 12,
+    "class_id": 1,
+    "class_name": "tumor",
+    "dice": 0.28316006989923115,
+    "iou": 0.16493096702533663,
+    "image_path": "TCGA-E2-A1LL-DX1_xmin5783_ymin22777_MPP-0.2500.png"
+  },
+  {
+    "sample_idx": 12,
+    "class_id": 2,
+    "class_name": "stroma",
+    "dice": 0.8715102238477861,
+    "iou": 0.772280123635107,
+    "image_path": "TCGA-E2-A1LL-DX1_xmin5783_ymin22777_MPP-0.2500.png"
+  },
+  {
+    "sample_idx": 12,
+    "class_id": 3,
+    "class_name": "lymphocyte",
+    "dice": 0.15898380416266744,
+    "iou": 0.08635654836830932,
+    "image_path": "TCGA-E2-A1LL-DX1_xmin5783_ymin22777_MPP-0.2500.png"
+  },
+  {
+    "sample_idx": 12,
+    "class_id": 4,
+    "class_name": "necrosis",
+    "dice": 0.7246575342465753,
+    "iou": 0.5682062298603652,
+    "image_path": "TCGA-E2-A1LL-DX1_xmin5783_ymin22777_MPP-0.2500.png"
+  },
+  {
+    "sample_idx": 13,
+    "class_id": 1,
+    "class_name": "tumor",
+    "dice": 0.5863443325955683,
+    "iou": 0.4147716775133343,
+    "image_path": "TCGA-E2-A1LS-DX1_xmin39247_ymin47756_MPP-0.2500.png"
+  },
+  {
+    "sample_idx": 13,
+    "class_id": 2,
+    "class_name": "stroma",
+    "dice": 0.6350671503133296,
+    "iou": 0.4652735484087101,
+    "image_path": "TCGA-E2-A1LS-DX1_xmin39247_ymin47756_MPP-0.2500.png"
+  },
+  {
+    "sample_idx": 13,
+    "class_id": 3,
+    "class_name": "lymphocyte",
+    "dice": 0.8050553053260044,
+    "iou": 0.6737176280326842,
+    "image_path": "TCGA-E2-A1LS-DX1_xmin39247_ymin47756_MPP-0.2500.png"
+  },
+  {
+    "sample_idx": 13,
+    "class_id": 18,
+    "class_name": "blood_vessel",
+    "dice": 0.6008130081300813,
+    "iou": 0.42940151074956423,
+    "image_path": "TCGA-E2-A1LS-DX1_xmin39247_ymin47756_MPP-0.2500.png"
+  },
+  {
+    "sample_idx": 14,
+    "class_id": 1,
+    "class_name": "tumor",
+    "dice": 0.7155753992296993,
+    "iou": 0.5571174818674067,
+    "image_path": "TCGA-E2-A573-DX1_xmin59666_ymin56141_MPP-0.2500.png"
+  },
+  {
+    "sample_idx": 14,
+    "class_id": 2,
+    "class_name": "stroma",
+    "dice": 0.6112411204284282,
+    "iou": 0.4401348062789663,
+    "image_path": "TCGA-E2-A573-DX1_xmin59666_ymin56141_MPP-0.2500.png"
+  },
+  {
+    "sample_idx": 14,
+    "class_id": 3,
+    "class_name": "lymphocyte",
+    "dice": 0.5203780106004556,
+    "iou": 0.3516965916488128,
+    "image_path": "TCGA-E2-A573-DX1_xmin59666_ymin56141_MPP-0.2500.png"
+  },
+  {
+    "sample_idx": 14,
+    "class_id": 18,
+    "class_name": "blood_vessel",
+    "dice": 0.2166365037871171,
+    "iou": 0.12147635871607908,
+    "image_path": "TCGA-E2-A573-DX1_xmin59666_ymin56141_MPP-0.2500.png"
+  },
+  {
+    "sample_idx": 15,
+    "class_id": 1,
+    "class_name": "tumor",
+    "dice": 0.5404845057055389,
+    "iou": 0.3703177580631389,
+    "image_path": "TCGA-E2-A574-DX1_xmin54962_ymin47475_MPP-0.2500.png"
+  },
+  {
+    "sample_idx": 15,
+    "class_id": 2,
+    "class_name": "stroma",
+    "dice": 0.4934634243299603,
+    "iou": 0.3275482535898539,
+    "image_path": "TCGA-E2-A574-DX1_xmin54962_ymin47475_MPP-0.2500.png"
+  },
+  {
+    "sample_idx": 15,
+    "class_id": 3,
+    "class_name": "lymphocyte",
+    "dice": 0.8771520186597662,
+    "iou": 0.7811850163481575,
+    "image_path": "TCGA-E2-A574-DX1_xmin54962_ymin47475_MPP-0.2500.png"
+  },
+  {
+    "sample_idx": 15,
+    "class_id": 4,
+    "class_name": "necrosis",
+    "dice": 0.6954896994096061,
+    "iou": 0.533142359316628,
+    "image_path": "TCGA-E2-A574-DX1_xmin54962_ymin47475_MPP-0.2500.png"
+  },
+  {
+    "sample_idx": 15,
+    "class_id": 18,
+    "class_name": "blood_vessel",
+    "dice": 0.5126114547353201,
+    "iou": 0.3446385656036508,
+    "image_path": "TCGA-E2-A574-DX1_xmin54962_ymin47475_MPP-0.2500.png"
+  },
+  {
+    "sample_idx": 16,
+    "class_id": 1,
+    "class_name": "tumor",
+    "dice": 0.5804742087121966,
+    "iou": 0.40892121317893526,
+    "image_path": "TCGA-EW-A1OV-DX1_xmin126026_ymin65132_MPP-0.2500.png"
+  },
+  {
+    "sample_idx": 16,
+    "class_id": 2,
+    "class_name": "stroma",
+    "dice": 0.4819866015694982,
+    "iou": 0.3175114278094197,
+    "image_path": "TCGA-EW-A1OV-DX1_xmin126026_ymin65132_MPP-0.2500.png"
+  },
+  {
+    "sample_idx": 16,
+    "class_id": 3,
+    "class_name": "lymphocyte",
+    "dice": 0.5896347519887757,
+    "iou": 0.41807237722301216,
+    "image_path": "TCGA-EW-A1OV-DX1_xmin126026_ymin65132_MPP-0.2500.png"
+  },
+  {
+    "sample_idx": 16,
+    "class_id": 18,
+    "class_name": "blood_vessel",
+    "dice": 0.19548200968918403,
+    "iou": 0.10832921075811142,
+    "image_path": "TCGA-EW-A1OV-DX1_xmin126026_ymin65132_MPP-0.2500.png"
+  },
+  {
+    "sample_idx": 17,
+    "class_id": 1,
+    "class_name": "tumor",
+    "dice": 0.8849027045009858,
+    "iou": 0.79356546560808,
+    "image_path": "TCGA-EW-A1OW-DX1_xmin36101_ymin49680_MPP-0.2500.png"
+  },
+  {
+    "sample_idx": 17,
+    "class_id": 2,
+    "class_name": "stroma",
+    "dice": 0.49057632840946064,
+    "iou": 0.3250090333435151,
+    "image_path": "TCGA-EW-A1OW-DX1_xmin36101_ymin49680_MPP-0.2500.png"
+  },
+  {
+    "sample_idx": 17,
+    "class_id": 3,
+    "class_name": "lymphocyte",
+    "dice": 0.7497415113276632,
+    "iou": 0.5996692029052504,
+    "image_path": "TCGA-EW-A1OW-DX1_xmin36101_ymin49680_MPP-0.2500.png"
+  },
+  {
+    "sample_idx": 17,
+    "class_id": 4,
+    "class_name": "necrosis",
+    "dice": 0.2894841355538677,
+    "iou": 0.1692379132932527,
+    "image_path": "TCGA-EW-A1OW-DX1_xmin36101_ymin49680_MPP-0.2500.png"
+  },
+  {
+    "sample_idx": 17,
+    "class_id": 18,
+    "class_name": "blood_vessel",
+    "dice": 0.05273659945514018,
+    "iou": 0.027082417016816553,
+    "image_path": "TCGA-EW-A1OW-DX1_xmin36101_ymin49680_MPP-0.2500.png"
+  },
+  {
+    "sample_idx": 18,
+    "class_id": 1,
+    "class_name": "tumor",
+    "dice": 0.36542105514259215,
+    "iou": 0.2235566879729199,
+    "image_path": "TCGA-EW-A1P1-DX1_xmin50567_ymin38988_MPP-0.2500.png"
+  },
+  {
+    "sample_idx": 18,
+    "class_id": 2,
+    "class_name": "stroma",
+    "dice": 0.6736822220838258,
+    "iou": 0.5079342472075374,
+    "image_path": "TCGA-EW-A1P1-DX1_xmin50567_ymin38988_MPP-0.2500.png"
+  },
+  {
+    "sample_idx": 18,
+    "class_id": 3,
+    "class_name": "lymphocyte",
+    "dice": 0.3909818107924466,
+    "iou": 0.24299402792022282,
+    "image_path": "TCGA-EW-A1P1-DX1_xmin50567_ymin38988_MPP-0.2500.png"
+  },
+  {
+    "sample_idx": 18,
+    "class_id": 4,
+    "class_name": "necrosis",
+    "dice": 0.8838130554662325,
+    "iou": 0.791814543069577,
+    "image_path": "TCGA-EW-A1P1-DX1_xmin50567_ymin38988_MPP-0.2500.png"
+  },
+  {
+    "sample_idx": 18,
+    "class_id": 18,
+    "class_name": "blood_vessel",
+    "dice": 0.2919663103336573,
+    "iou": 0.17093709105391924,
+    "image_path": "TCGA-EW-A1P1-DX1_xmin50567_ymin38988_MPP-0.2500.png"
+  },
+  {
+    "sample_idx": 19,
+    "class_id": 1,
+    "class_name": "tumor",
+    "dice": 0.6802132248493721,
+    "iou": 0.5153963031427853,
+    "image_path": "TCGA-EW-A1P4-DX1_xmin17256_ymin35430_MPP-0.2500.png"
+  },
+  {
+    "sample_idx": 19,
+    "class_id": 2,
+    "class_name": "stroma",
+    "dice": 0.609778280043213,
+    "iou": 0.4386194455817932,
+    "image_path": "TCGA-EW-A1P4-DX1_xmin17256_ymin35430_MPP-0.2500.png"
+  },
+  {
+    "sample_idx": 19,
+    "class_id": 3,
+    "class_name": "lymphocyte",
+    "dice": 0.6787452934276651,
+    "iou": 0.5137126778443046,
+    "image_path": "TCGA-EW-A1P4-DX1_xmin17256_ymin35430_MPP-0.2500.png"
+  },
+  {
+    "sample_idx": 20,
+    "class_id": 1,
+    "class_name": "tumor",
+    "dice": 0.7537847538228118,
+    "iou": 0.6048591975865123,
+    "image_path": "TCGA-EW-A1P7-DX1_xmin9808_ymin46395_MPP-0.2500.png"
+  },
+  {
+    "sample_idx": 20,
+    "class_id": 2,
+    "class_name": "stroma",
+    "dice": 0.5675342419633669,
+    "iou": 0.39619393258044855,
+    "image_path": "TCGA-EW-A1P7-DX1_xmin9808_ymin46395_MPP-0.2500.png"
+  },
+  {
+    "sample_idx": 20,
+    "class_id": 3,
+    "class_name": "lymphocyte",
+    "dice": 0.5118160096799285,
+    "iou": 0.3439198466110696,
+    "image_path": "TCGA-EW-A1P7-DX1_xmin9808_ymin46395_MPP-0.2500.png"
+  },
+  {
+    "sample_idx": 20,
+    "class_id": 4,
+    "class_name": "necrosis",
+    "dice": 0.8761553032105769,
+    "iou": 0.7796053188786313,
+    "image_path": "TCGA-EW-A1P7-DX1_xmin9808_ymin46395_MPP-0.2500.png"
+  },
+  {
+    "sample_idx": 20,
+    "class_id": 18,
+    "class_name": "blood_vessel",
+    "dice": 0.1833192081845148,
+    "iou": 0.10090887128349953,
+    "image_path": "TCGA-EW-A1P7-DX1_xmin9808_ymin46395_MPP-0.2500.png"
+  },
+  {
+    "sample_idx": 21,
+    "class_id": 1,
+    "class_name": "tumor",
+    "dice": 0.5683896284889377,
+    "iou": 0.39702815780036815,
+    "image_path": "TCGA-EW-A1P8-DX1_xmin15520_ymin26381_MPP-0.2500.png"
+  },
+  {
+    "sample_idx": 21,
+    "class_id": 2,
+    "class_name": "stroma",
+    "dice": 0.3348120303493235,
+    "iou": 0.20106560727769396,
+    "image_path": "TCGA-EW-A1P8-DX1_xmin15520_ymin26381_MPP-0.2500.png"
+  },
+  {
+    "sample_idx": 21,
+    "class_id": 3,
+    "class_name": "lymphocyte",
+    "dice": 0.5137928915336994,
+    "iou": 0.34570746473142017,
+    "image_path": "TCGA-EW-A1P8-DX1_xmin15520_ymin26381_MPP-0.2500.png"
+  },
+  {
+    "sample_idx": 21,
+    "class_id": 4,
+    "class_name": "necrosis",
+    "dice": 0.6813092456728043,
+    "iou": 0.5166558144410532,
+    "image_path": "TCGA-EW-A1P8-DX1_xmin15520_ymin26381_MPP-0.2500.png"
+  },
+  {
+    "sample_idx": 22,
+    "class_id": 1,
+    "class_name": "tumor",
+    "dice": 0.7405964384150082,
+    "iou": 0.588053314287081,
+    "image_path": "TCGA-EW-A1PB-DX1_xmin57214_ymin25940_MPP-0.2500.png"
+  },
+  {
+    "sample_idx": 22,
+    "class_id": 2,
+    "class_name": "stroma",
+    "dice": 0.4008184580732966,
+    "iou": 0.25063974762389274,
+    "image_path": "TCGA-EW-A1PB-DX1_xmin57214_ymin25940_MPP-0.2500.png"
+  },
+  {
+    "sample_idx": 22,
+    "class_id": 3,
+    "class_name": "lymphocyte",
+    "dice": 0.72573380895279,
+    "iou": 0.5695307731239199,
+    "image_path": "TCGA-EW-A1PB-DX1_xmin57214_ymin25940_MPP-0.2500.png"
+  },
+  {
+    "sample_idx": 23,
+    "class_id": 1,
+    "class_name": "tumor",
+    "dice": 0.6473761138849942,
+    "iou": 0.47860763108685145,
+    "image_path": "TCGA-EW-A1PH-DX1_xmin3455_ymin52049_MPP-0.2500.png"
+  },
+  {
+    "sample_idx": 23,
+    "class_id": 2,
+    "class_name": "stroma",
+    "dice": 0.5801898938639428,
+    "iou": 0.40863907881519507,
+    "image_path": "TCGA-EW-A1PH-DX1_xmin3455_ymin52049_MPP-0.2500.png"
+  },
+  {
+    "sample_idx": 23,
+    "class_id": 3,
+    "class_name": "lymphocyte",
+    "dice": 0.7953352036130785,
+    "iou": 0.6602128708321846,
+    "image_path": "TCGA-EW-A1PH-DX1_xmin3455_ymin52049_MPP-0.2500.png"
+  },
+  {
+    "sample_idx": 23,
+    "class_id": 4,
+    "class_name": "necrosis",
+    "dice": 0.6744121023920427,
+    "iou": 0.5087645290131491,
+    "image_path": "TCGA-EW-A1PH-DX1_xmin3455_ymin52049_MPP-0.2500.png"
+  },
+  {
+    "sample_idx": 24,
+    "class_id": 1,
+    "class_name": "tumor",
+    "dice": 0.5083916462922593,
+    "iou": 0.3408345394610678,
+    "image_path": "TCGA-EW-A3U0-DX1_xmin113512_ymin48566_MPP-0.2500.png"
+  },
+  {
+    "sample_idx": 24,
+    "class_id": 2,
+    "class_name": "stroma",
+    "dice": 0.7651836470777124,
+    "iou": 0.6196740472920095,
+    "image_path": "TCGA-EW-A3U0-DX1_xmin113512_ymin48566_MPP-0.2500.png"
+  },
+  {
+    "sample_idx": 24,
+    "class_id": 4,
+    "class_name": "necrosis",
+    "dice": 0.6873452144400353,
+    "iou": 0.5236298393159181,
+    "image_path": "TCGA-EW-A3U0-DX1_xmin113512_ymin48566_MPP-0.2500.png"
+  },
+  {
+    "sample_idx": 24,
+    "class_id": 18,
+    "class_name": "blood_vessel",
+    "dice": 0.46091526165973284,
+    "iou": 0.2994736093327643,
+    "image_path": "TCGA-EW-A3U0-DX1_xmin113512_ymin48566_MPP-0.2500.png"
+  },
+  {
+    "sample_idx": 25,
+    "class_id": 1,
+    "class_name": "tumor",
+    "dice": 0.46712220753677486,
+    "iou": 0.30473545238472194,
+    "image_path": "TCGA-EW-A6SB-DX1_xmin34625_ymin56578_MPP-0.2500.png"
+  },
+  {
+    "sample_idx": 25,
+    "class_id": 2,
+    "class_name": "stroma",
+    "dice": 0.4884301553555426,
+    "iou": 0.32312774503015324,
+    "image_path": "TCGA-EW-A6SB-DX1_xmin34625_ymin56578_MPP-0.2500.png"
+  },
+  {
+    "sample_idx": 25,
+    "class_id": 18,
+    "class_name": "blood_vessel",
+    "dice": 0.5444126074498568,
+    "iou": 0.37401574803149606,
+    "image_path": "TCGA-EW-A6SB-DX1_xmin34625_ymin56578_MPP-0.2500.png"
+  },
+  {
+    "sample_idx": 26,
+    "class_id": 1,
+    "class_name": "tumor",
+    "dice": 0.5345125960531525,
+    "iou": 0.364733667866134,
+    "image_path": "TCGA-GM-A2DB-DX1_xmin50586_ymin43110_MPP-0.2500.png"
+  },
+  {
+    "sample_idx": 26,
+    "class_id": 2,
+    "class_name": "stroma",
+    "dice": 0.3484988360055207,
+    "iou": 0.21101943105060122,
+    "image_path": "TCGA-GM-A2DB-DX1_xmin50586_ymin43110_MPP-0.2500.png"
+  },
+  {
+    "sample_idx": 26,
+    "class_id": 3,
+    "class_name": "lymphocyte",
+    "dice": 0.5619498646931185,
+    "iou": 0.39077209542016267,
+    "image_path": "TCGA-GM-A2DB-DX1_xmin50586_ymin43110_MPP-0.2500.png"
+  },
+  {
+    "sample_idx": 26,
+    "class_id": 4,
+    "class_name": "necrosis",
+    "dice": 0.5740512692276731,
+    "iou": 0.40257497120303454,
+    "image_path": "TCGA-GM-A2DB-DX1_xmin50586_ymin43110_MPP-0.2500.png"
+  },
+  {
+    "sample_idx": 26,
+    "class_id": 18,
+    "class_name": "blood_vessel",
+    "dice": 0.3993026665081818,
+    "iou": 0.24945544554455445,
+    "image_path": "TCGA-GM-A2DB-DX1_xmin50586_ymin43110_MPP-0.2500.png"
+  },
+  {
+    "sample_idx": 27,
+    "class_id": 1,
+    "class_name": "tumor",
+    "dice": 0.362469669168082,
+    "iou": 0.22135142314215075,
+    "image_path": "TCGA-GM-A2DD-DX1_xmin47260_ymin22408_MPP-0.2500.png"
+  },
+  {
+    "sample_idx": 27,
+    "class_id": 2,
+    "class_name": "stroma",
+    "dice": 0.8092272718320784,
+    "iou": 0.679581630221852,
+    "image_path": "TCGA-GM-A2DD-DX1_xmin47260_ymin22408_MPP-0.2500.png"
+  },
+  {
+    "sample_idx": 27,
+    "class_id": 3,
+    "class_name": "lymphocyte",
+    "dice": 0.5042501580014406,
+    "iou": 0.3371219864731406,
+    "image_path": "TCGA-GM-A2DD-DX1_xmin47260_ymin22408_MPP-0.2500.png"
+  },
+  {
+    "sample_idx": 27,
+    "class_id": 4,
+    "class_name": "necrosis",
+    "dice": 0.668742855959727,
+    "iou": 0.502339355663579,
+    "image_path": "TCGA-GM-A2DD-DX1_xmin47260_ymin22408_MPP-0.2500.png"
+  },
+  {
+    "sample_idx": 27,
+    "class_id": 18,
+    "class_name": "blood_vessel",
+    "dice": 0.329604185049792,
+    "iou": 0.19732100745212716,
+    "image_path": "TCGA-GM-A2DD-DX1_xmin47260_ymin22408_MPP-0.2500.png"
+  },
+  {
+    "sample_idx": 28,
+    "class_id": 1,
+    "class_name": "tumor",
+    "dice": 0.6906067700175261,
+    "iou": 0.527425034897095,
+    "image_path": "TCGA-GM-A2DF-DX1_xmin50637_ymin43774_MPP-0.2500.png"
+  },
+  {
+    "sample_idx": 28,
+    "class_id": 2,
+    "class_name": "stroma",
+    "dice": 0.5851058555351825,
+    "iou": 0.41353330765002083,
+    "image_path": "TCGA-GM-A2DF-DX1_xmin50637_ymin43774_MPP-0.2500.png"
+  },
+  {
+    "sample_idx": 28,
+    "class_id": 3,
+    "class_name": "lymphocyte",
+    "dice": 0.338613564682345,
+    "iou": 0.20381384937550817,
+    "image_path": "TCGA-GM-A2DF-DX1_xmin50637_ymin43774_MPP-0.2500.png"
+  },
+  {
+    "sample_idx": 28,
+    "class_id": 18,
+    "class_name": "blood_vessel",
+    "dice": 0.3211949505713964,
+    "iou": 0.19132355521608538,
+    "image_path": "TCGA-GM-A2DF-DX1_xmin50637_ymin43774_MPP-0.2500.png"
+  },
+  {
+    "sample_idx": 29,
+    "class_id": 1,
+    "class_name": "tumor",
+    "dice": 0.6467834298046882,
+    "iou": 0.4779600280177895,
+    "image_path": "TCGA-GM-A2DH-DX1_xmin50963_ymin56303_MPP-0.2500.png"
+  },
+  {
+    "sample_idx": 29,
+    "class_id": 2,
+    "class_name": "stroma",
+    "dice": 0.2617436965229381,
+    "iou": 0.1505783099991457,
+    "image_path": "TCGA-GM-A2DH-DX1_xmin50963_ymin56303_MPP-0.2500.png"
+  },
+  {
+    "sample_idx": 29,
+    "class_id": 3,
+    "class_name": "lymphocyte",
+    "dice": 0.44863045272783797,
+    "iou": 0.289183485338283,
+    "image_path": "TCGA-GM-A2DH-DX1_xmin50963_ymin56303_MPP-0.2500.png"
+  },
+  {
+    "sample_idx": 29,
+    "class_id": 4,
+    "class_name": "necrosis",
+    "dice": 0.12485639015351714,
+    "iou": 0.06658497487759835,
+    "image_path": "TCGA-GM-A2DH-DX1_xmin50963_ymin56303_MPP-0.2500.png"
+  },
+  {
+    "sample_idx": 29,
+    "class_id": 18,
+    "class_name": "blood_vessel",
+    "dice": 0.2816139639224363,
+    "iou": 0.16388282842734003,
+    "image_path": "TCGA-GM-A2DH-DX1_xmin50963_ymin56303_MPP-0.2500.png"
+  },
+  {
+    "sample_idx": 30,
+    "class_id": 1,
+    "class_name": "tumor",
+    "dice": 0.5214043942507371,
+    "iou": 0.3526348869314548,
+    "image_path": "TCGA-GM-A2DI-DX1_xmin22802_ymin51060_MPP-0.2500.png"
+  },
+  {
+    "sample_idx": 30,
+    "class_id": 2,
+    "class_name": "stroma",
+    "dice": 0.665870943456624,
+    "iou": 0.49910534531182726,
+    "image_path": "TCGA-GM-A2DI-DX1_xmin22802_ymin51060_MPP-0.2500.png"
+  },
+  {
+    "sample_idx": 31,
+    "class_id": 1,
+    "class_name": "tumor",
+    "dice": 0.7678970782264897,
+    "iou": 0.6232410171718166,
+    "image_path": "TCGA-GM-A3XL-DX1_xmin29910_ymin15820_MPP-0.2500.png"
+  },
+  {
+    "sample_idx": 31,
+    "class_id": 2,
+    "class_name": "stroma",
+    "dice": 0.405256843647804,
+    "iou": 0.25412044694067576,
+    "image_path": "TCGA-GM-A3XL-DX1_xmin29910_ymin15820_MPP-0.2500.png"
+  },
+  {
+    "sample_idx": 31,
+    "class_id": 3,
+    "class_name": "lymphocyte",
+    "dice": 0.0675900639307836,
+    "iou": 0.03497708362453928,
+    "image_path": "TCGA-GM-A3XL-DX1_xmin29910_ymin15820_MPP-0.2500.png"
+  },
+  {
+    "sample_idx": 31,
+    "class_id": 4,
+    "class_name": "necrosis",
+    "dice": 0.8581254095979353,
+    "iou": 0.7515058280575114,
+    "image_path": "TCGA-GM-A3XL-DX1_xmin29910_ymin15820_MPP-0.2500.png"
+  },
+  {
+    "sample_idx": 31,
+    "class_id": 18,
+    "class_name": "blood_vessel",
+    "dice": 0.4804436937791779,
+    "iou": 0.3161736697826318,
+    "image_path": "TCGA-GM-A3XL-DX1_xmin29910_ymin15820_MPP-0.2500.png"
+  },
+  {
+    "sample_idx": 32,
+    "class_id": 1,
+    "class_name": "tumor",
+    "dice": 0.5673923066489389,
+    "iou": 0.39605560495192677,
+    "image_path": "TCGA-LL-A441-DX1_xmin82006_ymin43121_MPP-0.2500.png"
+  },
+  {
+    "sample_idx": 32,
+    "class_id": 2,
+    "class_name": "stroma",
+    "dice": 0.35275240865688573,
+    "iou": 0.21414656212625718,
+    "image_path": "TCGA-LL-A441-DX1_xmin82006_ymin43121_MPP-0.2500.png"
+  },
+  {
+    "sample_idx": 32,
+    "class_id": 3,
+    "class_name": "lymphocyte",
+    "dice": 0.7867555838602557,
+    "iou": 0.6484724540200442,
+    "image_path": "TCGA-LL-A441-DX1_xmin82006_ymin43121_MPP-0.2500.png"
+  },
+  {
+    "sample_idx": 32,
+    "class_id": 18,
+    "class_name": "blood_vessel",
+    "dice": 0.6456256568680532,
+    "iou": 0.47669660913323614,
+    "image_path": "TCGA-LL-A441-DX1_xmin82006_ymin43121_MPP-0.2500.png"
+  },
+  {
+    "sample_idx": 33,
+    "class_id": 1,
+    "class_name": "tumor",
+    "dice": 0.11067936536152304,
+    "iou": 0.0585815680686204,
+    "image_path": "TCGA-LL-A5YO-DX1_xmin36631_ymin44396_MPP-0.2500.png"
+  },
+  {
+    "sample_idx": 33,
+    "class_id": 2,
+    "class_name": "stroma",
+    "dice": 0.5137699937701251,
+    "iou": 0.3456867319436023,
+    "image_path": "TCGA-LL-A5YO-DX1_xmin36631_ymin44396_MPP-0.2500.png"
+  },
+  {
+    "sample_idx": 33,
+    "class_id": 3,
+    "class_name": "lymphocyte",
+    "dice": 0.30062158170904374,
+    "iou": 0.176900905927342,
+    "image_path": "TCGA-LL-A5YO-DX1_xmin36631_ymin44396_MPP-0.2500.png"
+  },
+  {
+    "sample_idx": 33,
+    "class_id": 18,
+    "class_name": "blood_vessel",
+    "dice": 0.658269346907083,
+    "iou": 0.4906121399176955,
+    "image_path": "TCGA-LL-A5YO-DX1_xmin36631_ymin44396_MPP-0.2500.png"
+  },
+  {
+    "sample_idx": 34,
+    "class_id": 1,
+    "class_name": "tumor",
+    "dice": 0.3032315660998236,
+    "iou": 0.17871122543387863,
+    "image_path": "TCGA-LL-A73Y-DX1_xmin68117_ymin49445_MPP-0.2500.png"
+  },
+  {
+    "sample_idx": 34,
+    "class_id": 2,
+    "class_name": "stroma",
+    "dice": 0.3881047390628008,
+    "iou": 0.24077540797355917,
+    "image_path": "TCGA-LL-A73Y-DX1_xmin68117_ymin49445_MPP-0.2500.png"
+  },
+  {
+    "sample_idx": 34,
+    "class_id": 3,
+    "class_name": "lymphocyte",
+    "dice": 0.6995482796855741,
+    "iou": 0.5379271438976879,
+    "image_path": "TCGA-LL-A73Y-DX1_xmin68117_ymin49445_MPP-0.2500.png"
+  },
+  {
+    "sample_idx": 34,
+    "class_id": 18,
+    "class_name": "blood_vessel",
+    "dice": 0.5672986364194751,
+    "iou": 0.39596433062764375,
+    "image_path": "TCGA-LL-A73Y-DX1_xmin68117_ymin49445_MPP-0.2500.png"
+  },
+  {
+    "sample_idx": 35,
+    "class_id": 1,
+    "class_name": "tumor",
+    "dice": 0.7532869131921105,
+    "iou": 0.6042183411428224,
+    "image_path": "TCGA-LL-A740-DX1_xmin39436_ymin24080_MPP-0.2500.png"
+  },
+  {
+    "sample_idx": 35,
+    "class_id": 2,
+    "class_name": "stroma",
+    "dice": 0.8235852763390764,
+    "iou": 0.7000807281433323,
+    "image_path": "TCGA-LL-A740-DX1_xmin39436_ymin24080_MPP-0.2500.png"
+  },
+  {
+    "sample_idx": 35,
+    "class_id": 3,
+    "class_name": "lymphocyte",
+    "dice": 0.855107850260246,
+    "iou": 0.7468894344804627,
+    "image_path": "TCGA-LL-A740-DX1_xmin39436_ymin24080_MPP-0.2500.png"
+  },
+  {
+    "sample_idx": 35,
+    "class_id": 18,
+    "class_name": "blood_vessel",
+    "dice": 0.699623143427178,
+    "iou": 0.5380156836004092,
+    "image_path": "TCGA-LL-A740-DX1_xmin39436_ymin24080_MPP-0.2500.png"
+  },
+  {
+    "sample_idx": 36,
+    "class_id": 1,
+    "class_name": "tumor",
+    "dice": 0.5053296777272284,
+    "iou": 0.33808771753682254,
+    "image_path": "TCGA-OL-A5D6-DX1_xmin115108_ymin40554_MPP-0.2500.png"
+  },
+  {
+    "sample_idx": 36,
+    "class_id": 2,
+    "class_name": "stroma",
+    "dice": 0.33136063673681826,
+    "iou": 0.19858133760479635,
+    "image_path": "TCGA-OL-A5D6-DX1_xmin115108_ymin40554_MPP-0.2500.png"
+  },
+  {
+    "sample_idx": 36,
+    "class_id": 4,
+    "class_name": "necrosis",
+    "dice": 0.5744782917121218,
+    "iou": 0.4029951198723579,
+    "image_path": "TCGA-OL-A5D6-DX1_xmin115108_ymin40554_MPP-0.2500.png"
+  },
+  {
+    "sample_idx": 37,
+    "class_id": 1,
+    "class_name": "tumor",
+    "dice": 0.49036432260144225,
+    "iou": 0.32482295559313384,
+    "image_path": "TCGA-OL-A5D7-DX1_xmin114443_ymin22490_MPP-0.2500.png"
+  },
+  {
+    "sample_idx": 37,
+    "class_id": 2,
+    "class_name": "stroma",
+    "dice": 0.15955165191386877,
+    "iou": 0.08669173034917571,
+    "image_path": "TCGA-OL-A5D7-DX1_xmin114443_ymin22490_MPP-0.2500.png"
+  },
+  {
+    "sample_idx": 37,
+    "class_id": 3,
+    "class_name": "lymphocyte",
+    "dice": 0.6329771021611057,
+    "iou": 0.4630332843449584,
+    "image_path": "TCGA-OL-A5D7-DX1_xmin114443_ymin22490_MPP-0.2500.png"
+  },
+  {
+    "sample_idx": 37,
+    "class_id": 4,
+    "class_name": "necrosis",
+    "dice": 0.8536783687043801,
+    "iou": 0.7447110351913343,
+    "image_path": "TCGA-OL-A5D7-DX1_xmin114443_ymin22490_MPP-0.2500.png"
+  },
+  {
+    "sample_idx": 38,
+    "class_id": 1,
+    "class_name": "tumor",
+    "dice": 0.3001737898307986,
+    "iou": 0.17659087031074736,
+    "image_path": "TCGA-OL-A5RW-DX1_xmin5772_ymin6839_MPP-0.2500.png"
+  },
+  {
+    "sample_idx": 38,
+    "class_id": 2,
+    "class_name": "stroma",
+    "dice": 0.49013319360502056,
+    "iou": 0.3246201529360612,
+    "image_path": "TCGA-OL-A5RW-DX1_xmin5772_ymin6839_MPP-0.2500.png"
+  },
+  {
+    "sample_idx": 38,
+    "class_id": 4,
+    "class_name": "necrosis",
+    "dice": 0.7937161695308231,
+    "iou": 0.6579845882723239,
+    "image_path": "TCGA-OL-A5RW-DX1_xmin5772_ymin6839_MPP-0.2500.png"
+  },
+  {
+    "sample_idx": 39,
+    "class_id": 1,
+    "class_name": "tumor",
+    "dice": 0.6803483829735584,
+    "iou": 0.5155515093495515,
+    "image_path": "TCGA-OL-A66I-DX1_xmin38433_ymin22957_MPP-0.2500.png"
+  },
+  {
+    "sample_idx": 39,
+    "class_id": 2,
+    "class_name": "stroma",
+    "dice": 0.5197457748158679,
+    "iou": 0.3511192644974316,
+    "image_path": "TCGA-OL-A66I-DX1_xmin38433_ymin22957_MPP-0.2500.png"
+  },
+  {
+    "sample_idx": 39,
+    "class_id": 3,
+    "class_name": "lymphocyte",
+    "dice": 0.40407344609943036,
+    "iou": 0.25319050247760033,
+    "image_path": "TCGA-OL-A66I-DX1_xmin38433_ymin22957_MPP-0.2500.png"
+  },
+  {
+    "sample_idx": 39,
+    "class_id": 18,
+    "class_name": "blood_vessel",
+    "dice": 0.40084905660377357,
+    "iou": 0.25066367765913516,
+    "image_path": "TCGA-OL-A66I-DX1_xmin38433_ymin22957_MPP-0.2500.png"
+  },
+  {
+    "sample_idx": 40,
+    "class_id": 1,
+    "class_name": "tumor",
+    "dice": 0.5551984157088221,
+    "iou": 0.38427312216798504,
+    "image_path": "TCGA-OL-A66P-DX1_xmin30143_ymin20310_MPP-0.2500.png"
+  },
+  {
+    "sample_idx": 40,
+    "class_id": 2,
+    "class_name": "stroma",
+    "dice": 0.5186186278060279,
+    "iou": 0.35009123075304877,
+    "image_path": "TCGA-OL-A66P-DX1_xmin30143_ymin20310_MPP-0.2500.png"
+  },
+  {
+    "sample_idx": 40,
+    "class_id": 3,
+    "class_name": "lymphocyte",
+    "dice": 0.6610108718893403,
+    "iou": 0.4936641067594326,
+    "image_path": "TCGA-OL-A66P-DX1_xmin30143_ymin20310_MPP-0.2500.png"
+  },
+  {
+    "sample_idx": 41,
+    "class_id": 1,
+    "class_name": "tumor",
+    "dice": 0.5759537720721891,
+    "iou": 0.40444878879408536,
+    "image_path": "TCGA-OL-A6VO-DX1_xmin88416_ymin188485_MPP-0.2500.png"
+  },
+  {
+    "sample_idx": 41,
+    "class_id": 2,
+    "class_name": "stroma",
+    "dice": 0.36989770648563336,
+    "iou": 0.22691686770660524,
+    "image_path": "TCGA-OL-A6VO-DX1_xmin88416_ymin188485_MPP-0.2500.png"
+  },
+  {
+    "sample_idx": 41,
+    "class_id": 3,
+    "class_name": "lymphocyte",
+    "dice": 0.18182003885287995,
+    "iou": 0.10000112350713988,
+    "image_path": "TCGA-OL-A6VO-DX1_xmin88416_ymin188485_MPP-0.2500.png"
+  },
+  {
+    "sample_idx": 42,
+    "class_id": 1,
+    "class_name": "tumor",
+    "dice": 0.5969876042230808,
+    "iou": 0.4255041552163183,
+    "image_path": "TCGA-OL-A97C-DX1_xmin68058_ymin32495_MPP-0.2500.png"
+  },
+  {
+    "sample_idx": 42,
+    "class_id": 2,
+    "class_name": "stroma",
+    "dice": 0.6852341562004807,
+    "iou": 0.5211834178930556,
+    "image_path": "TCGA-OL-A97C-DX1_xmin68058_ymin32495_MPP-0.2500.png"
+  },
+  {
+    "sample_idx": 42,
+    "class_id": 18,
+    "class_name": "blood_vessel",
+    "dice": 0.4994254138242989,
+    "iou": 0.33282278563514306,
+    "image_path": "TCGA-OL-A97C-DX1_xmin68058_ymin32495_MPP-0.2500.png"
+  },
+  {
+    "sample_idx": 43,
+    "class_id": 1,
+    "class_name": "tumor",
+    "dice": 0.48912901962506583,
+    "iou": 0.32373976731202075,
+    "image_path": "TCGA-S3-AA10-DX1_xmin43039_ymin23986_MPP-0.2500.png"
+  },
+  {
+    "sample_idx": 43,
+    "class_id": 2,
+    "class_name": "stroma",
+    "dice": 0.4597179829308472,
+    "iou": 0.2984635137178308,
+    "image_path": "TCGA-S3-AA10-DX1_xmin43039_ymin23986_MPP-0.2500.png"
+  },
+  {
+    "sample_idx": 43,
+    "class_id": 3,
+    "class_name": "lymphocyte",
+    "dice": 0.533897410174503,
+    "iou": 0.36416101702545267,
+    "image_path": "TCGA-S3-AA10-DX1_xmin43039_ymin23986_MPP-0.2500.png"
+  },
+  {
+    "sample_idx": 43,
+    "class_id": 4,
+    "class_name": "necrosis",
+    "dice": 0.4934033142781837,
+    "iou": 0.32749528719545284,
+    "image_path": "TCGA-S3-AA10-DX1_xmin43039_ymin23986_MPP-0.2500.png"
+  },
+  {
+    "sample_idx": 43,
+    "class_id": 18,
+    "class_name": "blood_vessel",
+    "dice": 0.6183857595708364,
+    "iou": 0.44758206847864457,
+    "image_path": "TCGA-S3-AA10-DX1_xmin43039_ymin23986_MPP-0.2500.png"
+  },
+  {
+    "sample_idx": 44,
+    "class_id": 1,
+    "class_name": "tumor",
+    "dice": 0.730025933591354,
+    "iou": 0.5748353079805725,
+    "image_path": "TCGA-S3-AA15-DX1_xmin55486_ymin28926_MPP-0.2500.png"
+  },
+  {
+    "sample_idx": 44,
+    "class_id": 2,
+    "class_name": "stroma",
+    "dice": 0.6446800100343699,
+    "iou": 0.4756662742432645,
+    "image_path": "TCGA-S3-AA15-DX1_xmin55486_ymin28926_MPP-0.2500.png"
+  },
+  {
+    "sample_idx": 44,
+    "class_id": 3,
+    "class_name": "lymphocyte",
+    "dice": 0.5682450308662913,
+    "iou": 0.396887067352112,
+    "image_path": "TCGA-S3-AA15-DX1_xmin55486_ymin28926_MPP-0.2500.png"
+  }
+]
