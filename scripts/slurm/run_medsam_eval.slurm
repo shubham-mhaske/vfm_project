@@ -1,6 +1,6 @@
 #!/bin/bash
 #SBATCH --job-name=medsam_eval
-#SBATCH --time=01:00:00
+#SBATCH --time=04:00:00
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=16
 #SBATCH --mem=64G
@@ -69,17 +69,17 @@ echo ""
 # ============================================================
 # Experiment 1: MedSAM Box Prompt (baseline)
 # ============================================================
-echo ">>> Experiment 1: MedSAM Box Prompt (baseline)"
-echo "    Expected time: ~3-5 minutes on A100"
-python src/evaluate_medsam.py \
-    --checkpoint "$CHECKPOINT" \
-    --split test \
-    --output_dir results/medsam_box_baseline \
-    --tqdm
+#echo ">>> Experiment 1: MedSAM Box Prompt (baseline)"
+#echo "    Expected time: ~3-5 minutes on A100"
+#python src/evaluate_medsam.py \
+#    --checkpoint "$CHECKPOINT" \
+#    --split test \
+#    --output_dir results/medsam_box_baseline \
+#    --tqdm
 
-echo ""
-echo "Experiment 1 Result:"
-cat results/medsam_box_baseline/metrics.json | python -c "import sys,json; d=json.load(sys.stdin); print(f\"  Overall Dice: {d['overall']:.4f}\")" 2>/dev/null || echo "  (metrics not available)"
+#echo ""
+#echo "Experiment 1 Result:"
+#cat results/medsam_box_baseline/metrics.json | python -c "import sys,json; d=json.load(sys.stdin); print(f\"  Overall Dice: {d['overall']:.4f}\")" 2>/dev/null || echo "  (metrics not available)"
 
 # ============================================================
 # Experiment 2: MedSAM Box Prompt + TTA
