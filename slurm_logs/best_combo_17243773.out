@@ -1,0 +1,42 @@
+============================================================
+BEST COMBO: Fewshot Prompts + Blur Overlay
+Job ID: 17243773
+Started: Tue Dec  2 14:55:39 CST 2025
+============================================================
+Using Nvidia CUDA backend.
+[15:03:13] ======================================================================
+[15:03:13] BEST COMBO EXPERIMENT: Best Prompts + Blur Overlay
+[15:03:13] ======================================================================
+Using Nvidia CUDA backend.
+[15:03:13] Device: cuda
+[15:03:13] Loading dataset...
+[15:03:13] Loaded 45 samples
+[15:03:13] Loading CLIPClassifierV2...
+Loading CLIP model from: /scratch/user/shubhammhaske/clip_model
+CLIPClassifierV2 initialized on device: cuda
+[15:03:24] CLIP loaded!
+[15:03:24] 
+Testing: fewshot_blur with BLUR overlay
+[15:07:26]   Accuracy: 33.89% (61/180)
+[15:07:26] 
+Testing: hardcoded_v2_blur with BLUR overlay
+[15:10:53]   Accuracy: 31.11% (56/180)
+[15:10:53] 
+Testing: clip_friendly_blur with BLUR overlay
+[15:14:21]   Accuracy: 26.11% (47/180)
+[15:14:21] 
+======================================================================
+[15:14:21] RESULTS SUMMARY
+[15:14:21] ======================================================================
+[15:14:21] 
+Config                             Accuracy     vs Previous
+[15:14:21] ------------------------------------------------------------
+[15:14:21] fewshot_blur                        33.89%           -5.0%
+[15:14:21] hardcoded_v2_blur                   31.11%           -4.5%
+[15:14:21] clip_friendly_blur                  26.11%           -7.8%
+[15:14:21] 
+Best config: fewshot_blur
+[15:14:21] Per-class breakdown:
+[15:14:21]   tumor: 37.78%
+[15:14:21]   stroma: 97.78%
+Completed: Tue Dec  2 15:14:57 CST 2025
