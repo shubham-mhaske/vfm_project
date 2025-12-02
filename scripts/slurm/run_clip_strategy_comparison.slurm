@@ -1,10 +1,10 @@
 #!/bin/bash
 #SBATCH --job-name=clip_strategy
-#SBATCH --time=02:00:00
+#SBATCH --time=01:00:00
 #SBATCH --ntasks=1
-#SBATCH --cpus-per-task=16
-#SBATCH --mem=64G
-#SBATCH --gres=gpu:a100:1
+#SBATCH --cpus-per-task=48
+#SBATCH --mem=256G
+#SBATCH --gres=gpu:a100:2
 #SBATCH --partition=gpu
 #SBATCH --output=slurm_logs/clip_strategy_%j.out
 #SBATCH --error=slurm_logs/clip_strategy_%j.err
@@ -20,6 +20,9 @@ echo "============================================================"
 echo "CLIP Strategy Comparison"
 echo "Job ID: $SLURM_JOB_ID"
 echo "Node: $SLURM_NODELIST"
+echo "GPUs: 2x A100"
+echo "CPUs: 48"
+echo "Memory: 256GB"
 echo "Started: $(date)"
 echo "============================================================"
 
@@ -39,6 +42,13 @@ export LD_LIBRARY_PATH=$CONDA_PREFIX/lib:$LD_LIBRARY_PATH
 export PYTHONPATH="$PROJECT_ROOT:$PROJECT_ROOT/sam2:$PYTHONPATH"
 export PYTHONUNBUFFERED=1
 export CLIP_MODEL_PATH="$SCRATCH/clip_model"
+
+# Performance optimizations
+export OMP_NUM_THREADS=48
+export MKL_NUM_THREADS=48
+export CUDA_VISIBLE_DEVICES=0,1
+export TORCH_NUM_THREADS=48
+export PYTORCH_CUDA_ALLOC_CONF=max_split_size_mb:512
 
 echo "[$(date '+%H:%M:%S')] Environment ready"
 echo ""

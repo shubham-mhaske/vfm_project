@@ -1,10 +1,10 @@
 #!/bin/bash
 #SBATCH --job-name=comp_report
-#SBATCH --time=06:00:00
+#SBATCH --time=03:00:00
 #SBATCH --ntasks=1
-#SBATCH --cpus-per-task=32
-#SBATCH --mem=128G
-#SBATCH --gres=gpu:a100:1
+#SBATCH --cpus-per-task=48
+#SBATCH --mem=256G
+#SBATCH --gres=gpu:a100:2
 #SBATCH --partition=gpu
 #SBATCH --output=slurm_logs/comp_report_%j.out
 #SBATCH --error=slurm_logs/comp_report_%j.err
@@ -22,7 +22,9 @@ echo "============================================================"
 echo "SLURM Job: Comprehensive Report Generator"
 echo "Job ID: $SLURM_JOB_ID"
 echo "Node: $SLURM_NODELIST"
-echo "GPU: $(nvidia-smi --query-gpu=name --format=csv,noheader 2>/dev/null || echo 'N/A')"
+echo "GPUs: 2x A100 ($(nvidia-smi --query-gpu=name --format=csv,noheader 2>/dev/null | head -1 || echo 'N/A'))"
+echo "CPUs: 48"
+echo "Memory: 256GB"
 echo "Started: $(date)"
 echo "============================================================"
 
@@ -42,6 +44,15 @@ export LD_LIBRARY_PATH=$CONDA_PREFIX/lib:$LD_LIBRARY_PATH
 export PYTHONPATH="$PROJECT_ROOT:$PROJECT_ROOT/sam2:$PYTHONPATH"
 export PYTHONUNBUFFERED=1
 export CLIP_MODEL_PATH="$SCRATCH/clip_model"
+
+# Performance optimizations
+export OMP_NUM_THREADS=48
+export MKL_NUM_THREADS=48
+export CUDA_VISIBLE_DEVICES=0,1
+export TORCH_NUM_THREADS=48
+
+# DataLoader optimization
+export PYTORCH_CUDA_ALLOC_CONF=max_split_size_mb:512
 
 echo "[$(date '+%H:%M:%S')] Environment ready"
 echo ""
