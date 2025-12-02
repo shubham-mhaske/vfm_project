@@ -48,7 +48,7 @@ export OMP_NUM_THREADS=48
 export MKL_NUM_THREADS=48
 export CUDA_VISIBLE_DEVICES=0,1
 export TORCH_NUM_THREADS=48
-export PYTORCH_CUDA_ALLOC_CONF=max_split_size_mb:512
+export PYTORCH_ALLOC_CONF=max_split_size_mb:512
 
 echo "[$(date '+%H:%M:%S')] Environment ready"
 echo ""
