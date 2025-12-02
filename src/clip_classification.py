@@ -6,6 +6,33 @@ import json
 import os
 import sys
 
+# Default local path for offline CLIP model on HPRC
+DEFAULT_CLIP_LOCAL_PATH = os.environ.get('CLIP_MODEL_PATH', None)
+
+
+def get_clip_model_path():
+    """Get CLIP model path - local if available, otherwise HuggingFace."""
+    # Check environment variable first
+    if DEFAULT_CLIP_LOCAL_PATH and os.path.exists(DEFAULT_CLIP_LOCAL_PATH):
+        return DEFAULT_CLIP_LOCAL_PATH
+    
+    # Check common local paths on HPRC
+    scratch = os.environ.get('SCRATCH', '')
+    local_paths = [
+        os.path.join(scratch, 'clip_model'),
+        os.path.join(scratch, 'clip_cache'),
+        os.path.expanduser('~/clip_model'),
+    ]
+    
+    for path in local_paths:
+        if os.path.exists(path) and os.path.exists(os.path.join(path, 'config.json')):
+            print(f"Using local CLIP model from: {path}")
+            return path
+    
+    # Fall back to HuggingFace (requires internet)
+    return "openai/clip-vit-base-patch32"
+
+
 def load_prompts_from_json(json_path: str):
     """Loads a prompt dictionary from a JSON file."""
     if not os.path.exists(json_path):
@@ -44,17 +71,26 @@ def crop_region_from_mask(image_np, mask):
     return Image.fromarray(cropped_image_np)
 
 class CLIPClassifier:
-    def __init__(self, model_name="openai/clip-vit-base-patch32", device=None):
+    def __init__(self, model_name=None, device=None):
         """
         Initializes the CLIP classifier.
         
         Args:
-            model_name (str): The CLIP model to load from Hugging Face.
+            model_name (str): The CLIP model to load. Can be:
+                - HuggingFace model name (e.g., "openai/clip-vit-base-patch32")
+                - Local path to downloaded model
+                - None (auto-detect local or use HuggingFace)
             device (torch.device, optional): The device to load the model on. Defaults to CPU.
         """
         self.device = device if device else torch.device("cpu")
-        self.model = CLIPModel.from_pretrained(model_name).to(self.device)
-        self.processor = CLIPProcessor.from_pretrained(model_name, use_fast=True)
+        
+        # Auto-detect model path if not specified
+        if model_name is None:
+            model_name = get_clip_model_path()
+        
+        print(f"Loading CLIP model from: {model_name}")
+        self.model = CLIPModel.from_pretrained(model_name, local_files_only=os.path.exists(model_name)).to(self.device)
+        self.processor = CLIPProcessor.from_pretrained(model_name, local_files_only=os.path.exists(model_name))
         print(f"CLIPClassifier initialized on device: {self.device}")
 
     def classify_region(self, image, prompts):

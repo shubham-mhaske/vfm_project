@@ -48,24 +48,42 @@ export PYTHONPATH="$PROJECT_ROOT:$PROJECT_ROOT/sam2:$PYTHONPATH"
 # Enable unbuffered Python output for real-time logging
 export PYTHONUNBUFFERED=1
 
+# Set CLIP model path for offline use
+export CLIP_MODEL_PATH="$SCRATCH/clip_model"
+
 echo "[$(date '+%H:%M:%S')] Environment ready"
 echo "[$(date '+%H:%M:%S')] Python: $(which python)"
 echo "[$(date '+%H:%M:%S')] PyTorch CUDA: $(python -c 'import torch; print(torch.cuda.is_available())')"
+echo "[$(date '+%H:%M:%S')] CLIP model path: $CLIP_MODEL_PATH"
+
+# Check if CLIP model exists
+if [ -d "$CLIP_MODEL_PATH" ] && [ -f "$CLIP_MODEL_PATH/config.json" ]; then
+    echo "[$(date '+%H:%M:%S')] CLIP model found - will run with classification"
+    CLIP_FLAG=""
+else
+    echo "[$(date '+%H:%M:%S')] WARNING: CLIP model not found at $CLIP_MODEL_PATH"
+    echo "[$(date '+%H:%M:%S')] Running without CLIP classification"
+    echo "[$(date '+%H:%M:%S')] To enable CLIP, download model on login node:"
+    echo "    mkdir -p \$SCRATCH/clip_model && cd \$SCRATCH/clip_model"
+    echo "    wget https://huggingface.co/openai/clip-vit-base-patch32/resolve/main/config.json"
+    echo "    wget https://huggingface.co/openai/clip-vit-base-patch32/resolve/main/pytorch_model.bin"
+    echo "    ... (see scripts/download_clip_model.sh)"
+    CLIP_FLAG="--no_clip"
+fi
+
 echo ""
 echo "Running full pipeline evaluation..."
 echo "Configs: baseline, refine2, refine3, TTA, TTA+refine"
-echo "Metrics: Dice, IoU (CLIP skipped - no internet on compute nodes)"
+echo "Metrics: Dice, IoU, CLIP Classification Accuracy"
 echo ""
 
-# Note: Using --no_clip because compute nodes don't have internet access
-# To run with CLIP, pre-download models on login node first
 python -u src/evaluate_full_pipeline.py \
     --model_cfg configs/sam2.1/sam2.1_hiera_l.yaml \
     --checkpoint sam2/checkpoints/sam2.1_hiera_large.pt \
     --clip_prompts configs/prompts/hard_coded_prompts_v2.json \
     --split test \
     --output_dir results/full_pipeline_eval \
-    --no_clip
+    $CLIP_FLAG
 
 echo ""
 echo "============================================================"
