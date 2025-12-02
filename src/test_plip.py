@@ -269,21 +269,38 @@ def main():
     
     for idx in pbar:
         sample = dataset[idx]
-        image = sample['image']
+        # Use image_np (H, W, C) instead of image (C, H, W tensor)
+        image_np = sample.get('image_np', None)
         mask = sample['mask']
         filename = sample.get('filename', f'sample_{idx}')
         
-        # Convert image to PIL if needed
-        if isinstance(image, torch.Tensor):
-            image = image.numpy()
-        if isinstance(image, np.ndarray):
-            if image.max() <= 1:
-                image = (image * 255).astype(np.uint8)
-            image = Image.fromarray(image)
+        # Convert to PIL
+        if image_np is None:
+            # Fallback: convert tensor to numpy
+            image = sample['image']
+            if isinstance(image, torch.Tensor):
+                image = image.numpy()
+                # Tensor is (C, H, W), transpose to (H, W, C)
+                if image.shape[0] == 3:
+                    image = image.transpose(1, 2, 0)
+            image_np = image
+        
+        # Ensure uint8 for PIL
+        if image_np.dtype != np.uint8:
+            if image_np.max() <= 1:
+                image_np = (image_np * 255).astype(np.uint8)
+            else:
+                image_np = image_np.astype(np.uint8)
+        
+        pil_image = Image.fromarray(image_np)
+        
+        # Convert mask to numpy if tensor
+        if isinstance(mask, torch.Tensor):
+            mask = mask.numpy()
         
         # Get unique classes in this image
         unique_classes = sample.get('unique_classes', [])
-        if not unique_classes:
+        if len(unique_classes) == 0:
             unique_classes = np.unique(mask)
             unique_classes = unique_classes[unique_classes > 0]
         
@@ -312,7 +329,7 @@ def main():
                 continue
             
             # Classify
-            pred_class, conf, probs = classifier.classify(image, class_mask)
+            pred_class, conf, probs = classifier.classify(pil_image, class_mask)
             
             # Record result
             results['total'] += 1
