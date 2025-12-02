@@ -40,7 +40,7 @@ def predict_with_refinement(
     Returns:
         np.ndarray: The refined prediction mask.
     """
-    from .sam_segmentation import get_predicted_mask_from_prompts
+    from sam_segmentation import get_predicted_mask_from_prompts
     
     # Set image once
     predictor.set_image(image)
@@ -165,7 +165,7 @@ def predict_with_tta_and_refinement(
     Returns:
         np.ndarray: The refined TTA prediction mask.
     """
-    from .tta_utils import predict_with_tta
+    from tta_utils import predict_with_tta
     
     # Step 1: Get TTA ensemble prediction
     tta_mask = predict_with_tta(

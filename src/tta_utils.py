@@ -71,7 +71,7 @@ def predict_with_tta(
                 aug_prompts['box'] = np.array([np.min(new_coords, axis=0), np.max(new_coords, axis=0)])
 
         # Predict
-        from .sam_segmentation import get_predicted_mask_from_prompts
+        from sam_segmentation import get_predicted_mask_from_prompts
         mask, _, _ = get_predicted_mask_from_prompts(
             predictor, aug_image, aug_prompts, prompt_type, use_neg_points
         )
