@@ -38,13 +38,29 @@ class PLIPClassifier:
         try:
             from transformers import CLIPProcessor, CLIPModel
             
-            log("Loading PLIP model (vinid/plip)...")
+            log("  Importing transformers library...")
+            sys.stdout.flush()
+            
+            log("  Downloading/loading PLIP model (vinid/plip)...")
+            log("  (This downloads ~600MB on first run)")
+            sys.stdout.flush()
+            
             # PLIP uses the same architecture as CLIP
             self.model = CLIPModel.from_pretrained("vinid/plip")
+            log("  Model weights loaded!")
+            sys.stdout.flush()
+            
             self.processor = CLIPProcessor.from_pretrained("vinid/plip")
+            log("  Processor loaded!")
+            sys.stdout.flush()
+            
+            log(f"  Moving model to {device}...")
+            sys.stdout.flush()
             self.model.to(device)
             self.model.eval()
-            log("PLIP loaded successfully!")
+            
+            log("  PLIP loaded successfully!")
+            sys.stdout.flush()
             self.use_transformers = True
             
         except Exception as e:
@@ -100,7 +116,11 @@ class PLIPClassifier:
         }
         
         self.classes = list(self.class_prompts.keys())
+        log("  Encoding text prompts...")
+        sys.stdout.flush()
         self._encode_text_prompts()
+        log("  Text prompts encoded!")
+        sys.stdout.flush()
     
     def _encode_text_prompts(self):
         """Pre-encode all text prompts."""
@@ -182,18 +202,32 @@ def main():
     log("=" * 70)
     log("PLIP TEST: Pathology-Specific CLIP for Tissue Classification")
     log("=" * 70)
+    sys.stdout.flush()
     
     device = 'cuda' if torch.cuda.is_available() else 'cpu'
     log(f"Device: {device}")
+    if device == 'cuda':
+        log(f"GPU: {torch.cuda.get_device_name(0)}")
+        log(f"GPU Memory: {torch.cuda.get_device_properties(0).total_memory / 1e9:.1f} GB")
+    sys.stdout.flush()
     
     # Load dataset
     log("Loading dataset...")
+    sys.stdout.flush()
     image_dir = os.path.join(project_root, 'data', 'bcss', 'images')
     mask_dir = os.path.join(project_root, 'data', 'bcss', 'masks')
+    log(f"  Image dir: {image_dir}")
+    log(f"  Mask dir: {mask_dir}")
+    sys.stdout.flush()
     dataset = BCSSDataset(image_dir=image_dir, mask_dir=mask_dir, split='test')
     log(f"Loaded {len(dataset)} samples")
+    sys.stdout.flush()
     
     # Load PLIP
+    log("\n" + "-" * 50)
+    log("Loading PLIP model...")
+    log("  This may take a few minutes on first run (downloading ~600MB)")
+    sys.stdout.flush()
     try:
         classifier = PLIPClassifier(device=device)
     except Exception as e:
@@ -202,10 +236,17 @@ def main():
         log("  pip install transformers")
         log("\nOr for open_clip:")
         log("  pip install open_clip_torch")
+        sys.stdout.flush()
         return
     
+    log("Text prompts encoded!")
+    sys.stdout.flush()
+    
     # Evaluate
-    log("\nRunning evaluation...")
+    log("\n" + "-" * 50)
+    log("Running evaluation...")
+    log(f"  Processing {len(dataset)} images...")
+    sys.stdout.flush()
     
     results = {
         'correct': 0,
@@ -213,10 +254,15 @@ def main():
         'per_class': {c: {'correct': 0, 'total': 0} for c in classifier.classes}
     }
     
-    for idx in tqdm(range(len(dataset)), desc="Evaluating"):
+    # Use tqdm with flush
+    pbar = tqdm(range(len(dataset)), desc="Evaluating", file=sys.stdout, 
+                dynamic_ncols=False, ncols=80)
+    
+    for idx in pbar:
         sample = dataset[idx]
         image = sample['image']
         mask = sample['mask']
+        filename = sample.get('filename', f'sample_{idx}')
         
         # Convert image to PIL if needed
         if isinstance(image, torch.Tensor):
@@ -234,6 +280,9 @@ def main():
         
         # Class mapping
         class_map = {1: 'tumor', 2: 'stroma', 3: 'lymphocyte', 4: 'necrosis', 5: 'blood_vessel'}
+        
+        img_correct = 0
+        img_total = 0
         
         for class_idx in unique_classes:
             if isinstance(class_idx, str):
@@ -259,10 +308,21 @@ def main():
             # Record result
             results['total'] += 1
             results['per_class'][class_name]['total'] += 1
+            img_total += 1
             
             if pred_class == class_name:
                 results['correct'] += 1
                 results['per_class'][class_name]['correct'] += 1
+                img_correct += 1
+        
+        # Update progress bar with running accuracy
+        if results['total'] > 0:
+            running_acc = results['correct'] / results['total'] * 100
+            pbar.set_postfix({'acc': f'{running_acc:.1f}%', 'n': results['total']})
+        
+        # Periodic logging every 10 images
+        if (idx + 1) % 10 == 0:
+            sys.stdout.flush()
     
     # Calculate metrics
     overall_acc = results['correct'] / results['total'] if results['total'] > 0 else 0
