@@ -188,7 +188,9 @@ def main():
     
     # Load dataset
     log("Loading dataset...")
-    dataset = BCSSDataset(split='test')
+    image_dir = os.path.join(project_root, 'data', 'bcss', 'images')
+    mask_dir = os.path.join(project_root, 'data', 'bcss', 'masks')
+    dataset = BCSSDataset(image_dir=image_dir, mask_dir=mask_dir, split='test')
     log(f"Loaded {len(dataset)} samples")
     
     # Load PLIP
