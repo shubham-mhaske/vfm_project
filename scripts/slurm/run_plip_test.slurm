@@ -30,7 +30,11 @@ pip install transformers --quiet 2>/dev/null
 
 export PYTHONPATH="$PROJECT_ROOT:$PROJECT_ROOT/sam2:$PYTHONPATH"
 export HF_HOME="$SCRATCH/huggingface_cache"
+export PLIP_MODEL_PATH="$SCRATCH/plip_model/plip_model"
 mkdir -p "$HF_HOME"
+
+echo "PLIP model path: $PLIP_MODEL_PATH"
+ls -la "$PLIP_MODEL_PATH" || echo "WARNING: PLIP model not found!"
 
 python -u src/test_plip.py
 

@@ -31,7 +31,7 @@ def log(msg):
 class PLIPClassifier:
     """PLIP-based classifier for pathology images."""
     
-    def __init__(self, device='cuda'):
+    def __init__(self, device='cuda', model_path=None):
         self.device = device
         
         # Try to import and load PLIP
@@ -41,16 +41,25 @@ class PLIPClassifier:
             log("  Importing transformers library...")
             sys.stdout.flush()
             
-            log("  Downloading/loading PLIP model (vinid/plip)...")
-            log("  (This downloads ~600MB on first run)")
-            sys.stdout.flush()
+            # Check for local model path (for HPRC offline use)
+            if model_path is None:
+                model_path = os.environ.get('PLIP_MODEL_PATH', None)
             
-            # PLIP uses the same architecture as CLIP
-            self.model = CLIPModel.from_pretrained("vinid/plip")
+            if model_path and os.path.exists(model_path):
+                log(f"  Loading PLIP from local path: {model_path}")
+                sys.stdout.flush()
+                self.model = CLIPModel.from_pretrained(model_path, local_files_only=True)
+                self.processor = CLIPProcessor.from_pretrained(model_path, local_files_only=True)
+            else:
+                log("  Downloading/loading PLIP model (vinid/plip)...")
+                log("  (This downloads ~600MB on first run)")
+                sys.stdout.flush()
+                self.model = CLIPModel.from_pretrained("vinid/plip")
+                self.processor = CLIPProcessor.from_pretrained("vinid/plip")
+            
             log("  Model weights loaded!")
             sys.stdout.flush()
             
-            self.processor = CLIPProcessor.from_pretrained("vinid/plip")
             log("  Processor loaded!")
             sys.stdout.flush()
             
