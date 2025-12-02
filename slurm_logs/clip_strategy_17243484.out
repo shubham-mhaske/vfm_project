@@ -1,0 +1,49 @@
+============================================================
+CLIP Strategy Comparison
+Job ID: 17243484
+Node: g027
+GPUs: 2x A100
+CPUs: 48
+Memory: 256GB
+Started: Tue Dec  2 14:11:19 CST 2025
+============================================================
+[14:11:19] Loading modules...
+[14:11:24] Activating virtual environment...
+[14:11:24] Environment ready
+
+Using Nvidia CUDA backend.
+[14:16:55] Starting CLIP Strategy Comparison
+[14:16:55] ============================================================
+Using Nvidia CUDA backend.
+[14:16:55] Device: cuda
+[14:16:55] Loading BCSS dataset...
+[14:16:55] Loaded 45 samples
+[14:16:55] Loading CLIPClassifierV2...
+Loading CLIP model from: /scratch/user/shubhammhaske/clip_model
+CLIPClassifierV2 initialized on device: cuda
+[14:17:07] CLIP loaded!
+[14:17:07] 
+============================================================
+[14:17:07] EXPERIMENT 1: Comparing Crop Strategies (no overlay)
+[14:17:07] ============================================================
+[14:17:07] 
+Testing: tight crop
+[14:19:41]   Accuracy: 26.11%
+[14:19:41] 
+Testing: context crop
+[14:21:41]   Accuracy: 25.00%
+[14:21:41] 
+Testing: square crop
+[14:23:15]   Accuracy: 22.78%
+[14:23:15] 
+============================================================
+[14:23:15] EXPERIMENT 2: Comparing Overlay Strategies (tight crop)
+[14:23:15] ============================================================
+[14:23:15] 
+Testing: none overlay
+[14:25:15]   Accuracy: 26.11%
+[14:25:15] 
+Testing: blur overlay
+[14:28:37]   Accuracy: 31.11%
+[14:28:37] 
+Testing: dim overlay

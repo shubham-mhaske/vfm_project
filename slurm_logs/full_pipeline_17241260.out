@@ -1,0 +1,101 @@
+============================================================
+SLURM Job: Full Pipeline Evaluation (SAM2 + CLIP)
+Job ID: 17241260
+Node: g073
+GPU: NVIDIA A100-PCIE-40GB
+Started: Tue Dec  2 12:10:57 CST 2025
+============================================================
+[12:10:57] Loading modules...
+[12:11:01] Activating virtual environment...
+[12:11:01] Environment ready
+[12:11:01] Python: /scratch/user/shubhammhaske/vfm_env/bin/python
+[12:11:01] PyTorch CUDA: True
+[12:11:27] CLIP model path: /scratch/user/shubhammhaske/clip_model
+[12:11:27] CLIP model found - will run with classification
+
+Running full pipeline evaluation...
+Configs: baseline, refine2, refine3, TTA, TTA+refine
+Metrics: Dice, IoU, CLIP Classification Accuracy
+
+Using Nvidia CUDA backend.
+[12:11:35] Starting full pipeline evaluation...
+Using Nvidia CUDA backend.
+[12:11:35] Using device: cuda
+[12:11:35] Registering Hydra resolvers...
+[12:11:35] Loading BCSS dataset...
+[12:11:35] Loaded 45 samples from test split
+[12:11:35] Loading SAM2 predictor (this may take a minute)...
+[12:11:51] SAM2 predictor loaded successfully!
+[12:11:51] Loading CLIP classifier...
+Loading CLIP model from: /scratch/user/shubhammhaske/clip_model
+CLIPClassifier initialized on device: cuda
+[12:11:57] CLIP classifier loaded successfully!
+[12:11:57] Output directory: results/full_pipeline_eval
+[12:11:57] ================================================================================
+[12:11:57] Full Pipeline Evaluation: SAM2 Segmentation + CLIP Classification
+[12:11:57] ================================================================================
+[12:11:57] 
+>>> [1/5] Testing: box_neg_baseline
+[12:16:57]     Dice: 0.5089 | IoU: 0.3666 | CLIP Acc: 36.31% | Time: 299.9s
+[12:16:57] 
+>>> [2/5] Testing: box_neg_refine2
+[12:21:32]     Dice: 0.5148 | IoU: 0.3707 | CLIP Acc: 36.67% | Time: 274.6s
+[12:21:32] 
+>>> [3/5] Testing: box_neg_refine3
+[12:26:20]     Dice: 0.5144 | IoU: 0.3698 | CLIP Acc: 37.22% | Time: 287.9s
+[12:26:20] 
+>>> [4/5] Testing: box_neg_tta
+[12:35:47]     Dice: 0.5210 | IoU: 0.3751 | CLIP Acc: 36.67% | Time: 567.3s
+[12:35:47] 
+>>> [5/5] Testing: box_neg_tta_refine2
+[12:46:32]     Dice: 0.5256 | IoU: 0.3801 | CLIP Acc: 36.67% | Time: 644.4s
+
+================================================================================
+SEGMENTATION RESULTS SUMMARY
+================================================================================
+Configuration                   Dice        IoU  vs Baseline
+------------------------------------------------------------
+box_neg_baseline              0.5089     0.3666        +0.0%
+box_neg_refine2               0.5148     0.3707        +1.2%
+box_neg_refine3               0.5144     0.3698        +1.1%
+box_neg_tta                   0.5210     0.3751        +2.4%
+box_neg_tta_refine2           0.5256     0.3801        +3.3%
+
+================================================================================
+CLASSIFICATION RESULTS SUMMARY
+================================================================================
+Configuration                 Accuracy   Correct/Total
+-------------------------------------------------------
+box_neg_baseline               36.31%      65/179    
+box_neg_refine2                36.67%      66/180    
+box_neg_refine3                37.22%      67/180    
+box_neg_tta                    36.67%      66/180    
+box_neg_tta_refine2            36.67%      66/180    
+
+================================================================================
+PER-CLASS BREAKDOWN (Best Configuration)
+================================================================================
+
+Best config: box_neg_tta_refine2
+Class               Dice      IoU   CLIP Acc     Δ Dice
+-------------------------------------------------------
+tumor             0.5658   0.4091    60.00%    +0.0056
+stroma            0.5096   0.3655    64.44%    +0.0113
+lymphocyte        0.4814   0.3366     2.70%    +0.0355
+necrosis          0.6076   0.4656     8.70%    +0.0245
+blood_vessel      0.4823   0.3478    23.33%    +0.0126
+
+Results saved to: results/full_pipeline_eval/full_pipeline_results.json
+Summary CSV saved to: results/full_pipeline_eval/summary.csv
+
+============================================================
+Completed: Tue Dec  2 12:46:41 CST 2025
+============================================================
+
+Results Summary:
+Configuration,Dice,IoU,CLIP_Accuracy,Time_s
+box_neg_baseline,0.5089,0.3666,0.3631,299.9
+box_neg_refine2,0.5148,0.3707,0.3667,274.6
+box_neg_refine3,0.5144,0.3698,0.3722,287.9
+box_neg_tta,0.5210,0.3751,0.3667,567.3
+box_neg_tta_refine2,0.5256,0.3801,0.3667,644.4

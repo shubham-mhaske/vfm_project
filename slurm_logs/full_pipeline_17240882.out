@@ -1,0 +1,12 @@
+============================================================
+SLURM Job: Full Pipeline Evaluation (SAM2 + CLIP)
+Job ID: 17240882
+Node: g073
+GPU: NVIDIA A100-PCIE-40GB
+Started: Tue Dec  2 11:53:55 CST 2025
+============================================================
+
+Running full pipeline evaluation...
+Configs: baseline, refine2, refine3, TTA, TTA+refine
+Metrics: Dice, IoU, CLIP Classification Accuracy
+

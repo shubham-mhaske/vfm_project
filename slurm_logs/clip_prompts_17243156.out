@@ -1,0 +1,59 @@
+============================================================
+SLURM Job: CLIP Prompt Comparison
+Job ID: 17243156
+Node: g082
+GPUs: 2x A100 (NVIDIA A100-PCIE-40GB)
+CPUs: 48
+Memory: 256GB
+Started: Tue Dec  2 13:35:17 CST 2025
+============================================================
+[13:35:17] Loading modules...
+[13:35:21] Activating virtual environment...
+[13:35:22] Environment ready
+[13:35:22] CLIP model: /scratch/user/shubhammhaske/clip_model
+
+Using Nvidia CUDA backend.
+[13:41:22] ================================================================================
+[13:41:22] CLIP Prompt Comparison Evaluation
+[13:41:22] SAM2 Config: Box + Negative Points + TTA + Refinement (Best)
+[13:41:22] ================================================================================
+[13:41:22] Multi-GPU mode: 2 GPUs detected
+[13:41:23]   GPU 0 (NVIDIA A100-PCIE-40GB): SAM2
+[13:41:23]   GPU 1 (NVIDIA A100-PCIE-40GB): CLIP
+[13:41:23] SAM2 device: cuda:0
+[13:41:23] CLIP device: cuda:1
+[13:41:23] Loading dataset...
+[13:41:23] Loaded 45 samples
+[13:41:23] Loading SAM2...
+[13:41:41] SAM2 loaded!
+[13:41:41] Loading CLIP...
+Loading CLIP model from: /scratch/user/shubhammhaske/clip_model
+CLIPClassifier initialized on device: cuda:1
+[13:41:49] CLIP loaded!
+[13:41:49] 
+>>> [1/8] Testing: exp1_hardcoded_v1
+[13:41:50]     Classes in prompts: ['tumor', 'stroma', 'lymphocyte', 'necrosis', 'blood_vessel', 'background']
+[13:49:34]     Dice: 0.5250 | IoU: 0.3799 | CLIP Acc: 25.70% (46/179) | Time: 464.2s
+[13:49:34] 
+>>> [2/8] Testing: exp1_hardcoded_v2
+[13:49:34]     Classes in prompts: ['tumor', 'stroma', 'lymphocyte', 'necrosis', 'blood_vessel']
+[13:56:47]     Dice: 0.5252 | IoU: 0.3792 | CLIP Acc: 35.56% (64/180) | Time: 433.6s
+[13:56:47] 
+>>> [3/8] Testing: exp3_llm_text_v1_jargon
+[13:56:48]     Classes in prompts: ['tumor', 'stroma', 'lymphocyte', 'necrosis', 'blood_vessel', 'background']
+[14:04:58]     Dice: 0.5259 | IoU: 0.3813 | CLIP Acc: 22.91% (41/179) | Time: 490.4s
+[14:04:58] 
+>>> [4/8] Testing: exp3_llm_text_v2_clip_friendly
+[14:04:58]     Classes in prompts: ['tumor', 'stroma', 'lymphocyte', 'necrosis', 'blood_vessel']
+[14:12:05]     Dice: 0.5185 | IoU: 0.3738 | CLIP Acc: 33.89% (61/180) | Time: 426.7s
+[14:12:05] 
+>>> [5/8] Testing: exp3_llm_text_v3_fewshot
+[14:12:05]     Classes in prompts: ['tumor', 'stroma', 'lymphocyte', 'necrosis', 'blood_vessel']
+[14:19:11]     Dice: 0.5256 | IoU: 0.3801 | CLIP Acc: 38.89% (70/180) | Time: 426.5s
+[14:19:11] 
+>>> [6/8] Testing: exp5_llm_multimodal_v1
+[14:19:11]     Classes in prompts: ['tumor', 'stroma', 'lymphocyte', 'necrosis', 'blood_vessel', 'background']
+[14:26:18]     Dice: 0.5254 | IoU: 0.3806 | CLIP Acc: 18.44% (33/179) | Time: 427.1s
+[14:26:18] 
+>>> [7/8] Testing: exp5_llm_multimodal_v2_clip_friendly
+[14:26:18]     Classes in prompts: ['tumor', 'stroma', 'lymphocyte', 'necrosis', 'blood_vessel']

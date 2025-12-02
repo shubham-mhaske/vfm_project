@@ -1,0 +1,31 @@
+============================================================
+SLURM Job: Full Pipeline Evaluation (SAM2 + CLIP)
+Job ID: 17240908
+Node: g072
+GPU: NVIDIA A100-PCIE-40GB
+Started: Tue Dec  2 11:59:09 CST 2025
+============================================================
+[11:59:09] Loading modules...
+[11:59:12] Activating virtual environment...
+[11:59:12] Environment ready
+[11:59:12] Python: /scratch/user/shubhammhaske/vfm_env/bin/python
+[11:59:12] PyTorch CUDA: True
+
+Running full pipeline evaluation...
+Configs: baseline, refine2, refine3, TTA, TTA+refine
+Metrics: Dice, IoU, CLIP Classification Accuracy
+
+Using Nvidia CUDA backend.
+[12:00:15] Starting full pipeline evaluation...
+Using Nvidia CUDA backend.
+[12:00:15] Using device: cuda
+[12:00:15] Registering Hydra resolvers...
+[12:00:15] Loading BCSS dataset...
+[12:00:15] Loaded 45 samples from test split
+[12:00:15] Loading SAM2 predictor (this may take a minute)...
+[12:00:31] SAM2 predictor loaded successfully!
+[12:00:31] Loading CLIP classifier...
+
+============================================================
+Completed: Tue Dec  2 12:01:21 CST 2025
+============================================================
