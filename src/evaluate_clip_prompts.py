@@ -135,6 +135,22 @@ def evaluate_clip_prompts(
     return results
 
 
+def get_dual_gpu_devices():
+    """Get separate devices for SAM2 and CLIP when 2 GPUs available."""
+    import torch
+    if torch.cuda.is_available():
+        num_gpus = torch.cuda.device_count()
+        if num_gpus >= 2:
+            log(f"Multi-GPU mode: {num_gpus} GPUs detected")
+            log(f"  GPU 0 ({torch.cuda.get_device_name(0)}): SAM2")
+            log(f"  GPU 1 ({torch.cuda.get_device_name(1)}): CLIP")
+            return "cuda:0", "cuda:1"
+        else:
+            log(f"Single GPU mode: {torch.cuda.get_device_name(0)}")
+            return "cuda:0", "cuda:0"
+    return "cpu", "cpu"
+
+
 def main():
     parser = argparse.ArgumentParser(description="Evaluate all CLIP prompt configurations")
     parser.add_argument('--model_cfg', default="configs/sam2.1/sam2.1_hiera_l.yaml")
@@ -150,8 +166,10 @@ def main():
     log("SAM2 Config: Box + Negative Points + TTA + Refinement (Best)")
     log("="*80)
     
-    device = get_device()
-    log(f"Device: {device}")
+    # Get separate devices for SAM2 and CLIP
+    sam_device, clip_device = get_dual_gpu_devices()
+    log(f"SAM2 device: {sam_device}")
+    log(f"CLIP device: {clip_device}")
     
     register_omegaconf_resolvers()
     
@@ -160,7 +178,7 @@ def main():
     dataset = BCSSDataset('data/bcss/images', 'data/bcss/masks', split=args.split)
     log(f"Loaded {len(dataset)} samples")
     
-    # Load SAM2
+    # Load SAM2 on GPU 0
     log("Loading SAM2...")
     project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
     sam2_root = os.path.join(project_root, 'sam2')
@@ -169,14 +187,14 @@ def main():
     orig_cwd = os.getcwd()
     os.chdir(sam2_root)
     try:
-        predictor = get_sam2_predictor("configs/sam2.1/sam2.1_hiera_l.yaml", checkpoint, device)
+        predictor = get_sam2_predictor("configs/sam2.1/sam2.1_hiera_l.yaml", checkpoint, sam_device)
     finally:
         os.chdir(orig_cwd)
     log("SAM2 loaded!")
     
-    # Load CLIP
+    # Load CLIP on GPU 1
     log("Loading CLIP...")
-    clip_classifier = CLIPClassifier(device=device)
+    clip_classifier = CLIPClassifier(device=clip_device)
     log("CLIP loaded!")
     
     os.makedirs(args.output_dir, exist_ok=True)
