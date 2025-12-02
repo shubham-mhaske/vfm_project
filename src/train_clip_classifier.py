@@ -38,28 +38,25 @@ def log(msg):
 
 
 class CLIPFeatureExtractor:
-    """Extract CLIP image features."""
+    """Extract CLIP image features using transformers library."""
     
     def __init__(self, device='cuda', model_path=None):
         self.device = device
         
-        # Try to load CLIP
-        try:
-            import clip
-            
-            if model_path and os.path.exists(model_path):
-                log(f"  Loading CLIP from: {model_path}")
-                self.model, self.preprocess = clip.load("ViT-B/32", device=device, 
-                                                         download_root=model_path)
-            else:
-                log("  Loading CLIP from default location...")
-                self.model, self.preprocess = clip.load("ViT-B/32", device=device)
-            
-            self.model.eval()
-            log("  CLIP loaded!")
-            
-        except Exception as e:
-            raise RuntimeError(f"Failed to load CLIP: {e}")
+        from transformers import CLIPProcessor, CLIPModel
+        
+        if model_path and os.path.exists(model_path):
+            log(f"  Loading CLIP from: {model_path}")
+            self.model = CLIPModel.from_pretrained(model_path, local_files_only=True)
+            self.processor = CLIPProcessor.from_pretrained(model_path, local_files_only=True)
+        else:
+            log("  Loading CLIP from HuggingFace...")
+            self.model = CLIPModel.from_pretrained("openai/clip-vit-base-patch32")
+            self.processor = CLIPProcessor.from_pretrained("openai/clip-vit-base-patch32")
+        
+        self.model.to(device)
+        self.model.eval()
+        log("  CLIP loaded!")
     
     def extract_features(self, image: Image.Image, mask: np.ndarray = None) -> np.ndarray:
         """
@@ -91,8 +88,9 @@ class CLIPFeatureExtractor:
             image = image.crop((cmin, rmin, cmax, rmax))
         
         with torch.no_grad():
-            img_tensor = self.preprocess(image).unsqueeze(0).to(self.device)
-            features = self.model.encode_image(img_tensor)
+            inputs = self.processor(images=image, return_tensors="pt")
+            inputs = {k: v.to(self.device) for k, v in inputs.items()}
+            features = self.model.get_image_features(**inputs)
             features = features / features.norm(dim=-1, keepdim=True)
             
         return features.cpu().numpy().squeeze()
