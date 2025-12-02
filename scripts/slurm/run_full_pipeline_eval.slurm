@@ -54,15 +54,18 @@ echo "[$(date '+%H:%M:%S')] PyTorch CUDA: $(python -c 'import torch; print(torch
 echo ""
 echo "Running full pipeline evaluation..."
 echo "Configs: baseline, refine2, refine3, TTA, TTA+refine"
-echo "Metrics: Dice, IoU, CLIP Classification Accuracy"
+echo "Metrics: Dice, IoU (CLIP skipped - no internet on compute nodes)"
 echo ""
 
+# Note: Using --no_clip because compute nodes don't have internet access
+# To run with CLIP, pre-download models on login node first
 python -u src/evaluate_full_pipeline.py \
     --model_cfg configs/sam2.1/sam2.1_hiera_l.yaml \
     --checkpoint sam2/checkpoints/sam2.1_hiera_large.pt \
     --clip_prompts configs/prompts/hard_coded_prompts_v2.json \
     --split test \
-    --output_dir results/full_pipeline_eval
+    --output_dir results/full_pipeline_eval \
+    --no_clip
 
 echo ""
 echo "============================================================"
