@@ -57,3 +57,52 @@ CLIPClassifier initialized on device: cuda:1
 [14:26:18] 
 >>> [7/8] Testing: exp5_llm_multimodal_v2_clip_friendly
 [14:26:18]     Classes in prompts: ['tumor', 'stroma', 'lymphocyte', 'necrosis', 'blood_vessel']
+[14:33:23]     Dice: 0.5203 | IoU: 0.3759 | CLIP Acc: 28.89% (52/180) | Time: 424.1s
+[14:33:23] 
+>>> [8/8] Testing: exp5_llm_multimodal_v3_fewshot
+[14:33:23]     Classes in prompts: ['tumor', 'stroma', 'lymphocyte', 'necrosis', 'blood_vessel']
+[14:40:37]     Dice: 0.5125 | IoU: 0.3701 | CLIP Acc: 30.34% (54/178) | Time: 434.8s
+[14:40:38] 
+================================================================================
+[14:40:38] RESULTS SUMMARY
+[14:40:38] ================================================================================
+[14:40:38] Prompt Config                           Dice      IoU   CLIP Acc    Correct
+[14:40:38] ---------------------------------------------------------------------------
+[14:40:38] exp3_llm_text_v3_fewshot              0.5256   0.3801    38.89%    70/180 
+[14:40:38] exp1_hardcoded_v2                     0.5252   0.3792    35.56%    64/180 
+[14:40:38] exp3_llm_text_v2_clip_friendly        0.5185   0.3738    33.89%    61/180 
+[14:40:38] exp5_llm_multimodal_v3_fewshot        0.5125   0.3701    30.34%    54/178 
+[14:40:38] exp5_llm_multimodal_v2_clip_friendly   0.5203   0.3759    28.89%    52/180 
+[14:40:38] exp1_hardcoded_v1                     0.5250   0.3799    25.70%    46/179 
+[14:40:38] exp3_llm_text_v1_jargon               0.5259   0.3813    22.91%    41/179 
+[14:40:38] exp5_llm_multimodal_v1                0.5254   0.3806    18.44%    33/179 
+[14:40:38] 
+================================================================================
+[14:40:38] BEST CLIP PROMPTS: exp3_llm_text_v3_fewshot
+[14:40:38] Prompt file: configs/prompts/llm_text_prompts_v3_fewshot.json
+[14:40:38] ================================================================================
+[14:40:38] Class               Dice      IoU   CLIP Acc    Correct
+[14:40:38] -------------------------------------------------------
+[14:40:38] tumor             0.5658   0.4091    66.67%    30/45  
+[14:40:38] stroma            0.5096   0.3655    75.56%    34/45  
+[14:40:38] lymphocyte        0.4814   0.3366     0.00%     0/37  
+[14:40:38] necrosis          0.6076   0.4656     4.35%     1/23  
+[14:40:38] blood_vessel      0.4823   0.3478    16.67%     5/30  
+[14:40:38] 
+Results saved to: results/clip_prompts_comparison/clip_prompts_comparison.json
+[14:40:38] Summary CSV saved to: results/clip_prompts_comparison/summary.csv
+
+============================================================
+Completed: Tue Dec  2 14:41:18 CST 2025
+============================================================
+
+Results Summary:
+Prompt_Config,Dice,IoU,CLIP_Accuracy,Correct,Total,Time_s
+exp3_llm_text_v3_fewshot,0.5256,0.3801,0.3889,70,180,426.5
+exp1_hardcoded_v2,0.5252,0.3792,0.3556,64,180,433.6
+exp3_llm_text_v2_clip_friendly,0.5185,0.3738,0.3389,61,180,426.7
+exp5_llm_multimodal_v3_fewshot,0.5125,0.3701,0.3034,54,178,434.8
+exp5_llm_multimodal_v2_clip_friendly,0.5203,0.3759,0.2889,52,180,424.1
+exp1_hardcoded_v1,0.5250,0.3799,0.2570,46,179,464.2
+exp3_llm_text_v1_jargon,0.5259,0.3813,0.2291,41,179,490.4
+exp5_llm_multimodal_v1,0.5254,0.3806,0.1844,33,179,427.1
