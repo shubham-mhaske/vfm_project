@@ -2,8 +2,8 @@
 #SBATCH --job-name=full_pipeline
 #SBATCH --time=04:00:00
 #SBATCH --ntasks=1
-#SBATCH --cpus-per-task=16
-#SBATCH --mem=64G
+#SBATCH --cpus-per-task=32
+#SBATCH --mem=128G
 #SBATCH --gres=gpu:a100:1
 #SBATCH --partition=gpu
 #SBATCH --output=slurm_logs/full_pipeline_%j.out
@@ -33,23 +33,31 @@ cd "$PROJECT_ROOT" || { echo "ERROR: Project not found at $PROJECT_ROOT"; exit 1
 mkdir -p slurm_logs
 
 # Load modules and activate environment
+echo "[$(date '+%H:%M:%S')] Loading modules..."
 module purge
 module restore dl
 
 # Activate virtual environment
+echo "[$(date '+%H:%M:%S')] Activating virtual environment..."
 source $SCRATCH/vfm_env/bin/activate
 export LD_LIBRARY_PATH=$CONDA_PREFIX/lib:$LD_LIBRARY_PATH
 
 # Set PYTHONPATH
 export PYTHONPATH="$PROJECT_ROOT:$PROJECT_ROOT/sam2:$PYTHONPATH"
 
+# Enable unbuffered Python output for real-time logging
+export PYTHONUNBUFFERED=1
+
+echo "[$(date '+%H:%M:%S')] Environment ready"
+echo "[$(date '+%H:%M:%S')] Python: $(which python)"
+echo "[$(date '+%H:%M:%S')] PyTorch CUDA: $(python -c 'import torch; print(torch.cuda.is_available())')"
 echo ""
 echo "Running full pipeline evaluation..."
 echo "Configs: baseline, refine2, refine3, TTA, TTA+refine"
 echo "Metrics: Dice, IoU, CLIP Classification Accuracy"
 echo ""
 
-python src/evaluate_full_pipeline.py \
+python -u src/evaluate_full_pipeline.py \
     --model_cfg configs/sam2.1/sam2.1_hiera_l.yaml \
     --checkpoint sam2/checkpoints/sam2.1_hiera_large.pt \
     --clip_prompts configs/prompts/hard_coded_prompts_v2.json \

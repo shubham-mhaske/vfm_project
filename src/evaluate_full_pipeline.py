@@ -16,12 +16,18 @@ import time
 import numpy as np
 from tqdm import tqdm
 import torch
+from datetime import datetime
 
 from dataset import BCSSDataset
 from sam_segmentation import get_sam2_predictor, get_prompts_from_mask, calculate_metrics
 from clip_classification import CLIPClassifier, crop_region_from_mask, load_prompts_from_json
 from device_utils import get_device
 from training.utils.train_utils import register_omegaconf_resolvers
+
+
+def log(msg):
+    """Print with timestamp."""
+    print(f"[{datetime.now().strftime('%H:%M:%S')}] {msg}", flush=True)
 
 
 def evaluate_configuration(
@@ -206,34 +212,47 @@ def main():
         args.max_samples = 5
     
     # Setup
+    log("Starting full pipeline evaluation...")
     device = get_device()
-    print(f"Using device: {device}")
+    log(f"Using device: {device}")
+    
+    if device == "cuda":
+        log(f"GPU: {torch.cuda.get_device_name(0)}")
+        log(f"GPU Memory: {torch.cuda.get_device_properties(0).total_memory / 1e9:.1f} GB")
+    
+    log("Registering Hydra resolvers...")
     register_omegaconf_resolvers()
     
     # Load dataset
+    log("Loading BCSS dataset...")
     bcss_dataset = BCSSDataset(
         image_dir='data/bcss/images',
         mask_dir='data/bcss/masks',
         split=args.split
     )
-    print(f"Loaded {len(bcss_dataset)} samples from {args.split} split")
+    log(f"Loaded {len(bcss_dataset)} samples from {args.split} split")
     
     # Load SAM2 predictor
+    log("Loading SAM2 predictor (this may take a minute)...")
     predictor = load_sam2_predictor(args.model_cfg, args.checkpoint, device)
-    print("SAM2 predictor loaded")
+    log("SAM2 predictor loaded successfully!")
     
     # Load CLIP classifier
     clip_classifier = None
     clip_prompts = None
     if not args.no_clip:
+        log("Loading CLIP classifier...")
         project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
         clip_prompts_path = os.path.join(project_root, args.clip_prompts)
         clip_prompts = load_prompts_from_json(clip_prompts_path)
         clip_classifier = CLIPClassifier(device=device)
-        print("CLIP classifier loaded")
+        log("CLIP classifier loaded successfully!")
+    else:
+        log("Skipping CLIP classification (--no_clip flag)")
     
     # Create output directory
     os.makedirs(args.output_dir, exist_ok=True)
+    log(f"Output directory: {args.output_dir}")
     
     # Configurations to test
     configs = [
@@ -246,12 +265,12 @@ def main():
     
     all_results = {}
     
-    print("\n" + "="*80)
-    print("Full Pipeline Evaluation: SAM2 Segmentation + CLIP Classification")
-    print("="*80)
+    log("="*80)
+    log("Full Pipeline Evaluation: SAM2 Segmentation + CLIP Classification")
+    log("="*80)
     
-    for cfg in configs:
-        print(f"\n>>> Testing: {cfg['name']}")
+    for cfg_idx, cfg in enumerate(configs):
+        log(f"\n>>> [{cfg_idx+1}/{len(configs)}] Testing: {cfg['name']}")
         start_time = time.time()
         
         results = evaluate_configuration(
@@ -274,7 +293,7 @@ def main():
         
         seg = results['segmentation']
         clf = results['classification']
-        print(f"    Dice: {seg['overall_dice']:.4f} | IoU: {seg['overall_iou']:.4f} | "
+        log(f"    Dice: {seg['overall_dice']:.4f} | IoU: {seg['overall_iou']:.4f} | "
               f"CLIP Acc: {clf['overall_accuracy']:.2%} | Time: {elapsed:.1f}s")
     
     # ========== SUMMARY ==========
