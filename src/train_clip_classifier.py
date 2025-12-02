@@ -214,7 +214,7 @@ def main():
     log("Training Logistic Regression...")
     sys.stdout.flush()
     
-    lr = LogisticRegression(max_iter=1000, C=1.0, class_weight='balanced', random_state=42)
+    lr = LogisticRegression(max_iter=1000, C=1.0, class_weight='balanced', random_state=42, n_jobs=-1)
     lr.fit(X_train_scaled, y_train)
     
     lr_preds = lr.predict(X_test_scaled)
