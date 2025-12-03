@@ -1,0 +1,56 @@
+============================================================
+PATHOLOGY ENCODERS: UNI vs CTransPath
+Job ID: 17245746
+Started: Tue Dec  2 17:54:41 CST 2025
+============================================================
+CTransPath path: /scratch/user/shubhammhaske/vfm_project/models/ctranspath
+UNI path: /scratch/user/shubhammhaske/vfm_project/models/uni_model
+total 108696
+drwxrwxr-x 2 shubhammhaske shubhammhaske      4096 Nov 26 19:09 .
+drwxr-xr-x 6 shubhammhaske shubhammhaske      4096 Nov 28 13:46 ..
+-rw-r--r-- 1 shubhammhaske shubhammhaske 111292151 Nov 26 19:09 ctranspath.pth
+UNI not found
+[17:57:52] ======================================================================
+[17:57:52] PATHOLOGY ENCODER COMPARISON
+[17:57:52] UNI vs CTransPath vs CLIP features
+[17:57:52] ======================================================================
+[17:57:52] Device: cuda
+[17:57:52] 
+Loading datasets...
+[17:57:52]   Train: 85 images
+[17:57:52]   Test: 45 images
+[17:57:52] 
+--------------------------------------------------
+[17:57:52] Testing CTransPath encoder...
+[17:59:14] Loading CTransPath model...
+[17:59:14]   Loading from: /scratch/user/shubhammhaske/vfm_project/models/ctranspath/ctranspath.pth
+[17:59:23] CTransPath failed: Failed to load CTransPath: Error(s) in loading state_dict for SwinTransformer:
+	size mismatch for layers.1.downsample.norm.weight: copying a param with shape torch.Size([768]) from checkpoint, the shape in current model is torch.Size([384]).
+	size mismatch for layers.1.downsample.norm.bias: copying a param with shape torch.Size([768]) from checkpoint, the shape in current model is torch.Size([384]).
+	size mismatch for layers.1.downsample.reduction.weight: copying a param with shape torch.Size([384, 768]) from checkpoint, the shape in current model is torch.Size([192, 384]).
+	size mismatch for layers.2.downsample.norm.weight: copying a param with shape torch.Size([1536]) from checkpoint, the shape in current model is torch.Size([768]).
+	size mismatch for layers.2.downsample.norm.bias: copying a param with shape torch.Size([1536]) from checkpoint, the shape in current model is torch.Size([768]).
+	size mismatch for layers.2.downsample.reduction.weight: copying a param with shape torch.Size([768, 1536]) from checkpoint, the shape in current model is torch.Size([384, 768]).
+[17:59:23] 
+--------------------------------------------------
+[17:59:23] Testing UNI encoder...
+[17:59:23] Loading UNI model...
+[17:59:23]   UNI weights not found, using ImageNet pretrained ViT-L
+[18:00:12] Error loading UNI: An error happened while trying to locate the file on the Hub and we cannot find the requested files in the local cache. Please check your connection and try again or make sure your Internet connection is on.
+[18:00:12] Falling back to CLIP features...
+[18:00:12] UNI failed: An error happened while trying to locate the file on the Hub and we cannot find the requested files in the local cache. Please check your connection and try again or make sure your Internet connection is on.
+[18:00:12] 
+======================================================================
+[18:00:12] FINAL COMPARISON
+[18:00:12] ======================================================================
+[18:00:12] 
+Baselines:
+[18:00:12]   CLIP zero-shot:     38.9%
+[18:00:12]   CLIP + LR:          40.4%
+[18:00:12] 
+Pathology Encoders:
+[18:00:12] 
+Results saved to: /scratch/user/shubhammhaske/vfm_project/results/pathology_encoders/
+============================================================
+Completed: Tue Dec  2 18:00:37 CST 2025
+============================================================

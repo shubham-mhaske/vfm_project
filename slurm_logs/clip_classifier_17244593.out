@@ -1,0 +1,70 @@
+============================================================
+CLIP FEATURE CLASSIFIER
+Extract CLIP embeddings → Train LogisticRegression/MLP
+Job ID: 17244593
+CPUs: 48
+Memory: 256GB
+GPUs: 2x A100
+Started: Tue Dec  2 15:58:49 CST 2025
+============================================================
+CLIP model path: /scratch/user/shubhammhaske/clip_model
+Threads: 48
+[15:58:56] ======================================================================
+[15:58:56] CLIP FEATURE CLASSIFIER
+[15:58:56] Train classifier on CLIP embeddings
+[15:58:56] ======================================================================
+[15:58:56] Device: cuda
+[15:58:56] GPU: NVIDIA A100-PCIE-40GB
+[15:58:56] 
+Loading datasets...
+[15:58:56]   Train: 85 images
+[15:58:56]   Test: 45 images
+[15:58:56] 
+Loading CLIP feature extractor...
+[16:00:50]   Loading CLIP from: /scratch/user/shubhammhaske/clip_model
+[16:01:01]   CLIP loaded!
+[16:01:01] 
+Extracting features for train set (85 images)...
+Extracting train:   0%|                                  | 0/85 [00:00<?, ?it/s]Extracting train:   1%|▎                         | 1/85 [00:16<23:22, 16.70s/it]Extracting train:   2%|▌                         | 2/85 [00:18<10:44,  7.76s/it]Extracting train:   4%|▉                         | 3/85 [00:18<05:55,  4.33s/it]Extracting train:   5%|█▏                        | 4/85 [00:21<04:57,  3.68s/it]Extracting train:   6%|█▌                        | 5/85 [00:22<03:39,  2.75s/it]Extracting train:   7%|█▊                        | 6/85 [00:24<03:30,  2.66s/it]Extracting train:   8%|██▏                       | 7/85 [00:26<03:02,  2.34s/it]Extracting train:   9%|██▍                       | 8/85 [00:28<02:44,  2.13s/it]Extracting train:  11%|██▊                       | 9/85 [00:33<03:51,  3.05s/it]Extracting train:  12%|██▉                      | 10/85 [00:35<03:26,  2.75s/it]Extracting train:  13%|███▏                     | 11/85 [00:37<03:02,  2.47s/it]Extracting train:  14%|███▌                     | 12/85 [00:38<02:31,  2.07s/it]Extracting train:  15%|███▊                     | 13/85 [00:40<02:27,  2.05s/it]Extracting train:  16%|████                     | 14/85 [00:41<02:13,  1.89s/it]Extracting train:  18%|████▍                    | 15/85 [00:43<01:59,  1.71s/it]Extracting train:  19%|████▋                    | 16/85 [00:44<01:55,  1.67s/it]Extracting train:  20%|█████                    | 17/85 [00:46<01:48,  1.59s/it]Extracting train:  21%|█████▎                   | 18/85 [00:46<01:27,  1.31s/it]Extracting train:  22%|█████▌                   | 19/85 [00:48<01:40,  1.53s/it]Extracting train:  24%|█████▉                   | 20/85 [00:50<01:34,  1.46s/it]Extracting train:  25%|██████▏                  | 21/85 [00:50<01:22,  1.29s/it]Extracting train:  26%|██████▍                  | 22/85 [00:52<01:22,  1.31s/it]Extracting train:  27%|██████▊                  | 23/85 [00:53<01:19,  1.28s/it]Extracting train:  28%|███████                  | 24/85 [00:54<01:16,  1.25s/it]Extracting train:  29%|███████▎                 | 25/85 [00:55<01:07,  1.13s/it]Extracting train:  31%|███████▋                 | 26/85 [00:56<01:06,  1.13s/it]Extracting train:  32%|███████▉                 | 27/85 [00:57<00:54,  1.07it/s]Extracting train:  33%|████████▏                | 28/85 [01:00<01:31,  1.61s/it]Extracting train:  34%|████████▌                | 29/85 [01:01<01:21,  1.45s/it]Extracting train:  35%|████████▊                | 30/85 [01:02<01:20,  1.46s/it]Extracting train:  36%|█████████                | 31/85 [01:03<01:05,  1.21s/it]Extracting train:  38%|█████████▍               | 32/85 [01:05<01:09,  1.31s/it]Extracting train:  39%|█████████▋               | 33/85 [01:05<00:57,  1.12s/it]Extracting train:  40%|██████████               | 34/85 [01:06<00:54,  1.07s/it]Extracting train:  41%|██████████▎              | 35/85 [01:07<00:50,  1.00s/it]Extracting train:  42%|██████████▌              | 36/85 [01:09<01:10,  1.45s/it]Extracting train:  44%|██████████▉              | 37/85 [01:10<01:02,  1.29s/it]Extracting train:  45%|███████████▏             | 38/85 [01:11<00:48,  1.03s/it]Extracting train:  46%|███████████▍             | 39/85 [01:12<00:49,  1.08s/it]Extracting train:  47%|███████████▊             | 40/85 [01:13<00:43,  1.03it/s]Extracting train:  48%|████████████             | 41/85 [01:15<00:59,  1.35s/it]Extracting train:  49%|████████████▎            | 42/85 [01:16<00:49,  1.15s/it]Extracting train:  51%|████████████▋            | 43/85 [01:20<01:34,  2.24s/it]Extracting train:  52%|████████████▉            | 44/85 [01:22<01:17,  1.90s/it]Extracting train:  53%|█████████████▏           | 45/85 [01:25<01:33,  2.34s/it]Extracting train:  54%|█████████████▌           | 46/85 [01:27<01:32,  2.36s/it]Extracting train:  55%|█████████████▊           | 47/85 [01:28<01:10,  1.85s/it]Extracting train:  56%|██████████████           | 48/85 [01:29<00:57,  1.56s/it]Extracting train:  58%|██████████████▍          | 49/85 [01:30<00:48,  1.34s/it]Extracting train:  59%|██████████████▋          | 50/85 [01:31<00:45,  1.30s/it]Extracting train:  60%|███████████████          | 51/85 [01:32<00:43,  1.28s/it]Extracting train:  61%|███████████████▎         | 52/85 [01:33<00:36,  1.10s/it]Extracting train:  62%|███████████████▌         | 53/85 [01:33<00:29,  1.07it/s]Extracting train:  64%|███████████████▉         | 54/85 [01:34<00:23,  1.33it/s]Extracting train:  65%|████████████████▏        | 55/85 [01:35<00:27,  1.08it/s]Extracting train:  66%|████████████████▍        | 56/85 [01:36<00:25,  1.16it/s]Extracting train:  67%|████████████████▊        | 57/85 [01:37<00:31,  1.11s/it]Extracting train:  68%|█████████████████        | 58/85 [01:40<00:45,  1.69s/it]Extracting train:  69%|█████████████████▎       | 59/85 [01:41<00:35,  1.36s/it]Extracting train:  71%|█████████████████▋       | 60/85 [01:44<00:42,  1.68s/it]Extracting train:  72%|█████████████████▉       | 61/85 [01:45<00:36,  1.53s/it]Extracting train:  73%|██████████████████▏      | 62/85 [01:47<00:39,  1.71s/it]Extracting train:  74%|██████████████████▌      | 63/85 [01:48<00:33,  1.53s/it]Extracting train:  75%|██████████████████▊      | 64/85 [01:48<00:25,  1.22s/it]Extracting train:  76%|███████████████████      | 65/85 [01:51<00:31,  1.57s/it]Extracting train:  78%|███████████████████▍     | 66/85 [01:52<00:26,  1.37s/it]Extracting train:  79%|███████████████████▋     | 67/85 [01:53<00:22,  1.27s/it]Extracting train:  80%|████████████████████     | 68/85 [01:53<00:18,  1.09s/it]Extracting train:  81%|████████████████████▎    | 69/85 [01:55<00:19,  1.23s/it]Extracting train:  82%|████████████████████▌    | 70/85 [01:56<00:19,  1.28s/it]Extracting train:  84%|████████████████████▉    | 71/85 [02:00<00:25,  1.84s/it]Extracting train:  85%|█████████████████████▏   | 72/85 [02:01<00:21,  1.63s/it]Extracting train:  86%|█████████████████████▍   | 73/85 [02:01<00:15,  1.29s/it]Extracting train:  87%|█████████████████████▊   | 74/85 [02:04<00:19,  1.77s/it]Extracting train:  88%|██████████████████████   | 75/85 [02:07<00:22,  2.22s/it]Extracting train:  89%|██████████████████████▎  | 76/85 [02:09<00:19,  2.16s/it]Extracting train:  91%|██████████████████████▋  | 77/85 [02:11<00:15,  1.92s/it]Extracting train:  92%|██████████████████████▉  | 78/85 [02:13<00:13,  1.92s/it]Extracting train:  93%|███████████████████████▏ | 79/85 [02:15<00:12,  2.12s/it]Extracting train:  94%|███████████████████████▌ | 80/85 [02:16<00:08,  1.71s/it]Extracting train:  95%|███████████████████████▊ | 81/85 [02:17<00:06,  1.54s/it]Extracting train:  96%|████████████████████████ | 82/85 [02:18<00:03,  1.33s/it]Extracting train:  98%|████████████████████████▍| 83/85 [02:25<00:06,  3.12s/it]Extracting train:  99%|████████████████████████▋| 84/85 [02:28<00:02,  2.88s/it]Extracting train: 100%|█████████████████████████| 85/85 [02:30<00:00,  2.63s/it]Extracting train: 100%|█████████████████████████| 85/85 [02:30<00:00,  1.77s/it]
+[16:03:31] 
+Extracting features for test set (45 images)...
+Extracting test:   0%|                                   | 0/45 [00:00<?, ?it/s]Extracting test:   2%|▌                          | 1/45 [00:02<02:01,  2.76s/it]Extracting test:   4%|█▏                         | 2/45 [00:03<01:02,  1.46s/it]Extracting test:   7%|█▊                         | 3/45 [00:05<01:10,  1.67s/it]Extracting test:   9%|██▍                        | 4/45 [00:06<01:04,  1.56s/it]Extracting test:  11%|███                        | 5/45 [00:07<00:49,  1.25s/it]Extracting test:  13%|███▌                       | 6/45 [00:09<00:58,  1.49s/it]Extracting test:  16%|████▏                      | 7/45 [00:10<00:48,  1.26s/it]Extracting test:  18%|████▊                      | 8/45 [00:12<01:00,  1.63s/it]Extracting test:  20%|█████▍                     | 9/45 [00:15<01:09,  1.94s/it]Extracting test:  22%|█████▊                    | 10/45 [00:16<00:57,  1.63s/it]Extracting test:  24%|██████▎                   | 11/45 [00:19<01:13,  2.16s/it]Extracting test:  27%|██████▉                   | 12/45 [00:22<01:17,  2.34s/it]Extracting test:  29%|███████▌                  | 13/45 [00:23<01:02,  1.96s/it]Extracting test:  31%|████████                  | 14/45 [00:23<00:49,  1.58s/it]Extracting test:  33%|████████▋                 | 15/45 [00:24<00:42,  1.41s/it]Extracting test:  36%|█████████▏                | 16/45 [00:26<00:43,  1.49s/it]Extracting test:  38%|█████████▊                | 17/45 [00:31<01:08,  2.44s/it]Extracting test:  40%|██████████▍               | 18/45 [00:35<01:21,  3.02s/it]Extracting test:  42%|██████████▉               | 19/45 [00:37<01:08,  2.62s/it]Extracting test:  44%|███████████▌              | 20/45 [00:38<00:56,  2.25s/it]Extracting test:  47%|████████████▏             | 21/45 [00:40<00:47,  1.97s/it]Extracting test:  49%|████████████▋             | 22/45 [00:41<00:41,  1.79s/it]Extracting test:  51%|█████████████▎            | 23/45 [00:42<00:36,  1.67s/it]Extracting test:  53%|█████████████▊            | 24/45 [00:45<00:40,  1.93s/it]Extracting test:  56%|██████████████▍           | 25/45 [00:45<00:30,  1.50s/it]Extracting test:  58%|███████████████           | 26/45 [00:48<00:33,  1.74s/it]Extracting test:  60%|███████████████▌          | 27/45 [00:52<00:47,  2.66s/it]Extracting test:  62%|████████████████▏         | 28/45 [00:55<00:42,  2.52s/it]Extracting test:  64%|████████████████▊         | 29/45 [00:56<00:35,  2.23s/it]Extracting test:  67%|█████████████████▎        | 30/45 [00:58<00:30,  2.04s/it]Extracting test:  69%|█████████████████▉        | 31/45 [00:58<00:21,  1.54s/it]Extracting test:  71%|██████████████████▍       | 32/45 [01:00<00:22,  1.74s/it]Extracting test:  73%|███████████████████       | 33/45 [01:02<00:18,  1.58s/it]Extracting test:  76%|███████████████████▋      | 34/45 [01:02<00:14,  1.35s/it]Extracting test:  78%|████████████████████▏     | 35/45 [01:03<00:10,  1.08s/it]Extracting test:  80%|████████████████████▊     | 36/45 [01:04<00:08,  1.03it/s]Extracting test:  82%|█████████████████████▍    | 37/45 [01:04<00:07,  1.14it/s]Extracting test:  84%|█████████████████████▉    | 38/45 [01:07<00:10,  1.54s/it]Extracting test:  87%|██████████████████████▌   | 39/45 [01:08<00:06,  1.15s/it]Extracting test:  89%|███████████████████████   | 40/45 [01:08<00:05,  1.06s/it]Extracting test:  91%|███████████████████████▋  | 41/45 [01:10<00:05,  1.32s/it]Extracting test:  93%|████████████████████████▎ | 42/45 [01:11<00:03,  1.18s/it]Extracting test:  96%|████████████████████████▊ | 43/45 [01:13<00:02,  1.41s/it]Extracting test:  98%|█████████████████████████▍| 44/45 [01:14<00:01,  1.28s/it]Extracting test: 100%|██████████████████████████| 45/45 [01:15<00:00,  1.06s/it]Extracting test: 100%|██████████████████████████| 45/45 [01:15<00:00,  1.67s/it]
+[16:04:46] 
+Feature shapes:
+[16:04:46]   Train: (300, 512) features, 300 labels
+[16:04:46]   Test: (156, 512) features, 156 labels
+[16:04:46] 
+Normalizing features...
+[16:04:46] 
+--------------------------------------------------
+[16:04:46] Training Logistic Regression...
+[16:04:51] Logistic Regression Accuracy: 40.38%
+[16:04:51] 
+--------------------------------------------------
+[16:04:51] Training MLP Classifier...
+[16:04:51] MLP Accuracy: 32.05%
+[16:04:51] 
+======================================================================
+[16:04:51] RESULTS SUMMARY
+[16:04:51] ======================================================================
+[16:04:51] 
+Zero-shot CLIP:        38.9%
+[16:04:51] Logistic Regression:   40.4%
+[16:04:51] MLP Classifier:        32.1%
+[16:04:51] 
+Best: logistic_regression (40.4%)
+[16:04:51] Improvement over zero-shot: +1.5%
+[16:04:51] 
+Per-Class Breakdown (Best Method):
+[16:04:51] --------------------------------------------------
+[16:04:51]   tumor          : 28.89% (45 samples)
+[16:04:51]   stroma         : 55.56% (45 samples)
+[16:04:51]   lymphocyte     : 51.35% (37 samples)
+[16:04:51]   necrosis       : 26.09% (23 samples)
+[16:04:51]   blood_vessel   :  0.00% (6 samples)
+[16:04:51] 
+Results saved to: /scratch/user/shubhammhaske/vfm_project/results/clip_classifier/
+[16:04:51] Done!
+============================================================
+Completed: Tue Dec  2 16:04:58 CST 2025
+============================================================
