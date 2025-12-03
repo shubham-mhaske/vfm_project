@@ -535,6 +535,8 @@ def main():
                         help="Run on subset of samples for quick testing")
     parser.add_argument('--max-samples', type=int, default=None,
                         help="Maximum number of samples to evaluate")
+    parser.add_argument('--data-dir', type=str, default=None,
+                        help="Path to data directory (default: PROJECT_ROOT/data/bcss)")
     args = parser.parse_args()
     
     log("=" * 70)
@@ -550,8 +552,13 @@ def main():
     log(f"Using device: {device}")
     
     # Load dataset
-    image_dir = PROJECT_ROOT / 'data' / 'bcss' / 'images'
-    mask_dir = PROJECT_ROOT / 'data' / 'bcss' / 'masks'
+    if args.data_dir:
+        data_base = Path(args.data_dir)
+    else:
+        data_base = PROJECT_ROOT / 'data' / 'bcss'
+    image_dir = data_base / 'images'
+    mask_dir = data_base / 'masks'
+    log(f"Loading data from: {data_base}")
     dataset = BCSSDataset(image_dir=str(image_dir), mask_dir=str(mask_dir), split='test')
     log(f"Loaded {len(dataset)} test samples")
     
