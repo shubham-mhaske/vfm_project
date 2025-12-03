@@ -113,11 +113,16 @@ def create_overlay(image, mask, color, alpha=0.5):
     return overlay.astype(np.uint8)
 
 
-def load_sam2_predictor(device):
+def load_sam2_predictor(device, sam2_dir_override=None):
     """Load SAM2 predictor with proper directory handling."""
     # SAM2 needs to be loaded from its directory for hydra configs
     original_dir = os.getcwd()
-    sam2_dir = str(PROJECT_ROOT / 'sam2')
+    
+    # Use override if provided, otherwise default
+    if sam2_dir_override:
+        sam2_dir = sam2_dir_override
+    else:
+        sam2_dir = str(PROJECT_ROOT / 'sam2')
     
     log(f"  Changing to SAM2 directory: {sam2_dir}")
     os.chdir(sam2_dir)
@@ -132,7 +137,7 @@ def load_sam2_predictor(device):
         
         # Load with relative config path
         sam_cfg = "configs/sam2.1/sam2.1_hiera_l.yaml"
-        sam_ckpt = str(PROJECT_ROOT / 'sam2' / 'checkpoints' / 'sam2.1_hiera_large.pt')
+        sam_ckpt = os.path.join(sam2_dir, 'checkpoints', 'sam2.1_hiera_large.pt')
         
         predictor = get_sam2_predictor(sam_cfg, sam_ckpt, device)
         log("  ✓ SAM2 loaded successfully")
@@ -537,7 +542,13 @@ def main():
                         help="Maximum number of samples to evaluate")
     parser.add_argument('--data-dir', type=str, default=None,
                         help="Path to data directory (default: PROJECT_ROOT/data/bcss)")
+    parser.add_argument('--sam2-dir', type=str, default=None,
+                        help="Path to SAM2 directory with checkpoints (default: PROJECT_ROOT/sam2)")
     args = parser.parse_args()
+    
+    # Store args globally for load_sam2_predictor
+    global ARGS
+    ARGS = args
     
     log("=" * 70)
     log("Generating Best-Performing Qualitative Results")
@@ -570,7 +581,7 @@ def main():
     
     # Load SAM2 predictor once
     log("\nLoading SAM2 model...")
-    predictor = load_sam2_predictor(device)
+    predictor = load_sam2_predictor(device, args.sam2_dir)
     
     # Run evaluation for all model configurations
     log("\n" + "=" * 60)
