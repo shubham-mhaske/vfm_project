@@ -10,6 +10,7 @@
 #   bash scripts/run_complete_metrics_hprc.sh
 #
 # Or submit directly:
+#   cd /path/to/vfm_project
 #   sbatch scripts/slurm/run_complete_metrics.slurm
 #=============================================================
 
@@ -18,11 +19,18 @@ echo "VFM Project - Complete Metrics Collection"
 echo "============================================"
 echo ""
 
+# Get script directory and project root
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+PROJECT_ROOT="$(dirname "$SCRIPT_DIR")"
+
+# Change to project root
+cd "$PROJECT_ROOT"
+echo "Project root: $(pwd)"
+
 # Check if we're in the right directory
 if [ ! -f "requirements.txt" ]; then
-    echo "ERROR: Please run this script from the project root directory"
-    echo "       cd /path/to/vfm_project"
-    echo "       bash scripts/run_complete_metrics_hprc.sh"
+    echo "ERROR: Cannot find project root!"
+    echo "       Expected to find requirements.txt in: $PROJECT_ROOT"
     exit 1
 fi
 
@@ -53,14 +61,15 @@ if [ ! -d "data/bcss/images" ]; then
 fi
 
 echo ""
-echo "Submitting SLURM job..."
+echo "Submitting SLURM job from: $(pwd)"
 echo ""
 
-# Submit the job
-JOB_ID=$(sbatch scripts/slurm/run_complete_metrics.slurm | awk '{print $4}')
+# Submit the job from project root (important!)
+JOB_ID=$(sbatch scripts/slurm/run_complete_metrics.slurm 2>&1 | grep -oP 'Submitted batch job \K[0-9]+')
 
 if [ -z "$JOB_ID" ]; then
     echo "ERROR: Failed to submit job"
+    sbatch scripts/slurm/run_complete_metrics.slurm
     exit 1
 fi
 
@@ -69,13 +78,13 @@ echo "Job submitted successfully!"
 echo "============================================"
 echo ""
 echo "Job ID:        $JOB_ID"
-echo "Output file:   slurm_logs/complete_metrics-$JOB_ID.out"
-echo "Error file:    slurm_logs/complete_metrics-$JOB_ID.err"
+echo "Output file:   slurm_logs/complete_metrics-${JOB_ID}.out"
+echo "Error file:    slurm_logs/complete_metrics-${JOB_ID}.err"
 echo "Results dir:   results/complete_metrics/"
 echo ""
 echo "Monitor with:"
 echo "  squeue -u \$USER"
-echo "  tail -f slurm_logs/complete_metrics-$JOB_ID.out"
+echo "  tail -f slurm_logs/complete_metrics-${JOB_ID}.out"
 echo ""
 echo "Expected runtime: 4-6 hours"
 echo "============================================"

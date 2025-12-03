@@ -29,11 +29,32 @@ echo "Job ID:        $SLURM_JOB_ID"
 echo "Job Name:      $SLURM_JOB_NAME"
 echo "Node:          $SLURM_NODELIST"
 echo "Start Time:    $(date)"
+echo "Submit Dir:    $SLURM_SUBMIT_DIR"
 echo "============================================================"
 
-# Navigate to project root
-cd $SLURM_SUBMIT_DIR
-cd ..  # Move from scripts/slurm to project root
+# Navigate to project root - use the actual project path
+# This script should be submitted from the project root directory
+PROJECT_ROOT="$SLURM_SUBMIT_DIR"
+
+# If submitted from scripts/slurm, go up two levels
+if [[ "$SLURM_SUBMIT_DIR" == */scripts/slurm ]]; then
+    PROJECT_ROOT="$(dirname $(dirname $SLURM_SUBMIT_DIR))"
+elif [[ "$SLURM_SUBMIT_DIR" == */scripts ]]; then
+    PROJECT_ROOT="$(dirname $SLURM_SUBMIT_DIR)"
+fi
+
+echo "Project Root:  $PROJECT_ROOT"
+cd "$PROJECT_ROOT"
+
+# Verify we're in the right directory
+if [ ! -f "requirements.txt" ]; then
+    echo "ERROR: Cannot find project root!"
+    echo "       Make sure to submit this job from the vfm_project directory:"
+    echo "       cd /path/to/vfm_project && sbatch scripts/slurm/run_complete_metrics.slurm"
+    exit 1
+fi
+
+echo "Working Dir:   $(pwd)"
 
 # Create log directory
 mkdir -p slurm_logs
@@ -55,11 +76,9 @@ conda activate vfm
 echo ""
 echo "Environment Info:"
 echo "  Python: $(which python)"
-echo "  PyTorch: $(python -c 'import torch; print(torch.__version__)')"
-echo "  CUDA available: $(python -c 'import torch; print(torch.cuda.is_available())')"
-if python -c 'import torch; print(torch.cuda.is_available())' | grep -q "True"; then
-    echo "  GPU: $(python -c 'import torch; print(torch.cuda.get_device_name(0))')"
-fi
+echo "  PyTorch: $(python -c 'import torch; print(torch.__version__)' 2>/dev/null || echo 'NOT FOUND')"
+echo "  CUDA available: $(python -c 'import torch; print(torch.cuda.is_available())' 2>/dev/null || echo 'UNKNOWN')"
+python -c 'import torch; print("  GPU:", torch.cuda.get_device_name(0))' 2>/dev/null || true
 echo ""
 
 # Create output directory
