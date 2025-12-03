@@ -25,17 +25,10 @@ module purge
 module restore dl
 
 # Navigate to project root (SLURM_SUBMIT_DIR is scripts/slurm, go up 2 levels)
-PROJECT_ROOT="$SLURM_SUBMIT_DIR/../.."
-cd $PROJECT_ROOT
-PROJECT_ROOT=$(pwd)
-echo "Project root: $PROJECT_ROOT"
-
-# Verify we're in vfm_project
-if [ ! -f "requirements.txt" ]; then
-    echo "ERROR: Not in vfm_project directory!"
-    echo "Current dir: $(pwd)"
-    exit 1
-fi
+PROJECT_ROOT="/scratch/user/$(whoami)/vfm_project"
+cd "$PROJECT_ROOT" || { echo "ERROR: Project not found at $PROJECT_ROOT"; exit 1; }
+echo "Project Root: $PROJECT_ROOT"
+echo "Working Dir:  $(pwd)"
 
 # Activate virtual environment
 source $SCRATCH/vfm_env/bin/activate
