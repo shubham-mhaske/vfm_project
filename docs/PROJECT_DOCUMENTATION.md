@@ -31,6 +31,7 @@
 - [Appendix B: Prompt Files](#appendix-b-prompt-files) - CLIP prompt definitions
 - [Appendix C: Complete Metrics](#appendix-c-complete-metrics) - Detailed per-class results
 - [Appendix D: References](#appendix-d-references) - Academic citations
+- [Appendix E: Generated Figures](#appendix-e-generated-figures) - Qualitative & academic figures
 
 ---
 
@@ -2859,6 +2860,59 @@ python src/evaluation.py \
 
 ---
 
-**Document Version**: 1.0  
-**Last Updated**: December 2, 2025  
+# Appendix E: Generated Figures
+
+## E.1 Qualitative Results (Real Test Images)
+
+Location: `results/figures/qualitative/`
+
+| Figure | Description | Use Case |
+|--------|-------------|----------|
+| **qualitative_method_comparison.png** | 4 test images × 6 methods (Original, GT, SAM2 Centroid/Box/Box+Neg, MedSAM) | Main presentation slide - shows real predictions |
+| **qualitative_per_class.png** | SAM2 Box+Neg results for each tissue class (Tumor, Stroma, Lymphocyte, Necrosis, Blood Vessel) | Per-class performance visualization |
+| **qualitative_prompt_comparison.png** | Same image with different prompts showing impact on segmentation | Prompt ablation visualization |
+| **qualitative_success_failure.png** | Top row: High Dice (>0.7), Bottom row: Low Dice (<0.4) | Model limitations discussion |
+| **qualitative_full_segmentation.png** | Full multi-class segmentation with colored overlays | Complete pipeline demonstration |
+
+### Generation Script
+```bash
+# Run on HPRC with GPU
+sbatch scripts/slurm/run_qualitative_figures.slurm
+
+# Or locally (requires SAM2 + MedSAM checkpoints)
+python scripts/analysis/generate_qualitative_results.py
+```
+
+## E.2 Academic Charts (Synthetic/Metrics-Based)
+
+Location: `results/figures/academic/`
+
+| Figure | Description |
+|--------|-------------|
+| **fig1_segmentation_comprehensive.png** | 4-panel: Prompt ablation, model comparison, zero-shot vs finetuned, per-class heatmap |
+| **fig2_clip_analysis.png** | 3-panel: Strategy comparison, per-class accuracy, prompt evolution |
+| **fig3_training_analysis.png** | 3-panel: Training loss, validation Dice, final test comparison |
+| **fig4_method_overview.png** | Pipeline architecture schematic |
+| **fig5_summary_results.png** | Complete results tables |
+
+### Generation Script
+```bash
+python scripts/analysis/generate_academic_figures.py
+```
+
+## E.3 Recommended Presentation Figures
+
+For a 6-minute presentation, use these figures in order:
+
+1. **Slide 3 (Methods)**: `academic/fig4_method_overview.png`
+2. **Slide 5-6 (Main Results)**: `qualitative/qualitative_method_comparison.png` ⭐
+3. **Slide 7 (Per-Class)**: `qualitative/qualitative_per_class.png`
+4. **Slide 8 (CLIP)**: `academic/fig2_clip_analysis.png`
+5. **Slide 9 (Finetuning)**: `academic/fig3_training_analysis.png`
+6. **Slide 10 (Summary)**: `academic/fig5_summary_results.png`
+
+---
+
+**Document Version**: 1.1  
+**Last Updated**: December 3, 2025  
 **Authors**: VFM Project Team, CSCE 689

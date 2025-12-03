@@ -2,15 +2,27 @@
 
 ## 📊 PUBLICATION-QUALITY FIGURES
 
+### Qualitative Results (Real Test Images) ⭐ NEW
+Location: `results/figures/qualitative/`
+
+| Figure | Description | Recommended Slide |
+|--------|-------------|-------------------|
+| **qualitative_method_comparison.png** | 4 test images × 6 methods side-by-side | Slide 5-6: Main Results ⭐⭐ |
+| **qualitative_per_class.png** | Per-tissue class segmentation examples | Slide 7: Per-Class Analysis |
+| **qualitative_prompt_comparison.png** | Prompt strategy visual comparison | Slide 4: Prompt Ablation |
+| **qualitative_success_failure.png** | Success (Dice>0.7) vs Failure (Dice<0.4) | Slide 10: Limitations |
+| **qualitative_full_segmentation.png** | Full multi-class colored segmentation | Slide 3: Pipeline Demo |
+
+### Academic Charts (Metrics-Based)
 Location: `results/figures/academic/`
 
 | Figure | Description | Recommended Slide |
 |--------|-------------|-------------------|
 | **fig4_method_overview.png** | Pipeline architecture schematic | Slide 3: Methods |
-| **fig1_segmentation_comprehensive.png** | 4-panel segmentation analysis | Slide 5-6: Main Results ⭐ |
-| **fig2_clip_analysis.png** | 3-panel CLIP classification | Slide 7: CLIP Results ⭐ |
-| **fig3_training_analysis.png** | 3-panel training curves | Slide 8: Why Finetuning Failed ⭐ |
-| **fig5_summary_results.png** | Complete results tables | Slide 9: Summary |
+| **fig1_segmentation_comprehensive.png** | 4-panel segmentation analysis | Slide 8: Quantitative Results |
+| **fig2_clip_analysis.png** | 3-panel CLIP classification | Slide 9: CLIP Results |
+| **fig3_training_analysis.png** | 3-panel training curves | Slide 10: Why Finetuning Failed |
+| **fig5_summary_results.png** | Complete results tables | Slide 11: Summary |
 
 ---
 
@@ -20,14 +32,14 @@ Location: `results/figures/academic/`
 |-------|------|--------|-------------|
 | 1. Title | 10s | Sample image | VFMs for Medical Image Segmentation |
 | 2. Problem | 30s | - | Manual annotation costly; VFMs pretrained on billions |
-| 3. Methods | 40s | `fig4_method_overview.png` | Two-stage: SAM2→CLIP pipeline |
+| 3. Methods | 40s | `academic/fig4_method_overview.png` | Two-stage: SAM2→CLIP pipeline |
 | 4. Dataset | 20s | - | BCSS: 151 images, 5 classes, 45 test |
-| **5-6. Segmentation** | **60s** | **`fig1_segmentation_comprehensive.png`** | **Box+Neg best (0.555), finetuning hurts (-33%)** |
-| **7. CLIP** | **40s** | **`fig2_clip_analysis.png`** | **Few-shot LLM best (44.4%), text > multimodal** |
-| **8. Training** | **40s** | **`fig3_training_analysis.png`** | **Overfitting evidence, catastrophic forgetting** |
-| 9. Summary | 30s | `fig5_summary_results.png` | All results in tables |
-| 10. Key Findings | 30s | - | 4 takeaways |
-| 11. Conclusion | 20s | - | Best config: SAM2 Box+Neg + LLM Few-Shot |
+| **5-6. Segmentation** | **60s** | **`qualitative/qualitative_method_comparison.png`** | **Real predictions! Box+Neg best (0.555)** |
+| **7. Per-Class** | **30s** | **`qualitative/qualitative_per_class.png`** | **Visual per-class performance** |
+| **8. CLIP** | **40s** | **`academic/fig2_clip_analysis.png`** | **Few-shot LLM best (44.4%)** |
+| **9. Training** | **40s** | **`academic/fig3_training_analysis.png`** | **Overfitting evidence** |
+| 10. Limitations | 20s | `qualitative/qualitative_success_failure.png` | Success vs failure cases |
+| 11. Summary | 30s | `academic/fig5_summary_results.png` | All results in tables |
 | 12. Thank You | 10s | - | Questions |
 
 ---
@@ -129,12 +141,30 @@ Location: `results/figures/academic/`
 ## 📁 FILE LOCATIONS
 
 ```
-results/figures/academic/
-├── fig1_segmentation_comprehensive.png  ← MAIN RESULTS
-├── fig2_clip_analysis.png               ← CLIP RESULTS
-├── fig3_training_analysis.png           ← TRAINING ANALYSIS
-├── fig4_method_overview.png             ← PIPELINE
-└── fig5_summary_results.png             ← SUMMARY TABLES
+results/figures/
+├── qualitative/                              ← REAL TEST IMAGES ⭐
+│   ├── qualitative_method_comparison.png     ← MAIN PRESENTATION FIGURE
+│   ├── qualitative_per_class.png             ← Per-class examples
+│   ├── qualitative_prompt_comparison.png     ← Prompt ablation visual
+│   ├── qualitative_success_failure.png       ← Success vs failure
+│   └── qualitative_full_segmentation.png     ← Multi-class demo
+│
+├── academic/                                 ← METRICS-BASED CHARTS
+│   ├── fig1_segmentation_comprehensive.png   ← 4-panel quantitative
+│   ├── fig2_clip_analysis.png                ← CLIP results
+│   ├── fig3_training_analysis.png            ← Training curves
+│   ├── fig4_method_overview.png              ← Pipeline schematic
+│   └── fig5_summary_results.png              ← Summary tables
+│
+└── All figures also available as PDF for high-quality printing.
+```
 
-All figures also available as PDF for high-quality printing.
+### Generation Scripts
+
+```bash
+# Generate qualitative figures (requires GPU + SAM2/MedSAM)
+sbatch scripts/slurm/run_qualitative_figures.slurm
+
+# Generate academic charts (CPU only, from metrics)
+python scripts/analysis/generate_academic_figures.py
 ```
