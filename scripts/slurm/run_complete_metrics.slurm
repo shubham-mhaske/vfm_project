@@ -62,15 +62,12 @@ mkdir -p slurm_logs
 # Load required modules
 echo ""
 echo "Loading modules..."
-module purge
-module load GCC/11.3.0
-module load CUDA/11.7.0
-module load Python/3.10.4
+module restore dl
 
 # Activate conda environment
-echo "Activating conda environment..."
-source ~/.bashrc
-conda activate vfm
+echo "Activating  environment..."
+source vfm_env/bin/activate
+
 
 # Verify environment
 echo ""
