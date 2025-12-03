@@ -2,10 +2,10 @@
 #SBATCH --job-name=best_qual
 #SBATCH --output=slurm_logs/best_qualitative-%j.out
 #SBATCH --error=slurm_logs/best_qualitative-%j.err
-#SBATCH --time=02:00:00
+#SBATCH --time=01:00:00
 #SBATCH --ntasks=1
-#SBATCH --cpus-per-task=8
-#SBATCH --mem=64G
+#SBATCH --cpus-per-task=16
+#SBATCH --mem=128G
 #SBATCH --gres=gpu:a100:1
 #SBATCH --partition=gpu
 
@@ -21,17 +21,14 @@ echo "Node: $SLURMD_NODENAME"
 echo "Started: $(date)"
 echo "=============================================="
 
-# Load modules
-module purge
-module load GCC/12.2.0
-module load CUDA/12.0.0
-module load Python/3.10.8
+# Load modules using saved collection (faster)
+module restore dl
 
-# Activate virtual environment
-source ~/vfm_env/bin/activate
+# Activate virtual environment from SCRATCH
+source $SCRATCH/vfm_env/bin/activate
 
-# Change to project directory
-cd $SLURM_SUBMIT_DIR
+# Change to project directory in SCRATCH
+cd $SCRATCH/vfm_project
 
 # Create output directories
 mkdir -p results/best_qualitative
@@ -44,9 +41,15 @@ echo "GPU Info:"
 nvidia-smi --query-gpu=name,memory.total --format=csv
 echo ""
 
-# Run the script
+# Set optimal PyTorch settings for A100
+export CUDA_LAUNCH_BLOCKING=0
+export PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True
+
+# Run the script with correct paths for HPRC
 echo "Running best qualitative generation..."
-python scripts/analysis/generate_best_qualitative.py
+python scripts/analysis/generate_best_qualitative.py \
+    --data-dir $SCRATCH/vfm_project/data/bcss \
+    --sam2-dir $SCRATCH/vfm_project/sam2
 
 echo ""
 echo "=============================================="
