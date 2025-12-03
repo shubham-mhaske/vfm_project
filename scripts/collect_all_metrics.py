@@ -53,9 +53,14 @@ def log(msg):
 class ComprehensiveMetricsCollector:
     """Collects complete segmentation and classification metrics."""
     
-    def __init__(self, device='cuda'):
+    def __init__(self, device='cuda', num_workers=8):
         self.device = device
         self.project_root = project_root
+        self.num_workers = num_workers
+        
+        # Set up threading for PyTorch
+        num_threads = int(os.environ.get('OMP_NUM_THREADS', 8))
+        torch.set_num_threads(num_threads)
         
         # Paths
         self.image_dir = os.path.join(project_root, 'data', 'bcss', 'images')
@@ -505,14 +510,25 @@ class ComprehensiveMetricsCollector:
     def run_all_experiments(self, max_samples=None, skip_medsam=False):
         """Run all experiments and collect comprehensive metrics."""
         
+        import time
+        total_start = time.time()
+        
         output_dir = os.path.join(project_root, 'results', 'complete_metrics')
         os.makedirs(output_dir, exist_ok=True)
         
         timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
         
+        log(f"\n{'='*70}")
+        log(f"COMPREHENSIVE METRICS COLLECTION")
+        log(f"Started: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+        log(f"Device: {self.device}")
+        log(f"Output: {output_dir}")
+        log(f"{'='*70}")
+        
         # ==============================
         # 1. SAM2 Segmentation Experiments
         # ==============================
+        sam_start = time.time()
         sam_prompt_configs = [
             {'name': 'centroid', 'prompt_type': 'centroid', 'use_neg_points': False, 'use_tta': False},
             {'name': 'multi_point', 'prompt_type': 'multi_point', 'use_neg_points': False, 'use_tta': False},
@@ -538,11 +554,14 @@ class ComprehensiveMetricsCollector:
             for name, data in sam_results.items():
                 sam_clean[name] = {k: v for k, v in data.items() if k != 'sample_results'}
             json.dump(sam_clean, f, indent=2)
+        sam_elapsed = time.time() - sam_start
         log(f"\nSAM2 results saved to: {sam_output_path}")
+        log(f"SAM2 evaluation completed in {sam_elapsed/60:.1f} minutes")
         
         # ==============================
         # 2. CLIP Classification Experiments  
         # ==============================
+        clip_start = time.time()
         clip_prompt_configs = [
             {'name': 'hardcoded_v1', 'path': 'configs/prompts/hard_coded_prompts.json'},
             {'name': 'hardcoded_v2', 'path': 'configs/prompts/hard_coded_prompts_v2.json'},
@@ -564,11 +583,14 @@ class ComprehensiveMetricsCollector:
         clip_output_path = os.path.join(output_dir, f'clip_classification_{timestamp}.json')
         with open(clip_output_path, 'w') as f:
             json.dump(clip_results, f, indent=2)
+        clip_elapsed = time.time() - clip_start
         log(f"\nCLIP results saved to: {clip_output_path}")
+        log(f"CLIP evaluation completed in {clip_elapsed/60:.1f} minutes")
         
         # ==============================
         # 3. MedSAM Experiments
         # ==============================
+        medsam_start = time.time()
         if not skip_medsam:
             medsam_ckpt = 'models/medsam_checkpoints/medsam_vit_b.pth'
             if os.path.exists(os.path.join(project_root, medsam_ckpt)):
@@ -596,7 +618,9 @@ class ComprehensiveMetricsCollector:
                 medsam_output_path = os.path.join(output_dir, f'medsam_segmentation_{timestamp}.json')
                 with open(medsam_output_path, 'w') as f:
                     json.dump(medsam_combined, f, indent=2)
+                medsam_elapsed = time.time() - medsam_start
                 log(f"\nMedSAM results saved to: {medsam_output_path}")
+                log(f"MedSAM evaluation completed in {medsam_elapsed/60:.1f} minutes")
             else:
                 log(f"\nWARNING: MedSAM checkpoint not found at {medsam_ckpt}, skipping...")
         
@@ -605,8 +629,10 @@ class ComprehensiveMetricsCollector:
         # ==============================
         self.generate_summary_report(sam_results, clip_results, output_dir, timestamp)
         
+        total_elapsed = time.time() - total_start
         log("\n" + "="*70)
         log("ALL EXPERIMENTS COMPLETE!")
+        log(f"Total time: {total_elapsed/60:.1f} minutes ({total_elapsed/3600:.2f} hours)")
         log(f"Results saved to: {output_dir}")
         log("="*70)
         
@@ -705,6 +731,8 @@ def main():
                         help='Skip MedSAM evaluation')
     parser.add_argument('--gpu', type=int, default=0,
                         help='GPU ID to use')
+    parser.add_argument('--num_workers', type=int, default=8,
+                        help='Number of data loading workers')
     
     args = parser.parse_args()
     
@@ -717,6 +745,15 @@ def main():
     log(f"Using device: {device}")
     if 'cuda' in device:
         log(f"GPU: {torch.cuda.get_device_name(args.gpu)}")
+        log(f"GPU Memory: {torch.cuda.get_device_properties(args.gpu).total_memory / 1e9:.1f} GB")
+        # Enable TF32 for faster computation on A100
+        torch.backends.cuda.matmul.allow_tf32 = True
+        torch.backends.cudnn.allow_tf32 = True
+        torch.backends.cudnn.benchmark = True
+    
+    # Get number of workers from environment or argument
+    num_workers = int(os.environ.get('SLURM_CPUS_PER_TASK', args.num_workers))
+    log(f"Data loading workers: {num_workers}")
     
     # Run experiments
     collector = ComprehensiveMetricsCollector(device=device)
