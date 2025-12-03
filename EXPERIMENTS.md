@@ -1,34 +1,94 @@
-# Experiment Tracker: SAM2 Histopathology Segmentation
+# Experiment Tracker: Promptable Pathology
 
-## 🎉 Key Finding: Prompt Engineering Beats All Finetuning!
+**CSCE 689 - Visual Foundation Models for Medical Image Analysis (Fall 2025)**
 
+## 🎉 Key Findings
+
+### Segmentation: Prompt Engineering Beats Fine-tuning
 **Zeroshot SAM2 with optimized prompts (Box + Negative Points + TTA) achieves the best results.**
 
-| Approach | Overall Dice | vs Baseline |
-|----------|--------------|-------------|
-| **🥇 Box + Neg Points + TTA** | **0.566** | **+9.4%** ✅ |
-| 🥈 Box + TTA | 0.563 | +8.9% |
-| 🥉 Box + Neg Points | 0.560 | +8.4% |
-| Box baseline | 0.553 | +7.0% |
-| MedSAM Box + TTA | 0.536 | +3.7% |
-| **MedSAM Box** | **0.522** | **+0.9%** |
-| Multi-point prompt | 0.418 | -19.2% |
-| v2 Finetuned (best finetune) | 0.42 | -18.8% |
-| Path-SAM2 + CTransPath | 0.366 | -29.3% |
-| SAM2 LoRA-Light | 0.355 | -31.4% |
-| SAM2 Box+Focal | 0.372 | -28.1% |
-| Centroid (single point) | 0.335 | -35.1% |
-| LoRA Adapter r=8 | 0.266 | -48.6% ❌ |
-
-**Key Insights:**
-1. **Box prompts >> Point prompts** (0.55+ vs 0.33-0.42)
-2. **Negative points add ~1% improvement** (helps SAM understand what NOT to segment)
-3. **TTA adds ~1% improvement** (ensemble of hflip, vflip, rot90)
-4. **ALL finetuning approaches HURT performance** - catastrophic forgetting with only 85 training images
+### Classification: CLIP Feature Classifier is Best
+**CLIP + Logistic Regression achieves 40.4% on 5 tissue classes (zero-shot baseline: 25.7%).**
 
 ---
 
-## 🏆 Best Configuration
+## Summary Tables
+
+### Classification Results
+| Method | Accuracy | Δ vs Baseline |
+|--------|----------|---------------|
+| **🥇 CLIP + LogReg** | **40.4%** | **+14.7%** ✅ |
+| 🥈 LLM Text Fewshot | 38.9% | +13.2% |
+| 🥉 CLIP Hardcoded v2 | 35.6% | +9.9% |
+| LLM Multimodal Fewshot | 30.3% | +4.6% |
+| LLM Multimodal v2 | 28.9% | +3.2% |
+| PLIP Zero-shot | 26.9% | +1.2% |
+| CLIP Hardcoded v1 (baseline) | 25.7% | - |
+| LLM Text Jargon | 22.9% | -2.8% |
+| LLM Multimodal v1 | 18.4% | -7.3% |
+
+### Segmentation Results
+
+| Approach | Overall Dice | vs Baseline |
+|----------|--------------|-------------|
+| **🥇 Box + Neg Points + TTA** | **0.550** | **+4.6%** ✅ |
+| 🥈 Box + TTA | 0.540 | +2.7% |
+| 🥉 Box + Neg Points | 0.538 | +2.3% |
+| MedSAM Box + TTA | 0.536 | +1.9% |
+| Box baseline | 0.526 | - |
+| MedSAM Box | 0.522 | -0.8% |
+| Multi-point prompt | 0.418 | -20.5% |
+| v2 Finetuned (best finetune) | 0.42 | -20.2% |
+| Path-SAM2 + CTransPath | 0.366 | -30.4% |
+| SAM2 Box+Focal | 0.372 | -29.3% |
+| SAM2 LoRA-Light | 0.355 | -32.5% |
+| Centroid (single point) | 0.335 | -36.3% |
+| LoRA Adapter r=8 | 0.266 | -49.4% ❌ |
+
+**Key Insights:**
+1. **Box prompts >> Point prompts** (0.52+ vs 0.33-0.42)
+2. **Negative points add ~2% improvement** (helps SAM understand what NOT to segment)
+3. **TTA adds ~2% improvement** (ensemble of hflip, vflip, rot90)
+4. **ALL finetuning approaches HURT performance** - catastrophic forgetting with only 85 training images
+5. **CLIP prompt engineering adds +13%** - Fewshot prompts dramatically improve classification
+
+---
+
+## 📊 CLIP Classification Experiments (December 2025)
+
+### Prompt Comparison Results
+
+| Experiment | Prompt Type | Accuracy | Notes |
+|------------|-------------|----------|-------|
+| exp1_hardcoded_v1 | Basic | 25.7% | Baseline |
+| exp1_hardcoded_v2 | Improved | 35.6% | Better prompts |
+| exp3_llm_text_v1 | Jargon | 22.9% | Medical jargon hurt |
+| exp3_llm_text_v2 | CLIP-friendly | 33.9% | Better |
+| **exp3_llm_text_v3** | **Fewshot** | **38.9%** | **Best zero-shot** |
+| exp5_multimodal_v1 | Basic | 18.4% | Worst |
+| exp5_multimodal_v2 | CLIP-friendly | 28.9% | OK |
+| exp5_multimodal_v3 | Fewshot | 30.3% | Good |
+
+### Alternative Models Tested
+
+| Model | Method | Accuracy | Notes |
+|-------|--------|----------|-------|
+| **CLIP + LogReg** | Feature classifier | **40.4%** | Best overall |
+| CLIP + MLP | Feature classifier | 32.1% | Overfits |
+| PLIP | Zero-shot | 26.9% | Medical CLIP - worse |
+| CLIP + PLIP | Ensemble | 31.4% | Ensemble hurt |
+| CLIP Multi-scale | 3 scales | 27.8% | More context hurt |
+
+### CLIP Classifier Per-Class Results
+
+| Class | Precision | Recall | F1-Score | Support |
+|-------|-----------|--------|----------|---------|
+| Tumor | 37.1% | 28.9% | 32.5% | 45 |
+| Stroma | 43.1% | 55.6% | 48.5% | 45 |
+| Lymphocyte | 39.6% | 51.4% | 44.7% | 37 |
+| Necrosis | 42.9% | 26.1% | 32.4% | 23 |
+| Blood Vessel | 0.0% | 0.0% | 0.0% | 6 |
+| **Overall** | - | **40.4%** | 38.8% | 156 |
 
 ```bash
 python src/evaluate_segmentation.py \
@@ -290,72 +350,83 @@ All finetuning approaches performed WORSE than zeroshot SAM2:
 ## Commands
 
 ### Best Configuration (Recommended)
-\`\`\`bash
-# Zeroshot SAM2 with Box + Negative Points + TTA (Best: 0.566 Dice)
-python src/evaluate_segmentation.py \\
-  --model_cfg configs/sam2.1/sam2.1_hiera_l.yaml \\
-  --checkpoint sam2/checkpoints/sam2.1_hiera_large.pt \\
-  --prompt_type box \\
-  --use_neg_points \\
-  --use_tta \\
-  --split test \\
+```bash
+# Best Segmentation: SAM2 with Box + Negative Points + TTA (0.550 Dice)
+python src/evaluate_segmentation.py \
+  --model_cfg configs/sam2.1/sam2.1_hiera_l.yaml \
+  --checkpoint sam2/checkpoints/sam2.1_hiera_large.pt \
+  --prompt_type box \
+  --use_neg_points \
+  --use_tta \
+  --split test \
   --output_dir results/best_zeroshot
-\`\`\`
 
-### Run All Prompt Experiments
-\`\`\`bash
-# Run complete prompt engineering comparison
-bash scripts/run_prompt_experiments.sh
+# Best Classification: CLIP + LogReg (40.4% Accuracy)
+python src/train_clip_classifier.py \
+  --output_dir results/clip_classifier
 
-# Or submit as SLURM job
-sbatch scripts/slurm/run_prompt_experiments.slurm
-\`\`\`
+# Full Pipeline: SAM2 + CLIP
+python src/evaluation.py \
+  --sam_model_cfg configs/sam2.1/sam2.1_hiera_l.yaml \
+  --sam_checkpoint sam2/checkpoints/sam2.1_hiera_large.pt \
+  --clip_prompts configs/prompts/llm_text_prompts_v3_fewshot.json \
+  --output_dir results/full_pipeline
+```
 
-### Previous Experiments (for reference)
-\`\`\`bash
-# These all performed worse than zeroshot - DO NOT USE
-sbatch scripts/slurm/run_sam2_lora_light.slurm
-sbatch scripts/slurm/run_sam2_box_focal.slurm
-python src/train_with_lora.py --lora_rank 8 --epochs 20
-\`\`\`
+### Generate Presentation Figures
+```bash
+python scripts/plot_training_curves.py
+# Outputs to: presentation_data/figures/
+```
+
+### Alternative Experiments
+```bash
+# PLIP evaluation (26.9% - worse than CLIP)
+python src/test_plip.py --output_dir results/plip_test
+
+# CLIP + PLIP Ensemble (31.4% - ensemble hurt)
+python src/test_ensemble.py --output_dir results/ensemble_test
+
+# Multi-scale CLIP (27.8% - more context hurt)
+python src/test_multiscale.py --output_dir results/multiscale_test
+```
 
 ### MedSAM Evaluation
-\`\`\`bash
-# MedSAM Box baseline (0.522 Dice - 7.8% worse than SAM2)
-python src/evaluate_medsam.py \\
-  --checkpoint models/medsam_checkpoints/medsam_vit_b.pth \\
-  --split test \\
-  --output_dir results/medsam_box_baseline
-
-# MedSAM Box + TTA (0.536 Dice - 5.3% worse than SAM2)
-python src/evaluate_medsam.py \\
-  --checkpoint models/medsam_checkpoints/medsam_vit_b.pth \\
-  --split test \\
-  --use_tta \\
+```bash
+# MedSAM Box + TTA (0.536 Dice - 2.6% worse than SAM2)
+python src/evaluate_medsam.py \
+  --checkpoint models/medsam_checkpoints/medsam_vit_b.pth \
+  --split test --use_tta \
   --output_dir results/medsam_box_tta
-\`\`\`
+```
 
 ---
 
 ## Key Lessons Learned
 
 1. **Prompt Engineering > Finetuning** for small datasets (~85 images)
-2. **Box prompts >> Point prompts** (0.55 vs 0.33 Dice)
-3. **Negative points help** by telling SAM what NOT to segment (+1%)
-4. **TTA is free performance** with no training required (+1%)
-5. **Catastrophic forgetting** makes all finetuning counterproductive
-6. **Blood vessel is hardest** due to tiny size (0.5% of pixels)
+2. **Box prompts >> Point prompts** (0.52 vs 0.33 Dice)
+3. **Negative points help** by telling SAM what NOT to segment (+2%)
+4. **TTA is free performance** with no training required (+2%)
+5. **CLIP prompt engineering** adds +13% classification accuracy
+6. **Feature classifiers** add +1.5% over zero-shot CLIP
+7. **Catastrophic forgetting** makes all finetuning counterproductive
+8. **PLIP underperforms CLIP** on histopathology (may need different prompts)
+9. **Blood vessel is hardest** due to tiny size (0.5% of pixels)
 
 ---
 
 ## Research References
 
-1. **Medical SAM Adapter** (arXiv:2304.12620): Lightweight adapters for medical SAM
-2. **SAM-Med2D** (arXiv:2308.16184): Fine-tuned on 4.6M medical images
-3. **MedSAM** (Nature Communications): Fine-tuned on 1.57M medical images
+1. **SAM2** (Meta AI): Segment Anything Model 2 with Hiera-L backbone
+2. **CLIP** (OpenAI): Contrastive Language-Image Pre-training
+3. **PLIP** (Pathology CLIP): CLIP fine-tuned on pathology images
+4. **MedSAM** (Nature Communications): SAM fine-tuned on 1.57M medical images
+5. **Medical SAM Adapter** (arXiv:2304.12620): Lightweight adapters for medical SAM
+6. **SAM-Med2D** (arXiv:2308.16184): Fine-tuned on 4.6M medical images
 
-**Key insight**: Successful medical SAM adaptations use 1.5M-4.6M images. With only 85 images, prompt engineering is the only viable path. Even MedSAM (trained on 1.57M images) underperforms on histopathology due to domain mismatch with radiology.
+**Key insight**: Successful medical SAM adaptations use 1.5M-4.6M images. With only 85 images, prompt engineering is the only viable path.
 
 ---
 
-**Last Updated**: November 28, 2025
+**Last Updated**: December 2, 2025

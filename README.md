@@ -1,38 +1,54 @@
-# Visual Foundation Model for Histopathology Image Segmentation
+# Promptable Pathology: Interactive Zero-Shot Pipeline for Classifying Tumor Microenvironments
 
-Framework for utilizing and evaluating Visual Foundation Models (SAM/SAM2) for medical image segmentation on the BCSS (Breast Cancer Semantic Segmentation) dataset.
+**CSCE 689 - Visual Foundation Models for Medical Image Analysis (Fall 2025)**
+
+A comprehensive framework for zero-shot histopathology analysis using Visual Foundation Models (SAM2 + CLIP). This project demonstrates that prompt engineering outperforms fine-tuning for small medical datasets.
+
+## Key Results
+
+| Component | Best Method | Score |
+|-----------|-------------|-------|
+| **Segmentation** | SAM2 + Box + Neg + TTA | **0.550 Dice** |
+| **Classification** | CLIP + LogReg Classifier | **40.4% Accuracy** |
+| **Prompt Engineering (SAM2)** | Box + Neg + TTA | +4.6% over baseline |
+| **Prompt Engineering (CLIP)** | Fewshot prompts | +13.2% over baseline |
 
 ## Features
 
-- **Zero-Shot Segmentation**: Pre-trained SAM with various prompting strategies
+- **Zero-Shot Segmentation**: SAM2 with optimized prompting strategies (box, negative points, TTA)
+- **Zero-Shot Classification**: CLIP with prompt engineering and feature-based classifiers
 - **LLM-Powered Prompts**: Auto-generated text and multimodal prompts via Gemini
-- **Fine-Tuning**: SAM2 fine-tuning on BCSS with Hydra configs
-- **Comprehensive Evaluation**: Per-class Dice/IoU metrics and confusion matrices
+- **Comprehensive Evaluation**: Per-class Dice/IoU/Accuracy metrics and confusion matrices
+- **Alternative Models**: PLIP (pathology CLIP), MedSAM, ensemble methods
 - **HPC Ready**: SLURM scripts for TAMU HPRC Grace cluster
 
 ## Directory Structure
 
 ```
 ├── conf/                     # Hydra configuration
-│   └── experiment/           # Training configs (v2_stable, v3_perclass)
+│   └── experiment/           # Training configs
 ├── configs/prompts/          # CLIP prompt files
 ├── data/bcss/                # Dataset (images + masks)
 ├── docs/                     # Setup guides
 ├── experiments/              # Experiment tracking
 ├── finetune_logs/            # Training outputs & checkpoints
+├── presentation_data/        # Presentation figures & results
+│   ├── figures/             # Generated plots
+│   ├── finetune_logs/       # Training curves data
+│   └── results/             # All experiment metrics
 ├── results/                  # Evaluation results
 ├── sam2/                     # SAM2 submodule
 ├── scripts/                  # Utility scripts
 │   ├── slurm/               # HPC job scripts
 │   ├── training/            # Local training scripts
-│   └── validation/          # Validation utilities
+│   └── plot_training_curves.py  # Generate presentation figures
 ├── src/                      # Source code
-│   ├── run_finetuning.py    # Main training script
-│   ├── evaluation.py        # Full evaluation pipeline
-│   ├── dataset.py           # BCSS Dataset loader
-│   ├── finetune_dataset.py  # Training dataset
-│   └── sam_segmentation.py  # SAM utilities
-└── EXPERIMENTS.md            # Experiment tracker
+│   ├── evaluation.py         # Full SAM2+CLIP pipeline
+│   ├── train_clip_classifier.py  # CLIP feature classifier
+│   ├── test_plip.py          # PLIP evaluation
+│   ├── test_ensemble.py      # Ensemble methods
+│   └── test_multiscale.py    # Multi-scale analysis
+└── EXPERIMENTS.md            # Complete experiment tracker
 ```
 
 ## Quick Start
@@ -48,96 +64,109 @@ pip install -r requirements.txt
 
 # Download pre-trained weights
 bash sam2/checkpoints/download_ckpts.sh
-python src/download_ctranspath_weights.py
 ```
 
-### 2. Training
+### 2. Run Best Configuration (Zero-Shot)
 ```bash
-# Run the optimized Path-SAM2 + CTransPath training
-sbatch scripts/slurm/run_path_sam2_ctranspath_optimized.slurm
+# SAM2 Segmentation + CLIP Classification
+python src/evaluation.py \
+  --sam_model_cfg configs/sam2.1/sam2.1_hiera_l.yaml \
+  --sam_checkpoint sam2/checkpoints/sam2.1_hiera_large.pt \
+  --clip_prompts configs/prompts/llm_text_prompts_v3_fewshot.json \
+  --output_dir results/best_zeroshot
 
-# Or locally:
-python src/run_path_sam2_ctranspath.py experiment=path_sam2_ctranspath_optimized
+# CLIP Feature Classifier (best classification: 40.4%)
+python src/train_clip_classifier.py \
+  --output_dir results/clip_classifier
 ```
 
-### 3. Evaluation
+### 3. Generate Presentation Figures
 ```bash
-# Run the full evaluation pipeline on a completed training run
-bash scripts/evaluation/evaluate_experiment.sh finetune_logs/path_sam2_focal-2025-11-27_12-00-00
+python scripts/plot_training_curves.py
+# Outputs: presentation_data/figures/
 ```
 
-## Recent Improvements (November 2025)
+## Recent Experiments (December 2025)
 
-- **Path-SAM2 + CTransPath**: Integrated a pre-trained CTransPath encoder for histopathology-specific features, significantly boosting performance over the baseline.
-- **Optimized Training**: Achieved a ~5-8x speedup with `bfloat16` AMP, increased batch sizes, and optimized data loaders.
-- **Focal Loss**: Implemented a `FocalDiceLoss` to address severe class imbalance, dramatically improving results for rare classes like `blood_vessel`.
-- **Stain Normalization**: Added on-the-fly Macenko stain normalization and augmentation to handle variations in H&E staining.
-- **Test-Time Augmentation (TTA)**: Integrated TTA (flips and rotations) at inference time for more robust predictions.
-- **Automated Evaluation**: Created a comprehensive evaluation pipeline to find the best checkpoint, optimize thresholds, and run final evaluation.
+### Classification Experiments
+| Method | Accuracy | Notes |
+|--------|----------|-------|
+| CLIP Hardcoded v1 | 25.7% | Basic prompts |
+| CLIP Hardcoded v2 | 35.6% | Improved prompts |
+| LLM Text Fewshot | **38.9%** | Best zero-shot |
+| CLIP + LogReg | **40.4%** | Best overall |
+| PLIP Zero-shot | 26.9% | Medical CLIP - worse |
+| CLIP + PLIP Ensemble | 31.4% | Ensemble hurt |
+| Multi-scale CLIP | 27.8% | More context hurt |
+
+### Segmentation Experiments
+| Method | Dice | Notes |
+|--------|------|-------|
+| SAM2 Box + Neg + TTA | **0.550** | Best |
+| SAM2 Box baseline | 0.526 | Good |
+| MedSAM Box + TTA | 0.536 | 5% worse |
+| Fine-tuned SAM2 | 0.320 | Failed |
+
+### Key Finding: Fine-tuning Failed
+All fine-tuning approaches performed **worse** than zero-shot:
+- **Root cause**: Only 85 training images → catastrophic forgetting
+- **Lesson**: For small datasets, invest in prompt engineering, not fine-tuning
 
 ## Dataset
 
 **BCSS (Breast Cancer Semantic Segmentation)** - 151 H&E stained tissue patches (1024×1024)
 
-### Class Mapping
-| Class ID | Tissue Type | Frequency |
-|----------|-------------|-----------|
-| 0 | Background | - |
-| 1 | Tumor | 33.8% |
-| 2 | Stroma | 26.2% |
-| 3 | Lymphocyte | 5.9% |
-| 4 | Necrosis | 6.9% |
-| 18 | Blood Vessel | 0.5% |
+### Class Distribution
+| Class | ID | Frequency |
+|-------|-----|-----------|
+| Tumor | 1 | 33.8% |
+| Stroma | 2 | 26.2% |
+| Necrosis | 4 | 6.9% |
+| Lymphocyte | 3 | 5.9% |
+| Blood Vessel | 18 | 0.5% |
 
-**Note**: Blood vessel is class ID **18** (not 5).
-
-### Data Split (Deterministic)
+### Data Split
 - **Train**: 85 images
 - **Validation**: 21 images  
 - **Test**: 45 images
 
-## Expected Results
+## Per-Class Results
 
-### 🏆 Best Configuration: Zeroshot + Prompt Engineering
+### Classification (CLIP + LogReg)
+| Class | Precision | Recall | F1 |
+|-------|-----------|--------|-----|
+| Tumor | 37.1% | 28.9% | 32.5% |
+| Stroma | 43.1% | 55.6% | 48.5% |
+| Lymphocyte | 39.6% | 51.4% | 44.7% |
+| Necrosis | 42.9% | 26.1% | 32.4% |
+| Blood Vessel | 0.0% | 0.0% | 0.0% |
 
-**Box prompts + Negative Points + TTA = 0.566 Dice**
-
-| Class | Dice Score |
-|-------|------------|
+### Segmentation (SAM2 + Box + TTA)
+| Class | Dice |
+|-------|------|
 | Necrosis | 0.708 |
 | Tumor | 0.565 |
 | Lymphocyte | 0.562 |
 | Stroma | 0.540 |
 | Blood Vessel | 0.504 |
-| **Overall** | **0.566** |
-
-### Key Finding
-
-**All finetuning approaches performed WORSE than zeroshot SAM2.** With only 85 training images, prompt engineering is more effective than any training.
-
-| Approach | Overall Dice |
-|----------|--------------|
-| **Box + Neg + TTA (Best)** | **0.566** |
-| Box baseline | 0.553 |
-| v2 Finetuned | 0.42 |
-| LoRA Adapter | 0.27 |
-
-See `EXPERIMENTS.md` for full experiment details.
-
-### Quick Start (Best Config)
-
-```bash
-python src/evaluate_segmentation.py \
-  --model_cfg configs/sam2.1/sam2.1_hiera_l.yaml \
-  --checkpoint sam2/checkpoints/sam2.1_hiera_large.pt \
-  --prompt_type box --use_neg_points --use_tta \
-  --split test --output_dir results/best_config
-```
 
 ## HPC Setup
 
 For TAMU HPRC Grace cluster setup, see `docs/HPRC_GRACE_SETUP.md`.
 
+## Generated Figures
+
+Run `python scripts/plot_training_curves.py` to generate:
+- `sam2_finetuning_losses.png` - Training loss curves
+- `lora_training_curves.png` - LoRA overfitting visualization
+- `experiment_comparison.png` - All methods comparison
+- `prompt_engineering_impact.png` - Prompt engineering gains
+- `catastrophic_forgetting.png` - Why fine-tuning failed
+- `pipeline_summary.png` - Key results summary
+
 ## License
 
 MIT License - See LICENSE file.
+
+---
+**Last Updated**: December 2, 2025

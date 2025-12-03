@@ -40,3 +40,6 @@ __pycache__/
 .ipynb_checkpoints/
 results/
 MedSAM/
+
+# Presentation data (downloaded from HPRC for local use)
+presentation_data/
