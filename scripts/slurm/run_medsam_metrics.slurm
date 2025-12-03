@@ -53,6 +53,11 @@ from tqdm import tqdm
 
 from dataset import BCSSDataset
 from sam_segmentation import get_prompts_from_mask, calculate_metrics
+from evaluate_medsam import (
+    load_medsam_model,
+    predict_with_medsam,
+    predict_with_medsam_tta
+)
 
 device = 'cuda' if torch.cuda.is_available() else 'cpu'
 print(f'Device: {device}')
@@ -72,101 +77,10 @@ dataset = BCSSDataset(
 )
 print(f'Loaded {len(dataset)} test samples')
 
-# Load MedSAM
+# Load MedSAM using the proper function from src/evaluate_medsam.py
 print('Loading MedSAM...')
-from segment_anything import sam_model_registry
-
 checkpoint_path = '$PROJECT_ROOT/models/medsam_checkpoints/medsam_vit_b.pth'
-if not os.path.exists(checkpoint_path):
-    print(f'ERROR: MedSAM checkpoint not found at {checkpoint_path}')
-    sys.exit(1)
-
-sam_model = sam_model_registry['vit_b'](checkpoint=checkpoint_path)
-sam_model = sam_model.to(device)
-sam_model.eval()
-print('MedSAM loaded!')
-
-def preprocess_for_medsam(image):
-    \"\"\"Preprocess image for MedSAM (resize to 1024x1024).\"\"\"
-    from torchvision.transforms import Resize
-    import torch.nn.functional as F
-    
-    h, w = image.shape[:2]
-    target_size = 1024
-    
-    img_tensor = torch.from_numpy(image).permute(2, 0, 1).float()
-    img_tensor = F.interpolate(img_tensor.unsqueeze(0), size=(target_size, target_size), mode='bilinear', align_corners=False)
-    img_tensor = img_tensor.squeeze(0)
-    
-    # Normalize
-    pixel_mean = torch.tensor([123.675, 116.28, 103.53]).view(3, 1, 1)
-    pixel_std = torch.tensor([58.395, 57.12, 57.375]).view(3, 1, 1)
-    img_tensor = (img_tensor - pixel_mean) / pixel_std
-    
-    return img_tensor, h, w
-
-def run_medsam(image, box, sam_model, device):
-    \"\"\"Run MedSAM inference with box prompt.\"\"\"
-    img_tensor, orig_h, orig_w = preprocess_for_medsam(image)
-    img_tensor = img_tensor.unsqueeze(0).to(device)
-    
-    # Scale box to 1024x1024
-    scale_x = 1024 / orig_w
-    scale_y = 1024 / orig_h
-    scaled_box = np.array([
-        box[0] * scale_x, box[1] * scale_y,
-        box[2] * scale_x, box[3] * scale_y
-    ])
-    
-    box_torch = torch.from_numpy(scaled_box).float().unsqueeze(0).to(device)
-    
-    with torch.no_grad():
-        image_embedding = sam_model.image_encoder(img_tensor)
-        
-        sparse_embeddings, dense_embeddings = sam_model.prompt_encoder(
-            points=None,
-            boxes=box_torch,
-            masks=None
-        )
-        
-        low_res_masks, _ = sam_model.mask_decoder(
-            image_embeddings=image_embedding,
-            image_pe=sam_model.prompt_encoder.get_dense_pe(),
-            sparse_prompt_embeddings=sparse_embeddings,
-            dense_prompt_embeddings=dense_embeddings,
-            multimask_output=False
-        )
-    
-    # Resize back to original size
-    import torch.nn.functional as F
-    mask = F.interpolate(low_res_masks, size=(orig_h, orig_w), mode='bilinear', align_corners=False)
-    mask = (mask.squeeze().cpu().numpy() > 0).astype(np.uint8)
-    
-    return mask
-
-def run_medsam_with_tta(image, box, sam_model, device):
-    \"\"\"Run MedSAM with test-time augmentation (flips).\"\"\"
-    masks = []
-    
-    # Original
-    masks.append(run_medsam(image, box, sam_model, device))
-    
-    # Horizontal flip
-    img_flip_h = np.fliplr(image).copy()
-    h, w = image.shape[:2]
-    box_flip_h = [w - box[2], box[1], w - box[0], box[3]]
-    mask_h = run_medsam(img_flip_h, box_flip_h, sam_model, device)
-    masks.append(np.fliplr(mask_h))
-    
-    # Vertical flip
-    img_flip_v = np.flipud(image).copy()
-    box_flip_v = [box[0], h - box[3], box[2], h - box[1]]
-    mask_v = run_medsam(img_flip_v, box_flip_v, sam_model, device)
-    masks.append(np.flipud(mask_v))
-    
-    # Combine with majority voting
-    combined = np.mean(masks, axis=0)
-    return (combined > 0.5).astype(np.uint8)
+medsam_model = load_medsam_model(checkpoint_path, device)
 
 # Evaluate both with and without TTA
 configs = [
@@ -206,9 +120,9 @@ for config in configs:
             
             try:
                 if use_tta:
-                    pred_mask = run_medsam_with_tta(image, box, sam_model, device)
+                    pred_mask, _ = predict_with_medsam_tta(medsam_model, image, box, device)
                 else:
-                    pred_mask = run_medsam(image, box, sam_model, device)
+                    pred_mask, _ = predict_with_medsam(medsam_model, image, box, device)
                 
                 dice, iou = calculate_metrics(pred_mask, binary_gt)
                 class_metrics[class_id]['dice'].append(dice)

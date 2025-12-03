@@ -100,10 +100,12 @@ for config in prompt_configs:
     
     print(f'\n--- Evaluating: {config_name} ---')
     
-    # Load CLIP with prompts
+    # Load prompts
     prompts = load_prompts_from_json(prompt_path)
-    classifier = CLIPClassifier(device=device)
-    classifier.set_prompts(prompts)
+    
+    # Initialize classifier once per prompt config
+    if 'classifier' not in dir():
+        classifier = CLIPClassifier(device=device)
     
     y_true, y_pred = [], []
     
@@ -125,8 +127,8 @@ for config in prompt_configs:
             if crop is None:
                 continue
             
-            # Classify
-            pred_class = classifier.classify(crop)
+            # Classify using classify_region(image, prompts)
+            pred_class = classifier.classify_region(crop, prompts)
             
             true_label = class_names[class_id]
             y_true.append(true_label)
