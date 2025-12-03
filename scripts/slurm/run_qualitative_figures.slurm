@@ -22,9 +22,7 @@ echo "=============================================="
 
 # Load modules
 module purge
-module load GCC/12.2.0
-module load CUDA/12.0.0
-module load Python/3.10.8
+module restore dl
 
 # Navigate to project root
 cd $SLURM_SUBMIT_DIR/..
@@ -32,18 +30,8 @@ PROJECT_ROOT=$(pwd)
 echo "Project root: $PROJECT_ROOT"
 
 # Activate virtual environment
-if [ -d "venv" ]; then
-    source venv/bin/activate
-elif [ -d ".venv" ]; then
-    source .venv/bin/activate
-else
-    echo "Creating virtual environment..."
-    python -m venv venv
-    source venv/bin/activate
-    pip install --upgrade pip
-    pip install -r requirements.txt
-fi
-
+source $SCRATCH/vfm_env/bin/activate
+export LD_LIBRARY_PATH=$CONDA_PREFIX/lib:$LD_LIBRARY_PATH
 # Verify GPU
 echo ""
 echo "GPU Information:"
