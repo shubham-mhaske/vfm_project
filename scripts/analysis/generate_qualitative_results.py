@@ -22,6 +22,14 @@ import matplotlib.patches as mpatches
 from matplotlib.colors import ListedColormap
 import cv2
 from PIL import Image
+from tqdm import tqdm
+
+# Force unbuffered output for SLURM visibility
+os.environ['PYTHONUNBUFFERED'] = '1'
+
+def log(msg):
+    """Print with flush for SLURM visibility."""
+    print(msg, flush=True)
 
 # Add project paths
 project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..'))
@@ -71,33 +79,40 @@ def load_models():
     from sam_segmentation import get_sam2_predictor
     
     device = get_device()
-    print(f"Using device: {device}")
+    log(f"Using device: {device}")
     
     # Need to change to sam2 directory for hydra config resolution
     original_dir = os.getcwd()
     sam2_dir = os.path.join(project_root, "sam2")
+    log(f"Changing to SAM2 directory: {sam2_dir}")
     os.chdir(sam2_dir)
     
     # Register OmegaConf resolvers if available
     try:
         from training.utils.train_utils import register_omegaconf_resolvers
         register_omegaconf_resolvers()
-    except:
-        pass
+        log("  Registered OmegaConf resolvers")
+    except Exception as e:
+        log(f"  OmegaConf resolvers not available: {e}")
     
     # Load SAM2 - use relative config name for hydra
+    log("Loading SAM2 model...")
     sam2_cfg = "configs/sam2.1/sam2.1_hiera_l.yaml"  # Relative path for hydra
     sam2_ckpt = os.path.join(project_root, "sam2/checkpoints/sam2.1_hiera_large.pt")
+    log(f"  Config: {sam2_cfg}")
+    log(f"  Checkpoint: {sam2_ckpt}")
     sam2_predictor = get_sam2_predictor(sam2_cfg, sam2_ckpt, device)
-    print("✓ SAM2 loaded")
+    log("✓ SAM2 loaded successfully")
     
     # Change back to original directory
     os.chdir(original_dir)
+    log(f"Changed back to: {original_dir}")
     
     # Load MedSAM
     medsam_predictor = None
     try:
         medsam_ckpt = os.path.join(project_root, "models/medsam_checkpoints/medsam_vit_b.pth")
+        log(f"Loading MedSAM from: {medsam_ckpt}")
         if os.path.exists(medsam_ckpt):
             sys.path.insert(0, os.path.join(project_root, 'MedSAM'))
             from segment_anything import sam_model_registry
@@ -106,9 +121,11 @@ def load_models():
             medsam_model.eval()
             from segment_anything import SamPredictor
             medsam_predictor = SamPredictor(medsam_model)
-            print("✓ MedSAM loaded")
+            log("✓ MedSAM loaded successfully")
+        else:
+            log(f"⚠ MedSAM checkpoint not found at {medsam_ckpt}")
     except Exception as e:
-        print(f"⚠ Could not load MedSAM: {e}")
+        log(f"⚠ Could not load MedSAM: {e}")
     
     return sam2_predictor, medsam_predictor, device
 
@@ -259,17 +276,20 @@ def generate_method_comparison_figure(sam2_predictor, medsam_predictor, dataset,
     Figure 1: Side-by-side comparison of methods on multiple test images.
     Shows: Original | GT | SAM2 Centroid | SAM2 Box | SAM2 Box+Neg | MedSAM Box
     """
-    print("\n📊 Generating method comparison figure...")
+    log("\n" + "="*50)
+    log("📊 [1/5] Generating method comparison figure...")
+    log("="*50)
     
     # Select diverse samples
     np.random.seed(42)
     indices = np.random.choice(len(dataset), min(num_samples, len(dataset)), replace=False)
+    log(f"  Selected {len(indices)} samples: {list(indices)}")
     
     fig, axes = plt.subplots(num_samples, 6, figsize=(18, 3.5 * num_samples))
     
     methods = ['Original', 'Ground Truth', 'SAM2\nCentroid', 'SAM2\nBox', 'SAM2\nBox+Neg', 'MedSAM\nBox']
     
-    for row_idx, sample_idx in enumerate(indices):
+    for row_idx, sample_idx in enumerate(tqdm(indices, desc="  Processing samples", file=sys.stdout)):
         sample = dataset[sample_idx]
         image = sample['image_np']
         gt_mask = sample['mask'].numpy()
@@ -398,11 +418,13 @@ def generate_method_comparison_figure(sam2_predictor, medsam_predictor, dataset,
     plt.tight_layout()
     
     # Save
+    log("  Saving figure...")
     for fmt in ['png', 'pdf']:
-        plt.savefig(os.path.join(output_dir, f'qualitative_method_comparison.{fmt}'), 
-                   dpi=300, bbox_inches='tight', facecolor='white')
+        filepath = os.path.join(output_dir, f'qualitative_method_comparison.{fmt}')
+        plt.savefig(filepath, dpi=300, bbox_inches='tight', facecolor='white')
+        log(f"    ✓ Saved {filepath}")
     plt.close()
-    print(f"  ✓ Saved qualitative_method_comparison.png/pdf")
+    log("  ✓ Method comparison figure complete!")
 
 
 def generate_per_class_figure(sam2_predictor, dataset, output_dir):
@@ -410,13 +432,16 @@ def generate_per_class_figure(sam2_predictor, dataset, output_dir):
     Figure 2: Best model (SAM2 Box+Neg) predictions for each tissue class.
     One row per class showing successful segmentation examples.
     """
-    print("\n📊 Generating per-class results figure...")
+    log("\n" + "="*50)
+    log("📊 [2/5] Generating per-class results figure...")
+    log("="*50)
     
     target_classes = [1, 2, 3, 4, 18]
     class_examples = {c: [] for c in target_classes}
     
     # Collect examples for each class
-    for idx in range(len(dataset)):
+    log("  Collecting examples for each class...")
+    for idx in tqdm(range(len(dataset)), desc="  Scanning dataset", file=sys.stdout):
         sample = dataset[idx]
         gt_mask = sample['mask'].numpy()
         unique = sample['unique_classes']
@@ -483,11 +508,13 @@ def generate_per_class_figure(sam2_predictor, dataset, output_dir):
     plt.suptitle('SAM2 Box+Neg Segmentation by Tissue Class', fontsize=14, fontweight='bold', y=0.98)
     plt.tight_layout()
     
+    log("  Saving figure...")
     for fmt in ['png', 'pdf']:
-        plt.savefig(os.path.join(output_dir, f'qualitative_per_class.{fmt}'),
-                   dpi=300, bbox_inches='tight', facecolor='white')
+        filepath = os.path.join(output_dir, f'qualitative_per_class.{fmt}')
+        plt.savefig(filepath, dpi=300, bbox_inches='tight', facecolor='white')
+        log(f"    ✓ Saved {filepath}")
     plt.close()
-    print(f"  ✓ Saved qualitative_per_class.png/pdf")
+    log("  ✓ Per-class figure complete!")
 
 
 def generate_success_failure_figure(sam2_predictor, dataset, output_dir):
@@ -495,11 +522,15 @@ def generate_success_failure_figure(sam2_predictor, dataset, output_dir):
     Figure 3: Success vs Failure cases to show model limitations.
     Top row: High Dice (>0.7), Bottom row: Low Dice (<0.4)
     """
-    print("\n📊 Generating success/failure cases figure...")
+    log("\n" + "="*50)
+    log("📊 [3/5] Generating success/failure cases figure...")
+    log("="*50)
     
     results = []
+    num_samples = min(len(dataset), 45)
+    log(f"  Evaluating {num_samples} samples to find success/failure cases...")
     
-    for idx in range(min(len(dataset), 45)):  # Check first 45 samples
+    for idx in tqdm(range(num_samples), desc="  Evaluating samples", file=sys.stdout):  # Check first 45 samples
         sample = dataset[idx]
         image = sample['image_np']
         gt_mask = sample['mask'].numpy()
@@ -583,11 +614,14 @@ def generate_success_failure_figure(sam2_predictor, dataset, output_dir):
     plt.suptitle('SAM2 Box+Neg: Success vs Failure Analysis', fontsize=14, fontweight='bold', y=1.02)
     plt.tight_layout()
     
+    log(f"  Found {len(successes)} success cases (Dice>0.7) and {len(failures)} failure cases (Dice<0.4)")
+    log("  Saving figure...")
     for fmt in ['png', 'pdf']:
-        plt.savefig(os.path.join(output_dir, f'qualitative_success_failure.{fmt}'),
-                   dpi=300, bbox_inches='tight', facecolor='white')
+        filepath = os.path.join(output_dir, f'qualitative_success_failure.{fmt}')
+        plt.savefig(filepath, dpi=300, bbox_inches='tight', facecolor='white')
+        log(f"    ✓ Saved {filepath}")
     plt.close()
-    print(f"  ✓ Saved qualitative_success_failure.png/pdf")
+    log("  ✓ Success/failure figure complete!")
 
 
 def generate_prompt_comparison_figure(sam2_predictor, dataset, output_dir):
@@ -595,9 +629,12 @@ def generate_prompt_comparison_figure(sam2_predictor, dataset, output_dir):
     Figure 4: Visual comparison of different prompt strategies on same image.
     Shows how prompts affect segmentation quality.
     """
-    print("\n📊 Generating prompt comparison figure...")
+    log("\n" + "="*50)
+    log("📊 [4/5] Generating prompt comparison figure...")
+    log("="*50)
     
     # Find a good example image
+    log("  Selecting example image...")
     sample = dataset[5]
     image = sample['image_np']
     gt_mask = sample['mask'].numpy()
@@ -605,11 +642,12 @@ def generate_prompt_comparison_figure(sam2_predictor, dataset, output_dir):
     # Pick a class that exists
     unique = sample['unique_classes']
     target_class = 1 if 1 in unique else unique[0]
+    log(f"  Using sample 5 with class: {CLASS_NAMES.get(target_class, target_class)}")
     binary_gt = (gt_mask == target_class).astype(np.uint8)
     prompts = get_prompts_from_mask(binary_gt)
     
     if 'box' not in prompts:
-        print("  ⚠ Could not generate prompts for selected sample")
+        log("  ⚠ Could not generate prompts for selected sample")
         return
     
     import torch
@@ -708,11 +746,13 @@ def generate_prompt_comparison_figure(sam2_predictor, dataset, output_dir):
     plt.suptitle('Impact of Prompt Strategy on Segmentation Quality', fontsize=14, fontweight='bold', y=0.98)
     plt.tight_layout()
     
+    log("  Saving figure...")
     for fmt in ['png', 'pdf']:
-        plt.savefig(os.path.join(output_dir, f'qualitative_prompt_comparison.{fmt}'),
-                   dpi=300, bbox_inches='tight', facecolor='white')
+        filepath = os.path.join(output_dir, f'qualitative_prompt_comparison.{fmt}')
+        plt.savefig(filepath, dpi=300, bbox_inches='tight', facecolor='white')
+        log(f"    ✓ Saved {filepath}")
     plt.close()
-    print(f"  ✓ Saved qualitative_prompt_comparison.png/pdf")
+    log("  ✓ Prompt comparison figure complete!")
 
 
 def generate_full_image_segmentation(sam2_predictor, dataset, output_dir):
@@ -720,11 +760,13 @@ def generate_full_image_segmentation(sam2_predictor, dataset, output_dir):
     Figure 5: Full multi-class segmentation visualization.
     Shows complete image with all classes segmented and colored.
     """
-    print("\n📊 Generating full image segmentation figure...")
+    log("\n" + "="*50)
+    log("📊 [5/5] Generating full image segmentation figure...")
+    log("="*50)
     
     fig, axes = plt.subplots(2, 3, figsize=(15, 10))
     
-    for fig_idx in range(2):
+    for fig_idx in tqdm(range(2), desc="  Processing images", file=sys.stdout):
         sample = dataset[fig_idx * 10 + 3]  # Pick diverse samples
         image = sample['image_np']
         gt_mask = sample['mask'].numpy()
@@ -773,50 +815,69 @@ def generate_full_image_segmentation(sam2_predictor, dataset, output_dir):
     plt.suptitle('Full Multi-Class Histopathology Segmentation', fontsize=14, fontweight='bold', y=0.98)
     plt.tight_layout()
     
+    log("  Saving figure...")
     for fmt in ['png', 'pdf']:
-        plt.savefig(os.path.join(output_dir, f'qualitative_full_segmentation.{fmt}'),
-                   dpi=300, bbox_inches='tight', facecolor='white')
+        filepath = os.path.join(output_dir, f'qualitative_full_segmentation.{fmt}')
+        plt.savefig(filepath, dpi=300, bbox_inches='tight', facecolor='white')
+        log(f"    ✓ Saved {filepath}")
     plt.close()
-    print(f"  ✓ Saved qualitative_full_segmentation.png/pdf")
+    log("  ✓ Full segmentation figure complete!")
 
 
 def main():
     """Generate all qualitative result figures."""
-    print("=" * 60)
-    print("GENERATING QUALITATIVE RESULTS FIGURES")
-    print("=" * 60)
+    import time
+    start_time = time.time()
+    
+    log("=" * 60)
+    log("GENERATING QUALITATIVE RESULTS FIGURES")
+    log("=" * 60)
+    log(f"Start time: {time.strftime('%Y-%m-%d %H:%M:%S')}")
     
     # Setup output directory
     output_dir = os.path.join(project_root, 'results', 'figures', 'qualitative')
     os.makedirs(output_dir, exist_ok=True)
-    print(f"\nOutput directory: {output_dir}")
+    log(f"\nOutput directory: {output_dir}")
+    log(f"Project root: {project_root}")
     
     # Load dataset
+    log("\nLoading dataset...")
     from dataset import BCSSDataset
     image_dir = os.path.join(project_root, 'data/bcss/images')
     mask_dir = os.path.join(project_root, 'data/bcss/masks')
+    log(f"  Image dir: {image_dir}")
+    log(f"  Mask dir: {mask_dir}")
     dataset = BCSSDataset(image_dir, mask_dir, split='test')
-    print(f"Loaded {len(dataset)} test samples")
+    log(f"✓ Loaded {len(dataset)} test samples")
     
     # Load models
+    log("\nLoading models...")
     sam2_predictor, medsam_predictor, device = load_models()
     
     # Generate figures
+    log("\n" + "#" * 60)
+    log("# STARTING FIGURE GENERATION (5 figures total)")
+    log("#" * 60)
+    
     generate_method_comparison_figure(sam2_predictor, medsam_predictor, dataset, output_dir, num_samples=4)
     generate_per_class_figure(sam2_predictor, dataset, output_dir)
     generate_prompt_comparison_figure(sam2_predictor, dataset, output_dir)
     generate_success_failure_figure(sam2_predictor, dataset, output_dir)
     generate_full_image_segmentation(sam2_predictor, dataset, output_dir)
     
-    print("\n" + "=" * 60)
-    print("✅ ALL QUALITATIVE FIGURES GENERATED!")
-    print(f"📁 Saved to: {output_dir}")
-    print("=" * 60)
+    elapsed = time.time() - start_time
+    log("\n" + "=" * 60)
+    log("✅ ALL QUALITATIVE FIGURES GENERATED!")
+    log(f"📁 Saved to: {output_dir}")
+    log(f"⏱️  Total time: {elapsed:.1f} seconds ({elapsed/60:.1f} minutes)")
+    log("=" * 60)
     
     # List generated files
-    print("\nGenerated files:")
+    log("\nGenerated files:")
     for f in sorted(os.listdir(output_dir)):
-        print(f"  - {f}")
+        filepath = os.path.join(output_dir, f)
+        size_kb = os.path.getsize(filepath) / 1024
+        log(f"  - {f} ({size_kb:.1f} KB)")
 
 
 if __name__ == '__main__':

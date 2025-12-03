@@ -48,6 +48,7 @@ mkdir -p slurm_logs
 
 # Set environment variables for better GPU memory management
 export PYTORCH_CUDA_ALLOC_CONF=max_split_size_mb:512
+export PYTHONUNBUFFERED=1
 
 # Run the qualitative figure generation script
 echo ""
@@ -56,7 +57,7 @@ echo "Running Qualitative Figure Generation..."
 echo "=============================================="
 
 cd $PROJECT_ROOT
-python scripts/analysis/generate_qualitative_results.py
+python -u scripts/analysis/generate_qualitative_results.py 2>&1 | tee -a slurm_logs/qual_figures_${SLURM_JOB_ID}_progress.log
 
 # Check exit status
 if [ $? -eq 0 ]; then
