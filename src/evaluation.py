@@ -109,10 +109,19 @@ def run_evaluation(args):
     # Segmentation Metrics
     avg_dice = np.mean([res['dice'] for res in segmentation_results])
     avg_iou = np.mean([res['iou'] for res in segmentation_results])
-    metrics['segmentation'] = {'avg_dice': avg_dice, 'avg_iou': avg_iou}
+    dice_std = np.std([res['dice'] for res in segmentation_results])
+    iou_std = np.std([res['iou'] for res in segmentation_results])
+    
+    metrics['segmentation'] = {
+        'avg_dice': float(avg_dice), 
+        'dice_std': float(dice_std),
+        'avg_iou': float(avg_iou),
+        'iou_std': float(iou_std),
+        'total_samples': len(segmentation_results)
+    }
     print(f"\n[Segmentation]\n")
-    print(f"Average Dice Score: {avg_dice:.4f}")
-    print(f"Average IoU Score:  {avg_iou:.4f}")
+    print(f"Average Dice Score: {avg_dice:.4f} ± {dice_std:.4f}")
+    print(f"Average IoU Score:  {avg_iou:.4f} ± {iou_std:.4f}")
 
     # Classification Metrics
     true_labels = [res['true'] for res in classification_results]
@@ -122,9 +131,51 @@ def run_evaluation(args):
     class_names = list(bcss_dataset.class_names.values())[1:] # Exclude background
     cm = confusion_matrix(true_labels, pred_labels, labels=class_names)
     
-    metrics['classification'] = {'accuracy': accuracy, 'labels': class_names, 'confusion_matrix': cm.tolist()}
+    # Add precision, recall, F1 per class
+    from sklearn.metrics import precision_recall_fscore_support
+    precision, recall, f1, support = precision_recall_fscore_support(
+        true_labels, pred_labels, labels=class_names, zero_division=0
+    )
+    
+    per_class_clf = {}
+    for idx, cname in enumerate(class_names):
+        per_class_clf[cname] = {
+            'precision': float(precision[idx]),
+            'recall': float(recall[idx]),
+            'f1_score': float(f1[idx]),
+            'support': int(support[idx])
+        }
+    
+    metrics['classification'] = {
+        'accuracy': float(accuracy), 
+        'labels': class_names, 
+        'confusion_matrix': cm.tolist(),
+        'per_class': per_class_clf,
+        'macro_avg': {
+            'precision': float(np.mean(precision)),
+            'recall': float(np.mean(recall)),
+            'f1_score': float(np.mean(f1))
+        },
+        'weighted_avg': {
+            'precision': float(np.average(precision, weights=support)) if support.sum() > 0 else 0,
+            'recall': float(np.average(recall, weights=support)) if support.sum() > 0 else 0,
+            'f1_score': float(np.average(f1, weights=support)) if support.sum() > 0 else 0
+        },
+        'total_samples': len(classification_results)
+    }
+    
     print(f"\n[Classification]\n")
     print(f"Overall Accuracy: {accuracy:.4f}")
+    print(f"Macro F1: {np.mean(f1):.4f}")
+    print("\nPer-Class Metrics:")
+    print(f"{'Class':15s} | {'Precision':10s} | {'Recall':10s} | {'F1':10s} | {'Support':8s}")
+    print("-"*60)
+    for cname in class_names:
+        p = per_class_clf[cname]['precision']
+        r = per_class_clf[cname]['recall']
+        f = per_class_clf[cname]['f1_score']
+        s = per_class_clf[cname]['support']
+        print(f"{cname:15s} | {p:10.4f} | {r:10.4f} | {f:10.4f} | {s:8d}")
     print("\nConfusion Matrix:")
     print(cm)
 

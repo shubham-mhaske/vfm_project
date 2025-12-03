@@ -314,6 +314,7 @@ def evaluate_medsam(args):
     num_samples = len(bcss_dataset) if args.max_samples is None else min(args.max_samples, len(bcss_dataset))
     class_names = bcss_dataset.class_names
     class_dice_scores = {cid: [] for cid in class_names if cid != 0}
+    class_iou_scores = {cid: [] for cid in class_names if cid != 0}  # Added IoU tracking
     sample_results = []
     
     print(f"\n{'='*60}")
@@ -377,6 +378,7 @@ def evaluate_medsam(args):
             # Calculate metrics
             dice, iou = calculate_metrics(predicted_mask, binary_gt_mask)
             class_dice_scores[class_id].append(dice)
+            class_iou_scores[class_id].append(iou)  # Track IoU
             sample_results.append({
                 'sample_idx': int(i),
                 'class_id': int(class_id),
@@ -394,16 +396,25 @@ def evaluate_medsam(args):
     for cid, cname in class_names.items():
         if cid == 0:
             continue
-        scores = class_dice_scores.get(cid, [])
+        dice_scores = class_dice_scores.get(cid, [])
+        iou_scores = class_iou_scores.get(cid, [])
         results[cname] = {
-            'dice': float(np.mean(scores)) if scores else 0,
-            'std': float(np.std(scores)) if scores else 0,
-            'count': len(scores)
+            'dice': float(np.mean(dice_scores)) if dice_scores else 0,
+            'dice_std': float(np.std(dice_scores)) if dice_scores else 0,
+            'iou': float(np.mean(iou_scores)) if iou_scores else 0,
+            'iou_std': float(np.std(iou_scores)) if iou_scores else 0,
+            'count': len(dice_scores)
         }
     
-    all_scores = [s for scores in class_dice_scores.values() for s in scores]
-    results['overall'] = float(np.mean(all_scores)) if all_scores else 0
-    results['overall_std'] = float(np.std(all_scores)) if all_scores else 0
+    all_dice = [s for scores in class_dice_scores.values() for s in scores]
+    all_iou = [s for scores in class_iou_scores.values() for s in scores]
+    results['overall'] = {
+        'dice': float(np.mean(all_dice)) if all_dice else 0,
+        'dice_std': float(np.std(all_dice)) if all_dice else 0,
+        'iou': float(np.mean(all_iou)) if all_iou else 0,
+        'iou_std': float(np.std(all_iou)) if all_iou else 0,
+        'total_samples': len(all_dice)
+    }
     
     # Add metadata
     results['_metadata'] = {
@@ -417,18 +428,16 @@ def evaluate_medsam(args):
     
     # Print results
     print("\n" + "="*60)
-    print("Results: Per-Class Dice Scores")
+    print("Results: Per-Class Metrics (Dice | IoU)")
     print("="*60)
     for cname, data in results.items():
         if cname.startswith('_'):
             continue
         if cname == 'overall':
-            print("-"*40)
-            print(f"{'OVERALL':15s}: {data:.4f}")
-        elif cname == 'overall_std':
-            continue
+            print("-"*50)
+            print(f"{'OVERALL':15s}: Dice={data['dice']:.4f} | IoU={data['iou']:.4f}")
         else:
-            print(f"{cname:15s}: {data['dice']:.4f} ± {data['std']:.4f} (n={data['count']})")
+            print(f"{cname:15s}: {data['dice']:.4f} ± {data['dice_std']:.4f} | {data['iou']:.4f} ± {data['iou_std']:.4f} (n={data['count']})")
     print("="*60)
     
     # Save results

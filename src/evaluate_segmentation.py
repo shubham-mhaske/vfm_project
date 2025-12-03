@@ -228,6 +228,7 @@ def evaluate_segmentation(args):
 
     class_names = bcss_dataset.class_names
     class_dice_scores = {cid: [] for cid in class_names if cid != 0}
+    class_iou_scores = {cid: [] for cid in class_names if cid != 0}  # Added IoU tracking
     sample_results = []
 
     loop_start = time.time()
@@ -264,24 +265,45 @@ def evaluate_segmentation(args):
             
             dice, iou = calculate_metrics(predicted_mask, binary_gt_mask)
             class_dice_scores[class_id].append(dice)
-            sample_results.append({'sample_idx': i, 'class_id': class_id, 'dice': dice, 'image_path': bcss_dataset.image_files[i]})
+            class_iou_scores[class_id].append(iou)  # Store IoU
+            sample_results.append({
+                'sample_idx': i, 
+                'class_id': class_id, 
+                'dice': float(dice), 
+                'iou': float(iou),  # Added IoU
+                'image_path': bcss_dataset.image_files[i]
+            })
 
     # --- Metrics Calculation and Reporting ---
     results = {}
     for cid, cname in class_names.items():
         if cid == 0: continue
-        scores = class_dice_scores.get(cid, [])
-        results[cname] = {'dice': np.mean(scores) if scores else 0, 'std': np.std(scores) if scores else 0, 'count': len(scores)}
+        dice_scores = class_dice_scores.get(cid, [])
+        iou_scores = class_iou_scores.get(cid, [])
+        results[cname] = {
+            'dice': float(np.mean(dice_scores)) if dice_scores else 0, 
+            'dice_std': float(np.std(dice_scores)) if dice_scores else 0,
+            'iou': float(np.mean(iou_scores)) if iou_scores else 0,
+            'iou_std': float(np.std(iou_scores)) if iou_scores else 0,
+            'count': len(dice_scores)
+        }
     
-    all_scores = [s for scores in class_dice_scores.values() for s in scores]
-    results['overall'] = np.mean(all_scores) if all_scores else 0
+    all_dice = [s for scores in class_dice_scores.values() for s in scores]
+    all_iou = [s for scores in class_iou_scores.values() for s in scores]
+    results['overall'] = {
+        'dice': float(np.mean(all_dice)) if all_dice else 0,
+        'dice_std': float(np.std(all_dice)) if all_dice else 0,
+        'iou': float(np.mean(all_iou)) if all_iou else 0,
+        'iou_std': float(np.std(all_iou)) if all_iou else 0,
+        'total_samples': len(all_dice)
+    }
     
-    print("\n--- Per-Class Dice Scores ---")
+    print("\n--- Per-Class Metrics (Dice | IoU) ---")
     for cname, data in results.items():
         if cname != 'overall':
-            print(f"{cname:15s}: {data['dice']:.4f} (count: {data['count']})")
-    print(f"---------------------------------")
-    print(f"Overall Avg Dice: {results['overall']:.4f}")
+            print(f"{cname:15s}: {data['dice']:.4f} ± {data['dice_std']:.4f} | {data['iou']:.4f} ± {data['iou_std']:.4f} (n={data['count']})")
+    print(f"-----------------------------------------")
+    print(f"Overall:        Dice={results['overall']['dice']:.4f} | IoU={results['overall']['iou']:.4f}")
 
     # --- Save Visualizations ---
     if args.save_predictions and output_dir is not None:
