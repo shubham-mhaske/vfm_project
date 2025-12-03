@@ -1,0 +1,346 @@
+{
+  "hardcoded_v1": {
+    "per_class": {
+      "tumor": {
+        "precision": 1.0,
+        "recall": 0.08888888888888889,
+        "f1_score": 0.16326530612244897,
+        "support": 45
+      },
+      "stroma": {
+        "precision": 0.27586206896551724,
+        "recall": 0.17777777777777778,
+        "f1_score": 0.21621621621621623,
+        "support": 45
+      },
+      "lymphocyte": {
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1_score": 0.0,
+        "support": 37
+      },
+      "necrosis": {
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1_score": 0.0,
+        "support": 23
+      },
+      "blood_vessel": {
+        "precision": 0.28846153846153844,
+        "recall": 1.0,
+        "f1_score": 0.44776119402985076,
+        "support": 30
+      }
+    },
+    "macro_avg": {
+      "precision": 0.26072060123784263,
+      "recall": 0.2111111111111111,
+      "f1_score": 0.1378737860614193
+    },
+    "overall": {
+      "accuracy": 0.23333333333333334,
+      "total_samples": 180
+    }
+  },
+  "hardcoded_v2": {
+    "per_class": {
+      "tumor": {
+        "precision": 0.9761904761904762,
+        "recall": 0.9111111111111111,
+        "f1_score": 0.9425287356321839,
+        "support": 45
+      },
+      "stroma": {
+        "precision": 0.6666666666666666,
+        "recall": 0.08888888888888889,
+        "f1_score": 0.1568627450980392,
+        "support": 45
+      },
+      "lymphocyte": {
+        "precision": 0.3333333333333333,
+        "recall": 0.02702702702702703,
+        "f1_score": 0.05,
+        "support": 37
+      },
+      "necrosis": {
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1_score": 0.0,
+        "support": 23
+      },
+      "blood_vessel": {
+        "precision": 0.2564102564102564,
+        "recall": 1.0,
+        "f1_score": 0.40816326530612246,
+        "support": 30
+      }
+    },
+    "macro_avg": {
+      "precision": 0.44652014652014654,
+      "recall": 0.4054054054054054,
+      "f1_score": 0.31151094920726907
+    },
+    "overall": {
+      "accuracy": 0.4222222222222222,
+      "total_samples": 180
+    }
+  },
+  "llm_text_v1_jargon": {
+    "per_class": {
+      "tumor": {
+        "precision": 1.0,
+        "recall": 0.022222222222222223,
+        "f1_score": 0.043478260869565216,
+        "support": 45
+      },
+      "stroma": {
+        "precision": 0.5882352941176471,
+        "recall": 0.4444444444444444,
+        "f1_score": 0.5063291139240507,
+        "support": 45
+      },
+      "lymphocyte": {
+        "precision": 0.041666666666666664,
+        "recall": 0.02702702702702703,
+        "f1_score": 0.03278688524590164,
+        "support": 37
+      },
+      "necrosis": {
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1_score": 0.0,
+        "support": 23
+      },
+      "blood_vessel": {
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1_score": 0.0,
+        "support": 30
+      }
+    },
+    "macro_avg": {
+      "precision": 0.2716503267973856,
+      "recall": 0.08228228228228228,
+      "f1_score": 0.09709904333991959
+    },
+    "overall": {
+      "accuracy": 0.12222222222222222,
+      "total_samples": 180
+    }
+  },
+  "llm_text_v2_clip_friendly": {
+    "per_class": {
+      "tumor": {
+        "precision": 1.0,
+        "recall": 0.7111111111111111,
+        "f1_score": 0.8311688311688312,
+        "support": 45
+      },
+      "stroma": {
+        "precision": 1.0,
+        "recall": 0.044444444444444446,
+        "f1_score": 0.0851063829787234,
+        "support": 45
+      },
+      "lymphocyte": {
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1_score": 0.0,
+        "support": 37
+      },
+      "necrosis": {
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1_score": 0.0,
+        "support": 23
+      },
+      "blood_vessel": {
+        "precision": 0.27522935779816515,
+        "recall": 1.0,
+        "f1_score": 0.4316546762589928,
+        "support": 30
+      }
+    },
+    "macro_avg": {
+      "precision": 0.45504587155963305,
+      "recall": 0.3511111111111111,
+      "f1_score": 0.26958597808130946
+    },
+    "overall": {
+      "accuracy": 0.35555555555555557,
+      "total_samples": 180
+    }
+  },
+  "llm_text_v3_fewshot": {
+    "per_class": {
+      "tumor": {
+        "precision": 0.9736842105263158,
+        "recall": 0.8222222222222222,
+        "f1_score": 0.891566265060241,
+        "support": 45
+      },
+      "stroma": {
+        "precision": 0.6190476190476191,
+        "recall": 0.28888888888888886,
+        "f1_score": 0.3939393939393939,
+        "support": 45
+      },
+      "lymphocyte": {
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1_score": 0.0,
+        "support": 37
+      },
+      "necrosis": {
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1_score": 0.0,
+        "support": 23
+      },
+      "blood_vessel": {
+        "precision": 0.2542372881355932,
+        "recall": 1.0,
+        "f1_score": 0.40540540540540543,
+        "support": 30
+      }
+    },
+    "macro_avg": {
+      "precision": 0.3693938235419056,
+      "recall": 0.42222222222222217,
+      "f1_score": 0.338182212881008
+    },
+    "overall": {
+      "accuracy": 0.4444444444444444,
+      "total_samples": 180
+    }
+  },
+  "llm_multimodal_v1": {
+    "per_class": {
+      "tumor": {
+        "precision": 1.0,
+        "recall": 0.2222222222222222,
+        "f1_score": 0.36363636363636365,
+        "support": 45
+      },
+      "stroma": {
+        "precision": 0.5,
+        "recall": 0.1111111111111111,
+        "f1_score": 0.18181818181818182,
+        "support": 45
+      },
+      "lymphocyte": {
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1_score": 0.0,
+        "support": 37
+      },
+      "necrosis": {
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1_score": 0.0,
+        "support": 23
+      },
+      "blood_vessel": {
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1_score": 0.0,
+        "support": 30
+      }
+    },
+    "macro_avg": {
+      "precision": 0.25,
+      "recall": 0.05555555555555555,
+      "f1_score": 0.0909090909090909
+    },
+    "overall": {
+      "accuracy": 0.08333333333333333,
+      "total_samples": 180
+    }
+  },
+  "llm_multimodal_v2_clip_friendly": {
+    "per_class": {
+      "tumor": {
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1_score": 0.0,
+        "support": 45
+      },
+      "stroma": {
+        "precision": 1.0,
+        "recall": 0.06666666666666667,
+        "f1_score": 0.125,
+        "support": 45
+      },
+      "lymphocyte": {
+        "precision": 0.02040816326530612,
+        "recall": 0.02702702702702703,
+        "f1_score": 0.023255813953488372,
+        "support": 37
+      },
+      "necrosis": {
+        "precision": 0.21495327102803738,
+        "recall": 1.0,
+        "f1_score": 0.35384615384615387,
+        "support": 23
+      },
+      "blood_vessel": {
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1_score": 0.0,
+        "support": 30
+      }
+    },
+    "macro_avg": {
+      "precision": 0.2470722868586687,
+      "recall": 0.21873873873873872,
+      "f1_score": 0.10042039355992845
+    },
+    "overall": {
+      "accuracy": 0.15,
+      "total_samples": 180
+    }
+  },
+  "llm_multimodal_v3_fewshot": {
+    "per_class": {
+      "tumor": {
+        "precision": 0.9565217391304348,
+        "recall": 0.4888888888888889,
+        "f1_score": 0.6470588235294118,
+        "support": 45
+      },
+      "stroma": {
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1_score": 0.0,
+        "support": 45
+      },
+      "lymphocyte": {
+        "precision": 0.25,
+        "recall": 0.02702702702702703,
+        "f1_score": 0.04878048780487805,
+        "support": 37
+      },
+      "necrosis": {
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1_score": 0.0,
+        "support": 23
+      },
+      "blood_vessel": {
+        "precision": 0.25210084033613445,
+        "recall": 1.0,
+        "f1_score": 0.40268456375838924,
+        "support": 30
+      }
+    },
+    "macro_avg": {
+      "precision": 0.29172451589331383,
+      "recall": 0.30318318318318316,
+      "f1_score": 0.21970477501853583
+    },
+    "overall": {
+      "accuracy": 0.29444444444444445,
+      "total_samples": 180
+    }
+  }
+}

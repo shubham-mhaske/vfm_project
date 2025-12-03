@@ -1,45 +1,51 @@
-# Datasets
+# ===========================================
+# VFM Project .gitignore
+# ===========================================
+
+# ----- Data & Large Files -----
 data/
-
-
-# Models
 models/
+sam2/checkpoints/*.pt
 
-# Logs - exclude checkpoints but keep logs/metrics
-finetune_logs/
-
-# But include analysis files (logs, configs, metrics)
-!finetune_logs/**/
-!finetune_logs/**/*.log
-!finetune_logs/**/*.txt
-!finetune_logs/**/*.json
-!finetune_logs/**/*.yaml
-!finetune_logs/**/*.md
-!finetune_logs/**/*.csv
-
-# Exclude large files from finetune_logs
+# ----- Training Outputs -----
 finetune_logs/**/*.pt
 finetune_logs/**/*.pth
 finetune_logs/**/*.ckpt
 finetune_logs/**/*.safetensors
 finetune_logs/**/checkpoints/
-finetune_logs/**/tensorboard/events.out.tfevents.*
+finetune_logs/**/tensorboard/
 
-# Python cache
+# ----- Results (keep figures & metrics) -----
+results/**/*.png
+results/**/*.jpg
+!results/figures/
+!results/complete_metrics/
+
+# ----- Python -----
 __pycache__/
 *.pyc
+*.pyo
+*.egg-info/
+.eggs/
+*.egg
 
-# OS-specific
+# ----- OS -----
 .DS_Store
+Thumbs.db
 
-# Output files
-*.png
-*.jpg
+# ----- IDE -----
+.vscode/
+.idea/
+*.swp
+*.swo
 
-# Jupyter notebook checkpoints
+# ----- Jupyter -----
 .ipynb_checkpoints/
-results/
-MedSAM/
 
-# Presentation data (downloaded from HPRC for local use)
-presentation_data/
+# ----- External Dependencies -----
+MedSAM/
+CrowdsourcingDataset-Amgadetal2019/data/
+
+# ----- Slurm Logs -----
+slurm_logs/*.out
+slurm_logs/*.err

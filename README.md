@@ -25,30 +25,44 @@ A comprehensive framework for zero-shot histopathology analysis using Visual Fou
 ## Directory Structure
 
 ```
-├── conf/                     # Hydra configuration
-│   └── experiment/           # Training configs
-├── configs/prompts/          # CLIP prompt files
-├── data/bcss/                # Dataset (images + masks)
-├── docs/                     # Setup guides
-├── experiments/              # Experiment tracking
-├── finetune_logs/            # Training outputs & checkpoints
-├── presentation_data/        # Presentation figures & results
-│   ├── figures/             # Generated plots
-│   ├── finetune_logs/       # Training curves data
-│   └── results/             # All experiment metrics
-├── results/                  # Evaluation results
-├── sam2/                     # SAM2 submodule
-├── scripts/                  # Utility scripts
-│   ├── slurm/               # HPC job scripts
-│   ├── training/            # Local training scripts
-│   └── plot_training_curves.py  # Generate presentation figures
-├── src/                      # Source code
-│   ├── evaluation.py         # Full SAM2+CLIP pipeline
-│   ├── train_clip_classifier.py  # CLIP feature classifier
-│   ├── test_plip.py          # PLIP evaluation
-│   ├── test_ensemble.py      # Ensemble methods
-│   └── test_multiscale.py    # Multi-scale analysis
-└── EXPERIMENTS.md            # Complete experiment tracker
+vfm_project/
+├── conf/                         # Hydra configuration
+│   ├── config.yaml
+│   └── experiment/               # Training experiment configs
+├── configs/prompts/              # CLIP prompt JSON files
+├── data/bcss/                    # Dataset (images + masks)
+├── docs/                         # Documentation
+│   ├── FINAL_RESULTS_SUMMARY.md  # Complete results overview
+│   ├── EXPERIMENT_COMPARISON.md  # Comparison framework
+│   └── HPRC_GRACE_SETUP.md       # HPC setup guide
+├── finetune_logs/                # Training outputs
+│   ├── sam2_base_100ep/          # Base finetuning (100 epochs)
+│   ├── sam2_focal_50ep/          # Focal loss (50 epochs)
+│   ├── sam2_lora_30ep/           # LoRA adapter (30 epochs)
+│   └── pathsam2_ctranspath/      # CTransPath encoder
+├── results/                      # Evaluation results
+│   ├── figures/                  # Publication figures (PNG/PDF)
+│   ├── complete_metrics/         # Raw JSON metrics
+│   ├── sam2_zeroshot_hardcoded/  # Best SAM2 results
+│   ├── medsam_box_tta/           # MedSAM with TTA
+│   ├── clip_llm_text_fewshot/    # Best CLIP results
+│   └── sam2_prompt_ablation/     # Prompt type ablation
+├── scripts/                      # Utility scripts
+│   ├── analysis/                 # Figure/table generation
+│   ├── slurm/                    # HPC job scripts
+│   ├── training/                 # Training launchers
+│   └── utils/                    # Download helpers
+├── src/                          # Source code
+│   ├── dataset.py                # BCSS data loader
+│   ├── sam_segmentation.py       # SAM2 segmentation
+│   ├── clip_classification.py    # CLIP classification
+│   ├── evaluation.py             # Main evaluation pipeline
+│   ├── evaluators/               # Evaluation scripts
+│   ├── trainers/                 # Training scripts
+│   └── prompt_generators/        # LLM prompt generation
+├── sam2/                         # SAM2 submodule
+├── MedSAM/                       # MedSAM submodule
+└── models/                       # Model checkpoints
 ```
 
 ## Quick Start
@@ -80,10 +94,15 @@ python src/train_clip_classifier.py \
   --output_dir results/clip_classifier
 ```
 
-### 3. Generate Presentation Figures
+### 3. Generate Publication Figures
 ```bash
-python scripts/plot_training_curves.py
-# Outputs: presentation_data/figures/
+# Generate comparison figures
+python scripts/analysis/generate_comparison_figures.py
+
+# Generate training analysis & ablation studies
+python scripts/analysis/generate_training_analysis.py
+
+# Outputs: results/figures/ (13 PNG/PDF figures + LaTeX tables)
 ```
 
 ## Recent Experiments (December 2025)
@@ -156,13 +175,25 @@ For TAMU HPRC Grace cluster setup, see `docs/HPRC_GRACE_SETUP.md`.
 
 ## Generated Figures
 
-Run `python scripts/plot_training_curves.py` to generate:
-- `sam2_finetuning_losses.png` - Training loss curves
-- `lora_training_curves.png` - LoRA overfitting visualization
-- `experiment_comparison.png` - All methods comparison
-- `prompt_engineering_impact.png` - Prompt engineering gains
-- `catastrophic_forgetting.png` - Why fine-tuning failed
-- `pipeline_summary.png` - Key results summary
+Run figure generation scripts to create publication-ready outputs:
+
+### Main Figures (`results/figures/`)
+- `fig1_segmentation_comparison.*` - SAM2 vs MedSAM performance
+- `fig2_perclass_heatmap.*` - Per-class Dice heatmap
+- `fig3_clip_comparison.*` - CLIP prompt strategies
+- `fig4_prompt_effect.*` - SAM2 prompt type impact
+- `fig5_radar_comparison.*` - Multi-metric radar chart
+
+### Ablation Study Figures
+- `fig_training_curves.*` - Training loss over epochs
+- `fig_zeroshot_vs_finetuned.*` - Zero-shot vs finetuned
+- `fig_ablation_prompts.*` - Prompt type ablation
+- `fig_ablation_tta.*` - TTA effect analysis
+- `fig_ablation_clip_prompts.*` - CLIP prompt engineering
+
+### LaTeX Tables
+- `latex_tables.tex` - Main comparison tables
+- `ablation_tables.tex` - Ablation study tables
 
 ## License
 

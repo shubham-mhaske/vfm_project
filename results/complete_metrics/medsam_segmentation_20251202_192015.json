@@ -1,0 +1,24 @@
+{
+  "medsam_box": {
+    "per_class": {},
+    "overall": {
+      "dice_mean": 0,
+      "dice_std": 0,
+      "iou_mean": 0,
+      "iou_std": 0,
+      "total_samples": 0
+    },
+    "use_tta": false
+  },
+  "medsam_box_tta": {
+    "per_class": {},
+    "overall": {
+      "dice_mean": 0,
+      "dice_std": 0,
+      "iou_mean": 0,
+      "iou_std": 0,
+      "total_samples": 0
+    },
+    "use_tta": true
+  }
+}

@@ -1,0 +1,9 @@
+Prompt_Config,Dice,IoU,CLIP_Accuracy,Correct,Total,Time_s
+exp3_llm_text_v3_fewshot,0.5256,0.3801,0.3889,70,180,426.5
+exp1_hardcoded_v2,0.5252,0.3792,0.3556,64,180,433.6
+exp3_llm_text_v2_clip_friendly,0.5185,0.3738,0.3389,61,180,426.7
+exp5_llm_multimodal_v3_fewshot,0.5125,0.3701,0.3034,54,178,434.8
+exp5_llm_multimodal_v2_clip_friendly,0.5203,0.3759,0.2889,52,180,424.1
+exp1_hardcoded_v1,0.5250,0.3799,0.2570,46,179,464.2
+exp3_llm_text_v1_jargon,0.5259,0.3813,0.2291,41,179,490.4
+exp5_llm_multimodal_v1,0.5254,0.3806,0.1844,33,179,427.1

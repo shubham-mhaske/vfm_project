@@ -1,0 +1,386 @@
+{
+  "exp1_hardcoded_v1": {
+    "per_class": {
+      "tumor": {
+        "dice": 0.5671800709206727,
+        "iou": 0.410683668055735,
+        "clip_acc": 0.35555555555555557,
+        "correct": 16,
+        "total": 45
+      },
+      "stroma": {
+        "dice": 0.5003410124594738,
+        "iou": 0.35928011619775546,
+        "clip_acc": 0.06818181818181818,
+        "correct": 3,
+        "total": 44
+      },
+      "lymphocyte": {
+        "dice": 0.4767612503782276,
+        "iou": 0.33098127164275165,
+        "clip_acc": 0.0,
+        "correct": 0,
+        "total": 37
+      },
+      "necrosis": {
+        "dice": 0.6306398006265826,
+        "iou": 0.4893773484016083,
+        "clip_acc": 0.43478260869565216,
+        "correct": 10,
+        "total": 23
+      },
+      "blood_vessel": {
+        "dice": 0.47873497479504223,
+        "iou": 0.3424029479696807,
+        "clip_acc": 0.5666666666666667,
+        "correct": 17,
+        "total": 30
+      }
+    },
+    "overall": {
+      "dice": 0.524995108558888,
+      "iou": 0.37991628587008813,
+      "clip_acc": 0.2569832402234637,
+      "correct": 46,
+      "total": 179
+    },
+    "time_seconds": 464.21082949638367,
+    "prompt_file": "configs/prompts/hard_coded_prompts.json"
+  },
+  "exp1_hardcoded_v2": {
+    "per_class": {
+      "tumor": {
+        "dice": 0.5658545591320294,
+        "iou": 0.40906441721213005,
+        "clip_acc": 0.5777777777777777,
+        "correct": 26,
+        "total": 45
+      },
+      "stroma": {
+        "dice": 0.5082056057490962,
+        "iou": 0.36403307576874566,
+        "clip_acc": 0.6444444444444445,
+        "correct": 29,
+        "total": 45
+      },
+      "lymphocyte": {
+        "dice": 0.4851105316524577,
+        "iou": 0.3407849231854401,
+        "clip_acc": 0.02702702702702703,
+        "correct": 1,
+        "total": 37
+      },
+      "necrosis": {
+        "dice": 0.6155930671699852,
+        "iou": 0.47005365051260717,
+        "clip_acc": 0.08695652173913043,
+        "correct": 2,
+        "total": 23
+      },
+      "blood_vessel": {
+        "dice": 0.4714435874987132,
+        "iou": 0.3364688584305727,
+        "clip_acc": 0.2,
+        "correct": 6,
+        "total": 30
+      }
+    },
+    "overall": {
+      "dice": 0.5251667892163611,
+      "iou": 0.37922761279082007,
+      "clip_acc": 0.35555555555555557,
+      "correct": 64,
+      "total": 180
+    },
+    "time_seconds": 433.643678188324,
+    "prompt_file": "configs/prompts/hard_coded_prompts_v2.json"
+  },
+  "exp3_llm_text_v1_jargon": {
+    "per_class": {
+      "tumor": {
+        "dice": 0.5679929441429913,
+        "iou": 0.4113778516000575,
+        "clip_acc": 0.022222222222222223,
+        "correct": 1,
+        "total": 45
+      },
+      "stroma": {
+        "dice": 0.4996436207466126,
+        "iou": 0.3578865880101709,
+        "clip_acc": 0.7954545454545454,
+        "correct": 35,
+        "total": 44
+      },
+      "lymphocyte": {
+        "dice": 0.48091160554543994,
+        "iou": 0.33859608826282217,
+        "clip_acc": 0.08108108108108109,
+        "correct": 3,
+        "total": 37
+      },
+      "necrosis": {
+        "dice": 0.6201737607562865,
+        "iou": 0.4753887083541534,
+        "clip_acc": 0.0,
+        "correct": 0,
+        "total": 23
+      },
+      "blood_vessel": {
+        "dice": 0.4868768267799846,
+        "iou": 0.3526405846034956,
+        "clip_acc": 0.06666666666666667,
+        "correct": 2,
+        "total": 30
+      }
+    },
+    "overall": {
+      "dice": 0.5259367566452351,
+      "iou": 0.38127488101126306,
+      "clip_acc": 0.22905027932960895,
+      "correct": 41,
+      "total": 179
+    },
+    "time_seconds": 490.36665201187134,
+    "prompt_file": "configs/prompts/llm_text_prompts_v1_gemini_pro_latest.json"
+  },
+  "exp3_llm_text_v2_clip_friendly": {
+    "per_class": {
+      "tumor": {
+        "dice": 0.567251427807908,
+        "iou": 0.41086847531373116,
+        "clip_acc": 0.9777777777777777,
+        "correct": 44,
+        "total": 45
+      },
+      "stroma": {
+        "dice": 0.5081872447695094,
+        "iou": 0.3635778929565658,
+        "clip_acc": 0.0,
+        "correct": 0,
+        "total": 45
+      },
+      "lymphocyte": {
+        "dice": 0.4579613607780753,
+        "iou": 0.3160129061212917,
+        "clip_acc": 0.0,
+        "correct": 0,
+        "total": 37
+      },
+      "necrosis": {
+        "dice": 0.5927923597799224,
+        "iou": 0.45454297636002416,
+        "clip_acc": 0.17391304347826086,
+        "correct": 4,
+        "total": 23
+      },
+      "blood_vessel": {
+        "dice": 0.4796883129707616,
+        "iou": 0.34411875078953247,
+        "clip_acc": 0.43333333333333335,
+        "correct": 13,
+        "total": 30
+      }
+    },
+    "overall": {
+      "dice": 0.518474434208864,
+      "iou": 0.3738383084497637,
+      "clip_acc": 0.3388888888888889,
+      "correct": 61,
+      "total": 180
+    },
+    "time_seconds": 426.7256700992584,
+    "prompt_file": "configs/prompts/llm_text_prompts_v2_clip_friendly.json"
+  },
+  "exp3_llm_text_v3_fewshot": {
+    "per_class": {
+      "tumor": {
+        "dice": 0.5657713100367239,
+        "iou": 0.40909914007120485,
+        "clip_acc": 0.6666666666666666,
+        "correct": 30,
+        "total": 45
+      },
+      "stroma": {
+        "dice": 0.5095930797857516,
+        "iou": 0.3655389699938907,
+        "clip_acc": 0.7555555555555555,
+        "correct": 34,
+        "total": 45
+      },
+      "lymphocyte": {
+        "dice": 0.48143852143382776,
+        "iou": 0.33659979641165133,
+        "clip_acc": 0.0,
+        "correct": 0,
+        "total": 37
+      },
+      "necrosis": {
+        "dice": 0.6076348303248983,
+        "iou": 0.4655731067239877,
+        "clip_acc": 0.043478260869565216,
+        "correct": 1,
+        "total": 23
+      },
+      "blood_vessel": {
+        "dice": 0.48233356629208446,
+        "iou": 0.34777637886453905,
+        "clip_acc": 0.16666666666666666,
+        "correct": 5,
+        "total": 30
+      }
+    },
+    "overall": {
+      "dice": 0.5255942789369631,
+      "iou": 0.3801224122630542,
+      "clip_acc": 0.3888888888888889,
+      "correct": 70,
+      "total": 180
+    },
+    "time_seconds": 426.54382944107056,
+    "prompt_file": "configs/prompts/llm_text_prompts_v3_fewshot.json"
+  },
+  "exp5_llm_multimodal_v1": {
+    "per_class": {
+      "tumor": {
+        "dice": 0.5684920248729779,
+        "iou": 0.41187067288682117,
+        "clip_acc": 0.4,
+        "correct": 18,
+        "total": 45
+      },
+      "stroma": {
+        "dice": 0.5025591772806816,
+        "iou": 0.36053970493626475,
+        "clip_acc": 0.1590909090909091,
+        "correct": 7,
+        "total": 44
+      },
+      "lymphocyte": {
+        "dice": 0.4820174480048311,
+        "iou": 0.3379658904766606,
+        "clip_acc": 0.0,
+        "correct": 0,
+        "total": 37
+      },
+      "necrosis": {
+        "dice": 0.6186604446753318,
+        "iou": 0.477328437787577,
+        "clip_acc": 0.0,
+        "correct": 0,
+        "total": 23
+      },
+      "blood_vessel": {
+        "dice": 0.47849892794068166,
+        "iou": 0.34354199954331943,
+        "clip_acc": 0.26666666666666666,
+        "correct": 8,
+        "total": 30
+      }
+    },
+    "overall": {
+      "dice": 0.5253845672198186,
+      "iou": 0.3806163591416159,
+      "clip_acc": 0.18435754189944134,
+      "correct": 33,
+      "total": 179
+    },
+    "time_seconds": 427.0886392593384,
+    "prompt_file": "configs/prompts/llm_multimodal_prompts_v1_gemini_2.5_flash.json"
+  },
+  "exp5_llm_multimodal_v2_clip_friendly": {
+    "per_class": {
+      "tumor": {
+        "dice": 0.567334062642391,
+        "iou": 0.41066554843589687,
+        "clip_acc": 0.0,
+        "correct": 0,
+        "total": 45
+      },
+      "stroma": {
+        "dice": 0.5070951279716363,
+        "iou": 0.3634898269664585,
+        "clip_acc": 0.0,
+        "correct": 0,
+        "total": 45
+      },
+      "lymphocyte": {
+        "dice": 0.46467138027999116,
+        "iou": 0.32232609821437763,
+        "clip_acc": 0.918918918918919,
+        "correct": 34,
+        "total": 37
+      },
+      "necrosis": {
+        "dice": 0.6087147529199258,
+        "iou": 0.47014986689418786,
+        "clip_acc": 0.34782608695652173,
+        "correct": 8,
+        "total": 23
+      },
+      "blood_vessel": {
+        "dice": 0.47182206795698606,
+        "iou": 0.33757179777883656,
+        "clip_acc": 0.3333333333333333,
+        "correct": 10,
+        "total": 30
+      }
+    },
+    "overall": {
+      "dice": 0.5202711495680429,
+      "iou": 0.375918398877062,
+      "clip_acc": 0.28888888888888886,
+      "correct": 52,
+      "total": 180
+    },
+    "time_seconds": 424.0589225292206,
+    "prompt_file": "configs/prompts/llm_multimodal_prompts_v2_clip_friendly.json"
+  },
+  "exp5_llm_multimodal_v3_fewshot": {
+    "per_class": {
+      "tumor": {
+        "dice": 0.5698256446446552,
+        "iou": 0.4131523946219572,
+        "clip_acc": 0.6,
+        "correct": 27,
+        "total": 45
+      },
+      "stroma": {
+        "dice": 0.49099672793183097,
+        "iou": 0.35301342500538463,
+        "clip_acc": 0.37209302325581395,
+        "correct": 16,
+        "total": 43
+      },
+      "lymphocyte": {
+        "dice": 0.4744875707110557,
+        "iou": 0.3300591640326857,
+        "clip_acc": 0.0,
+        "correct": 0,
+        "total": 37
+      },
+      "necrosis": {
+        "dice": 0.5536868798227081,
+        "iou": 0.4209210894714687,
+        "clip_acc": 0.17391304347826086,
+        "correct": 4,
+        "total": 23
+      },
+      "blood_vessel": {
+        "dice": 0.4754031746364508,
+        "iou": 0.34260882066249787,
+        "clip_acc": 0.23333333333333334,
+        "correct": 7,
+        "total": 30
+      }
+    },
+    "overall": {
+      "dice": 0.5125157101210122,
+      "iou": 0.3701199417172429,
+      "clip_acc": 0.30337078651685395,
+      "correct": 54,
+      "total": 178
+    },
+    "time_seconds": 434.8304793834686,
+    "prompt_file": "configs/prompts/llm_multimodal_prompts_v3_fewshot.json"
+  }
+}

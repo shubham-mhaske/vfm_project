@@ -1,0 +1,95 @@
+% Ablation Study Tables for VFM Project
+% Auto-generated - do not edit manually
+
+
+\begin{table}[h]
+\centering
+\caption{Ablation Study: Effect of Prompt Type on SAM2 Segmentation}
+\label{tab:prompt_ablation}
+\begin{tabular}{lccccc}
+\toprule
+\textbf{Prompt Type} & \textbf{Dice} & \textbf{IoU} & \textbf{$\Delta$ Dice} & \textbf{Complexity} \\
+\midrule
+Centroid & 0.338 & 0.236 & - & Low \\
+Multi-Point (5 pts) & 0.418 & 0.287 & +23.7\% & Medium \\
+Bounding Box & 0.553 & 0.407 & +63.6\% & Medium \\
+Box + Neg Points & \textbf{0.555} & \textbf{0.408} & \textbf{+64.2\%} & High \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+
+
+\begin{table}[h]
+\centering
+\caption{Ablation Study: Effect of Test-Time Augmentation}
+\label{tab:tta_ablation}
+\begin{tabular}{lcccc}
+\toprule
+\textbf{Model} & \textbf{Baseline} & \textbf{+ Enhancement} & \textbf{$\Delta$} \\
+\midrule
+MedSAM Box & 0.522 & 0.536 (TTA) & +1.4\% \\
+SAM2 Box & 0.553 & 0.555 (Neg Pts) & +0.2\% \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+
+
+\begin{table}[h]
+\centering
+\caption{Training Configuration Comparison}
+\label{tab:training_config}
+\begin{tabular}{lcccccc}
+\toprule
+\textbf{Config} & \textbf{Loss} & \textbf{Epochs} & \textbf{LR} & \textbf{Params} & \textbf{Val Dice} & \textbf{Test Dice} \\
+\midrule
+Zero-Shot & - & - & - & 0 & - & \textbf{0.555} \\
+SAM2 Focal & Focal+Dice & 50 & 1e-4 & 224M & 0.381 & 0.372 \\
+SAM2 LoRA & BCE+Dice & 30 & 1e-4 & 4.2M & - & 0.355 \\
+SAM2 Base & BCE+Dice & 100 & 1e-4 & 224M & - & 0.371 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+
+
+\begin{table}[h]
+\centering
+\caption{Ablation Study: CLIP Prompt Engineering}
+\label{tab:clip_ablation}
+\begin{tabular}{llcc}
+\toprule
+\textbf{Prompt Source} & \textbf{Strategy} & \textbf{Accuracy} & \textbf{F1 Macro} \\
+\midrule
+LLM (GPT-4) & Text + Few-shot & \textbf{44.4\%} & \textbf{0.338} \\
+Manual & Hardcoded v2 & 42.2\% & 0.312 \\
+LLM (GPT-4) & Text + CLIP-opt & 35.6\% & 0.270 \\
+LLM (Gemini) & Multimodal + Few-shot & 29.4\% & 0.220 \\
+Manual & Hardcoded v1 & 23.3\% & 0.138 \\
+LLM (Gemini) & Multimodal + CLIP-opt & 15.0\% & 0.100 \\
+LLM (GPT-4) & Text + Jargon & 12.2\% & 0.097 \\
+LLM (Gemini) & Multimodal v1 & 8.3\% & 0.091 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+
+
+\begin{table*}[t]
+\centering
+\caption{Per-Class Segmentation Results Across All Methods}
+\label{tab:perclass_all}
+\begin{tabular}{l|ccccc|c}
+\toprule
+\textbf{Method} & \textbf{Tumor} & \textbf{Stroma} & \textbf{Lymph.} & \textbf{Necrosis} & \textbf{Blood V.} & \textbf{Mean} \\
+\midrule
+SAM2 Box+Neg (ZS) & 0.560 & 0.538 & 0.532 & \textbf{0.691} & \textbf{0.497} & \textbf{0.555} \\
+SAM2 Box (ZS) & 0.548 & 0.509 & \textbf{0.551} & 0.704 & 0.512 & 0.553 \\
+MedSAM TTA (ZS) & \textbf{0.575} & 0.505 & 0.549 & 0.647 & 0.427 & 0.536 \\
+MedSAM Box (ZS) & 0.573 & 0.486 & 0.542 & 0.615 & 0.407 & 0.522 \\
+SAM2 Focal (FT) & 0.386 & 0.386 & 0.301 & 0.478 & 0.335 & 0.372 \\
+SAM2 LoRA (FT) & 0.320 & 0.394 & 0.265 & 0.498 & 0.350 & 0.355 \\
+\bottomrule
+\end{tabular}
+\end{table*}

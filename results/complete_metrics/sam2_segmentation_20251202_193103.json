@@ -1,0 +1,206 @@
+{
+  "centroid": {
+    "config": {
+      "name": "centroid",
+      "prompt_type": "centroid",
+      "use_neg_points": false
+    },
+    "per_class": {
+      "tumor": {
+        "dice_mean": 0.27878206755726836,
+        "dice_std": 0.23688905865788717,
+        "iou_mean": 0.18538743593619372,
+        "iou_std": 0.17185312460104013,
+        "count": 45
+      },
+      "stroma": {
+        "dice_mean": 0.3308111442374824,
+        "dice_std": 0.24204230035791385,
+        "iou_mean": 0.22389754015097935,
+        "iou_std": 0.17864024932438025,
+        "count": 45
+      },
+      "lymphocyte": {
+        "dice_mean": 0.30696574747034033,
+        "dice_std": 0.2627293302205287,
+        "iou_mean": 0.21432214073922434,
+        "iou_std": 0.21537204896649326,
+        "count": 37
+      },
+      "necrosis": {
+        "dice_mean": 0.5138754277732013,
+        "dice_std": 0.29602767553253706,
+        "iou_mean": 0.3978422080493357,
+        "iou_std": 0.26533373004540456,
+        "count": 23
+      },
+      "blood_vessel": {
+        "dice_mean": 0.33866318958635383,
+        "dice_std": 0.24306822004105463,
+        "iou_mean": 0.23304456108193045,
+        "iou_std": 0.2023204609997402,
+        "count": 30
+      }
+    },
+    "overall": {
+      "dice_mean": 0.3376025428530035,
+      "dice_std": 0.26258044555097854,
+      "iou_mean": 0.2360525041603707,
+      "iou_std": 0.21174558891717132,
+      "total_samples": 180
+    }
+  },
+  "multi_point": {
+    "config": {
+      "name": "multi_point",
+      "prompt_type": "multi_point",
+      "use_neg_points": false
+    },
+    "per_class": {
+      "tumor": {
+        "dice_mean": 0.49414890072651274,
+        "dice_std": 0.1426971460343752,
+        "iou_mean": 0.3404930718864283,
+        "iou_std": 0.13152955754073434,
+        "count": 45
+      },
+      "stroma": {
+        "dice_mean": 0.37985068992803106,
+        "dice_std": 0.19020231196167814,
+        "iou_mean": 0.25325640229942836,
+        "iou_std": 0.16216332139385267,
+        "count": 34
+      },
+      "lymphocyte": {
+        "dice_mean": 0.36336897992396283,
+        "dice_std": 0.21032512956928834,
+        "iou_mean": 0.24396363269055546,
+        "iou_std": 0.17255777446769432,
+        "count": 37
+      },
+      "necrosis": {
+        "dice_mean": 0.4729424335094237,
+        "dice_std": 0.25688404008767146,
+        "iou_mean": 0.34907779904341785,
+        "iou_std": 0.23712949522897636,
+        "count": 23
+      },
+      "blood_vessel": {
+        "dice_mean": 0.371757154590792,
+        "dice_std": 0.2239955529747309,
+        "iou_mean": 0.2522215048970066,
+        "iou_std": 0.1757997365218329,
+        "count": 31
+      }
+    },
+    "overall": {
+      "dice_mean": 0.4176377882968473,
+      "dice_std": 0.20881713997544915,
+      "iou_mean": 0.2871012726613306,
+      "iou_std": 0.17802553292879003,
+      "total_samples": 170
+    }
+  },
+  "box_baseline": {
+    "config": {
+      "name": "box_baseline",
+      "prompt_type": "box",
+      "use_neg_points": false
+    },
+    "per_class": {
+      "tumor": {
+        "dice_mean": 0.5477011291953994,
+        "dice_std": 0.14531334182281122,
+        "iou_mean": 0.3904595366792387,
+        "iou_std": 0.1341753753065354,
+        "count": 45
+      },
+      "stroma": {
+        "dice_mean": 0.5093766385868651,
+        "dice_std": 0.18266834486025152,
+        "iou_mean": 0.3620550781140986,
+        "iou_std": 0.16835630414221203,
+        "count": 45
+      },
+      "lymphocyte": {
+        "dice_mean": 0.5509896408513528,
+        "dice_std": 0.19619489089270478,
+        "iou_mean": 0.4044162652197484,
+        "iou_std": 0.18046212749602716,
+        "count": 37
+      },
+      "necrosis": {
+        "dice_mean": 0.7041810919657666,
+        "dice_std": 0.17931215509320458,
+        "iou_mean": 0.5701567115776771,
+        "iou_std": 0.19777554486759466,
+        "count": 23
+      },
+      "blood_vessel": {
+        "dice_mean": 0.5115078372439876,
+        "dice_std": 0.2258524444805363,
+        "iou_mean": 0.37641528154175874,
+        "iou_std": 0.21840061862965596,
+        "count": 31
+      }
+    },
+    "overall": {
+      "dice_mean": 0.5525305211683879,
+      "dice_std": 0.1947210801577879,
+      "iou_mean": 0.40667976559619873,
+      "iou_std": 0.18823971028984918,
+      "total_samples": 181
+    }
+  },
+  "box_neg_points": {
+    "config": {
+      "name": "box_neg_points",
+      "prompt_type": "box",
+      "use_neg_points": true
+    },
+    "per_class": {
+      "tumor": {
+        "dice_mean": 0.5600982429136411,
+        "dice_std": 0.14698973106913837,
+        "iou_mean": 0.40300268848231224,
+        "iou_std": 0.13854847637650694,
+        "count": 45
+      },
+      "stroma": {
+        "dice_mean": 0.537746864564273,
+        "dice_std": 0.16614311489801215,
+        "iou_mean": 0.3854855072946292,
+        "iou_std": 0.15823321461595025,
+        "count": 45
+      },
+      "lymphocyte": {
+        "dice_mean": 0.5323286424715867,
+        "dice_std": 0.21769634723611797,
+        "iou_mean": 0.39070210627972746,
+        "iou_std": 0.19133250996801884,
+        "count": 37
+      },
+      "necrosis": {
+        "dice_mean": 0.6914730029815896,
+        "dice_std": 0.1943493459328966,
+        "iou_mean": 0.5589249996547158,
+        "iou_std": 0.2097129581255325,
+        "count": 23
+      },
+      "blood_vessel": {
+        "dice_mean": 0.4968878572170602,
+        "dice_std": 0.20840031156134978,
+        "iou_mean": 0.357317467330733,
+        "iou_std": 0.19508047808700107,
+        "count": 31
+      }
+    },
+    "overall": {
+      "dice_mean": 0.5547325538688413,
+      "dice_std": 0.1931084812113907,
+      "iou_mean": 0.40812189625206335,
+      "iou_std": 0.1847025026650531,
+      "total_samples": 181
+    }
+  }
+}

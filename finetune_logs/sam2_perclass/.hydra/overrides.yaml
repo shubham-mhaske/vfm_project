@@ -1,0 +1,2 @@
+- experiment=base_finetune_v3_perclass
+- data_root=/scratch/user/shubhammhaske/vfm_project/data/bcss

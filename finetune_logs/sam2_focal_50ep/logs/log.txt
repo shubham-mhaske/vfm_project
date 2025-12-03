@@ -1,0 +1,953 @@
+INFO 2025-11-27 19:48:13,100 train_utils.py: 108: MACHINE SEED: 2100
+INFO 2025-11-27 19:48:13,115 train_utils.py: 154: Logging ENV_VARIABLES
+INFO 2025-11-27 19:48:13,115 train_utils.py: 155: BASH_ENV=/sw/lmod/lmod/init/bash
+BASH_FUNC_ml%%=() {  eval "$($LMOD_DIR/ml_cmd "$@")"
+}
+BASH_FUNC_module%%=() {  if [ -z "${LMOD_SH_DBG_ON+x}" ]; then
+ case "$-" in 
+ *v*x*)
+ __lmod_sh_dbg='vx'
+ ;;
+ *v*)
+ __lmod_sh_dbg='v'
+ ;;
+ *x*)
+ __lmod_sh_dbg='x'
+ ;;
+ esac;
+ fi;
+ if [ -n "${__lmod_sh_dbg:-}" ]; then
+ set +$__lmod_sh_dbg;
+ echo "Shell debugging temporarily silenced: export LMOD_SH_DBG_ON=1 for Lmod's output" 1>&2;
+ fi;
+ eval "$($LMOD_CMD shell "$@")" && eval "$(${LMOD_SETTARG_CMD:-:} -s sh)";
+ __lmod_my_status=$?;
+ if [ -n "${__lmod_sh_dbg:-}" ]; then
+ echo "Shell debugging restarted" 1>&2;
+ set -$__lmod_sh_dbg;
+ fi;
+ unset __lmod_sh_dbg;
+ return $__lmod_my_status
+}
+BASH_FUNC_which%%=() {  ( alias;
+ eval ${which_declare} ) | /usr/bin/which --tty-only --read-alias --read-functions --show-tilde --show-dot $@
+}
+CMAKE_LIBRARY_PATH=/sw/eb/sw/OpenSSL/1.1/lib64:/sw/eb/sw/libffi/3.4.2-GCCcore-11.3.0/lib64:/sw/eb/sw/GCCcore/11.3.0/lib64
+CMAKE_PREFIX_PATH=/sw/eb/sw/cuDNN/8.9.2.26-CUDA-12.1.1:/sw/eb/sw/CUDA/12.1.1:/sw/eb/sw/Python/3.10.4-GCCcore-11.3.0:/sw/eb/sw/OpenSSL/1.1:/sw/eb/sw/libffi/3.4.2-GCCcore-11.3.0:/sw/eb/sw/GMP/6.2.1-GCCcore-11.3.0:/sw/eb/sw/XZ/5.2.5-GCCcore-11.3.0:/sw/eb/sw/SQLite/3.38.3-GCCcore-11.3.0:/sw/eb/sw/Tcl/8.6.12-GCCcore-11.3.0:/sw/eb/sw/libreadline/8.1.2-GCCcore-11.3.0:/sw/eb/sw/ncurses/6.3-GCCcore-11.3.0:/sw/eb/sw/bzip2/1.0.8-GCCcore-11.3.0:/sw/eb/sw/binutils/2.38-GCCcore-11.3.0:/sw/eb/sw/zlib/1.2.12-GCCcore-11.3.0:/sw/eb/sw/GCCcore/11.3.0
+CPATH=/sw/eb/sw/cuDNN/8.9.2.26-CUDA-12.1.1/include:/sw/eb/sw/CUDA/12.1.1/nvvm/include:/sw/eb/sw/CUDA/12.1.1/extras/CUPTI/include:/sw/eb/sw/CUDA/12.1.1/include:/sw/eb/sw/Python/3.10.4-GCCcore-11.3.0/include:/sw/eb/sw/OpenSSL/1.1/include:/sw/eb/sw/libffi/3.4.2-GCCcore-11.3.0/include:/sw/eb/sw/GMP/6.2.1-GCCcore-11.3.0/include:/sw/eb/sw/XZ/5.2.5-GCCcore-11.3.0/include:/sw/eb/sw/SQLite/3.38.3-GCCcore-11.3.0/include:/sw/eb/sw/Tcl/8.6.12-GCCcore-11.3.0/include:/sw/eb/sw/libreadline/8.1.2-GCCcore-11.3.0/include:/sw/eb/sw/ncurses/6.3-GCCcore-11.3.0/include:/sw/eb/sw/bzip2/1.0.8-GCCcore-11.3.0/include:/sw/eb/sw/binutils/2.38-GCCcore-11.3.0/include:/sw/eb/sw/zlib/1.2.12-GCCcore-11.3.0/include
+CUDA_HOME=/sw/eb/sw/CUDA/12.1.1
+CUDA_PATH=/sw/eb/sw/CUDA/12.1.1
+CUDA_ROOT=/sw/eb/sw/CUDA/12.1.1
+CUDA_VISIBLE_DEVICES=0
+DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/26467/bus
+EBDEVELBINUTILS=/sw/eb/sw/binutils/2.38-GCCcore-11.3.0/easybuild/Compiler-GCCcore-11.3.0-binutils-2.38-easybuild-devel
+EBDEVELBZIP2=/sw/eb/sw/bzip2/1.0.8-GCCcore-11.3.0/easybuild/Compiler-GCCcore-11.3.0-bzip2-1.0.8-easybuild-devel
+EBDEVELCUDA=/sw/eb/sw/CUDA/12.1.1/easybuild/Core-CUDA-12.1.1-easybuild-devel
+EBDEVELCUDNN=/sw/eb/sw/cuDNN/8.9.2.26-CUDA-12.1.1/easybuild/Core-cuDNN-8.9.2.26-CUDA-12.1.1-easybuild-devel
+EBDEVELGCCCORE=/sw/eb/sw/GCCcore/11.3.0/easybuild/Core-GCCcore-11.3.0-easybuild-devel
+EBDEVELGMP=/sw/eb/sw/GMP/6.2.1-GCCcore-11.3.0/easybuild/Compiler-GCCcore-11.3.0-GMP-6.2.1-easybuild-devel
+EBDEVELLIBFFI=/sw/eb/sw/libffi/3.4.2-GCCcore-11.3.0/easybuild/Compiler-GCCcore-11.3.0-libffi-3.4.2-easybuild-devel
+EBDEVELLIBREADLINE=/sw/eb/sw/libreadline/8.1.2-GCCcore-11.3.0/easybuild/Compiler-GCCcore-11.3.0-libreadline-8.1.2-easybuild-devel
+EBDEVELNCURSES=/sw/eb/sw/ncurses/6.3-GCCcore-11.3.0/easybuild/Compiler-GCCcore-11.3.0-ncurses-6.3-easybuild-devel
+EBDEVELOPENSSL=/sw/eb/sw/OpenSSL/1.1/easybuild/Core-OpenSSL-1.1-easybuild-devel
+EBDEVELPYTHON=/sw/eb/sw/Python/3.10.4-GCCcore-11.3.0/easybuild/Compiler-GCCcore-11.3.0-Python-3.10.4-easybuild-devel
+EBDEVELSQLITE=/sw/eb/sw/SQLite/3.38.3-GCCcore-11.3.0/easybuild/Compiler-GCCcore-11.3.0-SQLite-3.38.3-easybuild-devel
+EBDEVELTCL=/sw/eb/sw/Tcl/8.6.12-GCCcore-11.3.0/easybuild/Compiler-GCCcore-11.3.0-Tcl-8.6.12-easybuild-devel
+EBDEVELXZ=/sw/eb/sw/XZ/5.2.5-GCCcore-11.3.0/easybuild/Compiler-GCCcore-11.3.0-XZ-5.2.5-easybuild-devel
+EBDEVELZLIB=/sw/eb/sw/zlib/1.2.12-GCCcore-11.3.0/easybuild/Compiler-GCCcore-11.3.0-zlib-1.2.12-easybuild-devel
+EBEXTSLISTPYTHON=wheel-0.37.1,setuptools-62.1.0,pip-22.0.4,blist-1.3.6,pbr-5.8.1,Cython-0.29.28,six-1.16.0,toml-0.10.2,flit-core-3.7.1,tomli-2.0.1,setuptools_scm-6.4.2,python-dateutil-2.8.2,decorator-5.1.1,liac-arff-2.5.0,pycrypto-2.6.1,ecdsa-0.17.0,ipaddress-1.0.23,asn1crypto-1.5.1,idna-3.3,pycparser-2.21,cffi-1.15.0,semantic_version-2.9.0,typing_extensions-4.2.0,setuptools-rust-1.3.0,cryptography-37.0.1,pyasn1-0.4.8,PyNaCl-1.5.0,bcrypt-3.2.2,paramiko-2.10.4,pyparsing-3.0.8,netifaces-0.11.0,netaddr-0.8.0,mock-4.0.3,pytz-2022.1,bitstring-3.1.9,appdirs-1.4.4,distlib-0.3.4,filelock-3.6.0,zipp-3.8.0,importlib_metadata-4.11.3,backports.entry_points_selectable-1.1.1,pathspec-0.9.0,pluggy-1.0.0,packaging-20.9,editables-0.3,platformdirs-2.4.1,scandir-1.10.0,pathlib2-2.3.7.post1,importlib_resources-5.7.1,virtualenv-20.14.1,docopt-0.6.2,joblib-1.1.0,chardet-4.0.0,certifi-2021.10.8,urllib3-1.26.9,charset-normalizer-2.0.12,requests-2.27.1,xlrd-2.0.1,py_expression_eval-0.3.14,tabulate-0.8.9,ujson-5.2.0,atomicwrites-1.4.0,py-1.11.0,more-itertools-8.12.0,attrs-21.4.0,backports.functools_lru_cache-1.6.4,wcwidth-0.2.5,iniconfig-1.1.1,colorama-0.4.4,pytest-7.1.2,MarkupSafe-2.1.1,Jinja2-3.1.2,sphinxcontrib-serializinghtml-1.1.5,sphinxcontrib-websupport-1.2.4,Pygments-2.12.0,imagesize-1.3.0,docutils-0.17.1,snowballstemmer-2.2.0,alabaster-0.7.12,sphinxcontrib-applehelp-1.0.2,sphinxcontrib-devhelp-1.0.2,sphinxcontrib-htmlhelp-2.0.0,sphinxcontrib-jsmath-1.0.1,sphinxcontrib-qthelp-1.0.3,Babel-2.10.1,Sphinx-4.5.0,sphinx-bootstrap-theme-0.8.1,click-8.1.3,psutil-5.9.0,future-0.18.2,sortedcontainers-2.4.0,intervaltree-3.1.0,pytoml-0.1.21,zipfile36-0.1.3,tomli_w-1.0.0,flit-3.7.1,regex-2022.4.24,intreehooks-1.0,pylev-1.4.0,pastel-0.2.1,crashtest-0.3.1,clikit-0.6.2,jeepney-0.8.0,SecretStorage-3.3.2,keyring-23.5.0,keyrings.alt-4.1.0,tomlkit-0.10.2,shellingham-1.4.0,requests-toolbelt-0.9.1,pyrsistent-0.18.1,pkginfo-1.8.2,ptyprocess-0.7.0,pexpect-4.8.0,jsonschema-4.4.0,simplejson-3.17.6,webencodings-0.5.1,html5lib-1.1,cleo-0.8.1,cachy-0.3.0,msgpack-1.0.3,CacheControl-0.12.11,lockfile-0.12.2,poetry-core-1.0.8,glob2-0.7,poetry-1.1.13,fsspec-2022.3.0,threadpoolctl-3.1.0,simplegeneric-0.8.1
+EBROOTBINUTILS=/sw/eb/sw/binutils/2.38-GCCcore-11.3.0
+EBROOTBZIP2=/sw/eb/sw/bzip2/1.0.8-GCCcore-11.3.0
+EBROOTCUDA=/sw/eb/sw/CUDA/12.1.1
+EBROOTCUDNN=/sw/eb/sw/cuDNN/8.9.2.26-CUDA-12.1.1
+EBROOTGCCCORE=/sw/eb/sw/GCCcore/11.3.0
+EBROOTGMP=/sw/eb/sw/GMP/6.2.1-GCCcore-11.3.0
+EBROOTLIBFFI=/sw/eb/sw/libffi/3.4.2-GCCcore-11.3.0
+EBROOTLIBREADLINE=/sw/eb/sw/libreadline/8.1.2-GCCcore-11.3.0
+EBROOTNCURSES=/sw/eb/sw/ncurses/6.3-GCCcore-11.3.0
+EBROOTOPENSSL=/sw/eb/sw/OpenSSL/1.1
+EBROOTPYTHON=/sw/eb/sw/Python/3.10.4-GCCcore-11.3.0
+EBROOTSQLITE=/sw/eb/sw/SQLite/3.38.3-GCCcore-11.3.0
+EBROOTTCL=/sw/eb/sw/Tcl/8.6.12-GCCcore-11.3.0
+EBROOTXZ=/sw/eb/sw/XZ/5.2.5-GCCcore-11.3.0
+EBROOTZLIB=/sw/eb/sw/zlib/1.2.12-GCCcore-11.3.0
+EBVERSIONBINUTILS=2.38
+EBVERSIONBZIP2=1.0.8
+EBVERSIONCUDA=12.1.1
+EBVERSIONCUDNN=8.9.2.26
+EBVERSIONGCCCORE=11.3.0
+EBVERSIONGMP=6.2.1
+EBVERSIONLIBFFI=3.4.2
+EBVERSIONLIBREADLINE=8.1.2
+EBVERSIONNCURSES=6.3
+EBVERSIONOPENSSL=1.1
+EBVERSIONPYTHON=3.10.4
+EBVERSIONSQLITE=3.38.3
+EBVERSIONTCL=8.6.12
+EBVERSIONXZ=5.2.5
+EBVERSIONZLIB=1.2.12
+ENVIRONMENT=BATCH
+FPATH=/sw/lmod/lmod/init/ksh_funcs
+GPU_DEVICE_ORDINAL=0
+HISTCONTROL=ignoredups
+HISTSIZE=1000
+HOME=/home/shubhammhaske
+HOSTNAME=g078
+HYDRA_BOOTSTRAP=slurm
+HYDRA_LAUNCHER_EXTRA_ARGS=--external-launcher
+I_MPI_HYDRA_BOOTSTRAP=slurm
+I_MPI_HYDRA_BOOTSTRAP_EXEC_EXTRA_ARGS=--external-launcher
+KRB5CCNAME=KCM:
+LANG=en_US.UTF-8
+LD_LIBRARY_PATH=/lib:/sw/eb/sw/cuDNN/8.9.2.26-CUDA-12.1.1/lib:/sw/eb/sw/CUDA/12.1.1/nvvm/lib64:/sw/eb/sw/CUDA/12.1.1/extras/CUPTI/lib64:/sw/eb/sw/CUDA/12.1.1/lib:/sw/eb/sw/Python/3.10.4-GCCcore-11.3.0/lib:/sw/eb/sw/OpenSSL/1.1/lib64:/sw/eb/sw/libffi/3.4.2-GCCcore-11.3.0/lib64:/sw/eb/sw/GMP/6.2.1-GCCcore-11.3.0/lib:/sw/eb/sw/XZ/5.2.5-GCCcore-11.3.0/lib:/sw/eb/sw/SQLite/3.38.3-GCCcore-11.3.0/lib:/sw/eb/sw/Tcl/8.6.12-GCCcore-11.3.0/lib:/sw/eb/sw/libreadline/8.1.2-GCCcore-11.3.0/lib:/sw/eb/sw/ncurses/6.3-GCCcore-11.3.0/lib:/sw/eb/sw/bzip2/1.0.8-GCCcore-11.3.0/lib:/sw/eb/sw/binutils/2.38-GCCcore-11.3.0/lib:/sw/eb/sw/zlib/1.2.12-GCCcore-11.3.0/lib:/sw/eb/sw/GCCcore/11.3.0/lib64
+LESSOPEN=||/usr/bin/lesspipe.sh %s
+LIBRARY_PATH=/sw/eb/sw/cuDNN/8.9.2.26-CUDA-12.1.1/lib:/sw/eb/sw/CUDA/12.1.1/stubs/lib64:/sw/eb/sw/CUDA/12.1.1/lib:/sw/eb/sw/Python/3.10.4-GCCcore-11.3.0/lib:/sw/eb/sw/OpenSSL/1.1/lib64:/sw/eb/sw/libffi/3.4.2-GCCcore-11.3.0/lib64:/sw/eb/sw/libffi/3.4.2-GCCcore-11.3.0/lib:/sw/eb/sw/GMP/6.2.1-GCCcore-11.3.0/lib:/sw/eb/sw/XZ/5.2.5-GCCcore-11.3.0/lib:/sw/eb/sw/SQLite/3.38.3-GCCcore-11.3.0/lib:/sw/eb/sw/Tcl/8.6.12-GCCcore-11.3.0/lib:/sw/eb/sw/libreadline/8.1.2-GCCcore-11.3.0/lib:/sw/eb/sw/ncurses/6.3-GCCcore-11.3.0/lib:/sw/eb/sw/bzip2/1.0.8-GCCcore-11.3.0/lib:/sw/eb/sw/binutils/2.38-GCCcore-11.3.0/lib:/sw/eb/sw/zlib/1.2.12-GCCcore-11.3.0/lib
+LMOD_AVAIL_STYLE=system:<en_grouped>:fr_grouped
+LMOD_CMD=/sw/lmod/lmod/libexec/lmod
+LMOD_DIR=/sw/lmod/lmod/libexec
+LMOD_PACKAGE_PATH=/sw/lmod/hprc/mods/
+LMOD_PKG=/sw/lmod/lmod
+LMOD_ROOT=/sw/lmod
+LMOD_SETTARG_FULL_SUPPORT=no
+LMOD_VERSION=8.7.59
+LMOD_sys=Linux
+LOADEDMODULES=GCCcore/11.3.0:zlib/1.2.12:binutils/2.38:bzip2/1.0.8:ncurses/6.3:libreadline/8.1.2:Tcl/8.6.12:SQLite/3.38.3:XZ/5.2.5:GMP/6.2.1:libffi/3.4.2:OpenSSL/1.1:Python/3.10.4:CUDA/12.1.1:cuDNN/8.9.2.26-CUDA-12.1.1
+LOCAL_RANK=0
+LOGNAME=shubhammhaske
+LS_COLORS=rs=0:di=38;5;33:ln=38;5;51:mh=00:pi=40;38;5;11:so=38;5;13:do=38;5;5:bd=48;5;232;38;5;11:cd=48;5;232;38;5;3:or=48;5;232;38;5;9:mi=01;05;37;41:su=48;5;196;38;5;15:sg=48;5;11;38;5;16:ca=48;5;196;38;5;226:tw=48;5;10;38;5;16:ow=48;5;10;38;5;21:st=48;5;21;38;5;15:ex=38;5;40:*.tar=38;5;9:*.tgz=38;5;9:*.arc=38;5;9:*.arj=38;5;9:*.taz=38;5;9:*.lha=38;5;9:*.lz4=38;5;9:*.lzh=38;5;9:*.lzma=38;5;9:*.tlz=38;5;9:*.txz=38;5;9:*.tzo=38;5;9:*.t7z=38;5;9:*.zip=38;5;9:*.z=38;5;9:*.dz=38;5;9:*.gz=38;5;9:*.lrz=38;5;9:*.lz=38;5;9:*.lzo=38;5;9:*.xz=38;5;9:*.zst=38;5;9:*.tzst=38;5;9:*.bz2=38;5;9:*.bz=38;5;9:*.tbz=38;5;9:*.tbz2=38;5;9:*.tz=38;5;9:*.deb=38;5;9:*.rpm=38;5;9:*.jar=38;5;9:*.war=38;5;9:*.ear=38;5;9:*.sar=38;5;9:*.rar=38;5;9:*.alz=38;5;9:*.ace=38;5;9:*.zoo=38;5;9:*.cpio=38;5;9:*.7z=38;5;9:*.rz=38;5;9:*.cab=38;5;9:*.wim=38;5;9:*.swm=38;5;9:*.dwm=38;5;9:*.esd=38;5;9:*.jpg=38;5;13:*.jpeg=38;5;13:*.mjpg=38;5;13:*.mjpeg=38;5;13:*.gif=38;5;13:*.bmp=38;5;13:*.pbm=38;5;13:*.pgm=38;5;13:*.ppm=38;5;13:*.tga=38;5;13:*.xbm=38;5;13:*.xpm=38;5;13:*.tif=38;5;13:*.tiff=38;5;13:*.png=38;5;13:*.svg=38;5;13:*.svgz=38;5;13:*.mng=38;5;13:*.pcx=38;5;13:*.mov=38;5;13:*.mpg=38;5;13:*.mpeg=38;5;13:*.m2v=38;5;13:*.mkv=38;5;13:*.webm=38;5;13:*.ogm=38;5;13:*.mp4=38;5;13:*.m4v=38;5;13:*.mp4v=38;5;13:*.vob=38;5;13:*.qt=38;5;13:*.nuv=38;5;13:*.wmv=38;5;13:*.asf=38;5;13:*.rm=38;5;13:*.rmvb=38;5;13:*.flc=38;5;13:*.avi=38;5;13:*.fli=38;5;13:*.flv=38;5;13:*.gl=38;5;13:*.dl=38;5;13:*.xcf=38;5;13:*.xwd=38;5;13:*.yuv=38;5;13:*.cgm=38;5;13:*.emf=38;5;13:*.ogv=38;5;13:*.ogx=38;5;13:*.aac=38;5;45:*.au=38;5;45:*.flac=38;5;45:*.m4a=38;5;45:*.mid=38;5;45:*.midi=38;5;45:*.mka=38;5;45:*.mp3=38;5;45:*.mpc=38;5;45:*.ogg=38;5;45:*.ra=38;5;45:*.wav=38;5;45:*.oga=38;5;45:*.opus=38;5;45:*.spx=38;5;45:*.xspf=38;5;45:
+MAIL=/var/spool/mail/shubhammhaske
+MANPATH=/sw/eb/sw/Python/3.10.4-GCCcore-11.3.0/share/man:/sw/eb/sw/libffi/3.4.2-GCCcore-11.3.0/share/man:/sw/eb/sw/XZ/5.2.5-GCCcore-11.3.0/share/man:/sw/eb/sw/SQLite/3.38.3-GCCcore-11.3.0/share/man:/sw/eb/sw/Tcl/8.6.12-GCCcore-11.3.0/share/man:/sw/eb/sw/Tcl/8.6.12-GCCcore-11.3.0/man:/sw/eb/sw/libreadline/8.1.2-GCCcore-11.3.0/share/man:/sw/eb/sw/ncurses/6.3-GCCcore-11.3.0/share/man:/sw/eb/sw/bzip2/1.0.8-GCCcore-11.3.0/man:/sw/eb/sw/binutils/2.38-GCCcore-11.3.0/share/man:/sw/eb/sw/zlib/1.2.12-GCCcore-11.3.0/share/man:/sw/eb/sw/GCCcore/11.3.0/share/man:/sw/hprc/local/share/man:/sw/lmod/lmod/share/man::
+MASTER_ADDR=localhost
+MASTER_PORT=12355
+MODULEPATH=/sw/eb/mods/all/Compiler/GCCcore/11.3.0:/sw/hprc/mods/all/Core:/sw/eb/mods/all/Core:/sw/lmod/hprc/mods/Linux:/sw/lmod/lmod/modulefiles/Core
+MODULEPATH_ROOT=/sw/lmod/hprc/mods
+MODULESHOME=/sw/lmod/lmod
+OLDPWD=/scratch/user/shubhammhaske/vfm_project
+OMPI_MCA_plm_slurm_args=--external-launcher
+OMP_NUM_THREADS=1
+PATH=/scratch/user/shubhammhaske/vfm_env/bin:/sw/eb/sw/CUDA/12.1.1/nvvm/bin:/sw/eb/sw/CUDA/12.1.1/bin:/sw/eb/sw/Python/3.10.4-GCCcore-11.3.0/bin:/sw/eb/sw/OpenSSL/1.1/bin:/sw/eb/sw/XZ/5.2.5-GCCcore-11.3.0/bin:/sw/eb/sw/SQLite/3.38.3-GCCcore-11.3.0/bin:/sw/eb/sw/Tcl/8.6.12-GCCcore-11.3.0/bin:/sw/eb/sw/ncurses/6.3-GCCcore-11.3.0/bin:/sw/eb/sw/bzip2/1.0.8-GCCcore-11.3.0/bin:/sw/eb/sw/binutils/2.38-GCCcore-11.3.0/bin:/sw/eb/sw/GCCcore/11.3.0/bin:/scratch/user/shubhammhaske/vfm_env/bin:/sw/local/bin:/usr/local/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/usr/lpp/mmfs/bin
+PIP_CACHE_DIR=/scratch/user/shubhammhaske/PIP_CACHE
+PKG_CONFIG_PATH=/sw/eb/sw/CUDA/12.1.1/pkgconfig:/sw/eb/sw/Python/3.10.4-GCCcore-11.3.0/lib/pkgconfig:/sw/eb/sw/OpenSSL/1.1/lib64/pkgconfig:/sw/eb/sw/libffi/3.4.2-GCCcore-11.3.0/lib/pkgconfig:/sw/eb/sw/GMP/6.2.1-GCCcore-11.3.0/lib/pkgconfig:/sw/eb/sw/XZ/5.2.5-GCCcore-11.3.0/lib/pkgconfig:/sw/eb/sw/SQLite/3.38.3-GCCcore-11.3.0/lib/pkgconfig:/sw/eb/sw/Tcl/8.6.12-GCCcore-11.3.0/lib/pkgconfig:/sw/eb/sw/libreadline/8.1.2-GCCcore-11.3.0/lib/pkgconfig:/sw/eb/sw/bzip2/1.0.8-GCCcore-11.3.0/lib/pkgconfig:/sw/eb/sw/zlib/1.2.12-GCCcore-11.3.0/lib/pkgconfig
+PRTE_MCA_plm_slurm_args=--external-launcher
+PS1=(vfm_env) 
+PWD=/scratch/user/shubhammhaske/vfm_project
+PYTHONPATH=/scratch/user/shubhammhaske/vfm_project:/scratch/user/shubhammhaske/vfm_project/sam2:/sw/eb/sw/Python/3.10.4-GCCcore-11.3.0/easybuild/python
+RANK=0
+ROCR_VISIBLE_DEVICES=0
+SACCT_FORMAT=jobid%10,jobname%20,user%20,ncpus%5,nnodes%6,state%20,elapsed%12s,start%20,end%20,reqmem%10,nodelist%-50
+SCRATCH=/scratch/user/shubhammhaske
+SHELL=/bin/bash
+SHLVL=3
+SINFO_FORMAT=%16P %6a %12l %11s %16F %20C
+SLURMD_NODENAME=g078
+SLURM_CLUSTER_NAME=grace
+SLURM_CONF=/var/spool/slurmd/conf-cache/slurm.conf
+SLURM_CPUS_ON_NODE=16
+SLURM_CPUS_PER_TASK=16
+SLURM_GPUS_ON_NODE=1
+SLURM_GTIDS=0
+SLURM_JOBID=17217530
+SLURM_JOB_ACCOUNT=132730915297
+SLURM_JOB_CPUS_PER_NODE=16
+SLURM_JOB_END_TIME=1764316078
+SLURM_JOB_GID=26467
+SLURM_JOB_GPUS=0
+SLURM_JOB_ID=17217530
+SLURM_JOB_NAME=sam2_box_focal
+SLURM_JOB_NODELIST=g078
+SLURM_JOB_NUM_NODES=1
+SLURM_JOB_PARTITION=gpu
+SLURM_JOB_QOS=normal
+SLURM_JOB_START_TIME=1764294478
+SLURM_JOB_UID=26467
+SLURM_JOB_USER=shubhammhaske
+SLURM_LOCALID=0
+SLURM_MEM_PER_NODE=131072
+SLURM_NNODES=1
+SLURM_NODEID=0
+SLURM_NODELIST=g078
+SLURM_NPROCS=1
+SLURM_NTASKS=1
+SLURM_NTASKS_PER_NODE=1
+SLURM_OOM_KILL_STEP=0
+SLURM_PRIO_PROCESS=0
+SLURM_PROCID=0
+SLURM_SCRIPT_CONTEXT=prolog_task
+SLURM_SUBMIT_DIR=/scratch/user/shubhammhaske/vfm_project
+SLURM_SUBMIT_HOST=login2
+SLURM_TASKS_PER_NODE=1
+SLURM_TASK_PID=2807859
+SLURM_TOPOLOGY_ADDR=core_r07.leaf_r14.g078
+SLURM_TOPOLOGY_ADDR_PATTERN=switch.switch.node
+SLURM_TRES_PER_TASK=cpu=16
+SPRIO_FORMAT=%15i %16u %9r %.10Y %.10S %.10A %.10B %.10F %.10J %.10P %.10Q %40T
+SQUEUE_FORMAT=%12A %20j %24u %22P %6D %5C %12T %12M %12L %16S  %24r %N
+SSH_CLIENT=172.31.7.26 55787 22
+SSH_CONNECTION=172.31.7.26 55787 128.194.35.40 22
+SSH_TTY=/dev/pts/86
+S_COLORS=auto
+TERM=xterm-256color
+TMPDIR=/tmp/job.17217530
+TORCH_NCCL_ASYNC_ERROR_HANDLING=1
+USER=shubhammhaske
+VIRTUAL_ENV=/scratch/user/shubhammhaske/vfm_env
+VIRTUAL_ENV_PROMPT=(vfm_env) 
+WORLD_SIZE=1
+XDG_DATA_DIRS=/sw/eb/sw/CUDA/12.1.1/share:/sw/eb/sw/Python/3.10.4-GCCcore-11.3.0/share:/sw/eb/sw/libffi/3.4.2-GCCcore-11.3.0/share:/sw/eb/sw/GMP/6.2.1-GCCcore-11.3.0/share:/sw/eb/sw/XZ/5.2.5-GCCcore-11.3.0/share:/sw/eb/sw/SQLite/3.38.3-GCCcore-11.3.0/share:/sw/eb/sw/Tcl/8.6.12-GCCcore-11.3.0/share:/sw/eb/sw/libreadline/8.1.2-GCCcore-11.3.0/share:/sw/eb/sw/ncurses/6.3-GCCcore-11.3.0/share:/sw/eb/sw/binutils/2.38-GCCcore-11.3.0/share:/sw/eb/sw/zlib/1.2.12-GCCcore-11.3.0/share:/sw/eb/sw/GCCcore/11.3.0/share
+XDG_RUNTIME_DIR=/run/user/26467
+XDG_SESSION_ID=43396
+ZE_AFFINITY_MASK=0
+_=/scratch/user/shubhammhaske/vfm_env/bin/python
+_LMFILES_=/sw/eb/mods/all/Core/GCCcore/11.3.0.lua:/sw/eb/mods/all/Compiler/GCCcore/11.3.0/zlib/1.2.12.lua:/sw/eb/mods/all/Compiler/GCCcore/11.3.0/binutils/2.38.lua:/sw/eb/mods/all/Compiler/GCCcore/11.3.0/bzip2/1.0.8.lua:/sw/eb/mods/all/Compiler/GCCcore/11.3.0/ncurses/6.3.lua:/sw/eb/mods/all/Compiler/GCCcore/11.3.0/libreadline/8.1.2.lua:/sw/eb/mods/all/Compiler/GCCcore/11.3.0/Tcl/8.6.12.lua:/sw/eb/mods/all/Compiler/GCCcore/11.3.0/SQLite/3.38.3.lua:/sw/eb/mods/all/Compiler/GCCcore/11.3.0/XZ/5.2.5.lua:/sw/eb/mods/all/Compiler/GCCcore/11.3.0/GMP/6.2.1.lua:/sw/eb/mods/all/Compiler/GCCcore/11.3.0/libffi/3.4.2.lua:/sw/eb/mods/all/Core/OpenSSL/1.1.lua:/sw/eb/mods/all/Compiler/GCCcore/11.3.0/Python/3.10.4.lua:/sw/eb/mods/all/Core/CUDA/12.1.1.lua:/sw/eb/mods/all/Core/cuDNN/8.9.2.26-CUDA-12.1.1.lua
+_ModuleTable001_=X01vZHVsZVRhYmxlXyA9IHsKTVR2ZXJzaW9uID0gMywKY19yZWJ1aWxkVGltZSA9IGZhbHNlLApjX3Nob3J0VGltZSA9IDAuMTI2NzI4MDU3ODYxMzMsCmRlcHRoVCA9IHt9LApmYW1pbHkgPSB7fSwKbVQgPSB7CkNVREEgPSB7CmZuID0gIi9zdy9lYi9tb2RzL2FsbC9Db3JlL0NVREEvMTIuMS4xLmx1YSIsCmZ1bGxOYW1lID0gIkNVREEvMTIuMS4xIiwKbG9hZE9yZGVyID0gMTQsCnByb3BUID0ge30sCnN0YWNrRGVwdGggPSAwLApzdGF0dXMgPSAiYWN0aXZlIiwKdXNlck5hbWUgPSAiQ1VEQS8xMi4xLjEiLAp3ViA9ICIwMDAwMDAwMTIuMDAwMDAwMDAxLjAwMDAwMDAwMS4qemZpbmFsIiwKfSwKR0NDY29yZSA9IHsKYWN0aW9uQSA9IHsKInByZXBlbmRfcGF0aChcIk1PRFVM
+_ModuleTable002_=RVBBVEhcIixcIi9zdy9lYi9tb2RzL2FsbC9Db21waWxlci9HQ0Njb3JlLzExLjMuMFwiKSIsCn0sCmZuID0gIi9zdy9lYi9tb2RzL2FsbC9Db3JlL0dDQ2NvcmUvMTEuMy4wLmx1YSIsCmZ1bGxOYW1lID0gIkdDQ2NvcmUvMTEuMy4wIiwKbG9hZE9yZGVyID0gMSwKcHJvcFQgPSB7fSwKc3RhY2tEZXB0aCA9IDAsCnN0YXR1cyA9ICJhY3RpdmUiLAp1c2VyTmFtZSA9ICJHQ0Njb3JlLzExLjMuMCIsCndWID0gIjAwMDAwMDAxMS4wMDAwMDAwMDMuKnpmaW5hbCIsCn0sCkdNUCA9IHsKZm4gPSAiL3N3L2ViL21vZHMvYWxsL0NvbXBpbGVyL0dDQ2NvcmUvMTEuMy4wL0dNUC82LjIuMS5sdWEiLApmdWxsTmFtZSA9ICJHTVAvNi4yLjEiLApsb2FkT3JkZXIgPSAxMCwKcHJvcFQgPSB7
+_ModuleTable003_=fSwKc3RhY2tEZXB0aCA9IDEsCnN0YXR1cyA9ICJhY3RpdmUiLAp1c2VyTmFtZSA9ICJHTVAvNi4yLjEiLAp3ViA9ICIwMDAwMDAwMDYuMDAwMDAwMDAyLjAwMDAwMDAwMS4qemZpbmFsIiwKfSwKT3BlblNTTCA9IHsKZm4gPSAiL3N3L2ViL21vZHMvYWxsL0NvcmUvT3BlblNTTC8xLjEubHVhIiwKZnVsbE5hbWUgPSAiT3BlblNTTC8xLjEiLApsb2FkT3JkZXIgPSAxMiwKcHJvcFQgPSB7fSwKc3RhY2tEZXB0aCA9IDEsCnN0YXR1cyA9ICJhY3RpdmUiLAp1c2VyTmFtZSA9ICJPcGVuU1NMLzEuMSIsCndWID0gIjAwMDAwMDAwMS4wMDAwMDAwMDEuKnpmaW5hbCIsCn0sClB5dGhvbiA9IHsKZm4gPSAiL3N3L2ViL21vZHMvYWxsL0NvbXBpbGVyL0dDQ2NvcmUvMTEuMy4wL1B5dGhv
+_ModuleTable004_=bi8zLjEwLjQubHVhIiwKZnVsbE5hbWUgPSAiUHl0aG9uLzMuMTAuNCIsCmxvYWRPcmRlciA9IDEzLApwcm9wVCA9IHt9LApzdGFja0RlcHRoID0gMCwKc3RhdHVzID0gImFjdGl2ZSIsCnVzZXJOYW1lID0gIlB5dGhvbi8zLjEwLjQiLAp3ViA9ICIwMDAwMDAwMDMuMDAwMDAwMDEwLjAwMDAwMDAwNC4qemZpbmFsIiwKfSwKU1FMaXRlID0gewpmbiA9ICIvc3cvZWIvbW9kcy9hbGwvQ29tcGlsZXIvR0NDY29yZS8xMS4zLjAvU1FMaXRlLzMuMzguMy5sdWEiLApmdWxsTmFtZSA9ICJTUUxpdGUvMy4zOC4zIiwKbG9hZE9yZGVyID0gOCwKcHJvcFQgPSB7fSwKc3RhY2tEZXB0aCA9IDEsCnN0YXR1cyA9ICJhY3RpdmUiLAp1c2VyTmFtZSA9ICJTUUxpdGUvMy4zOC4zIiwKd1YgPSAi
+_ModuleTable005_=MDAwMDAwMDAzLjAwMDAwMDAzOC4wMDAwMDAwMDMuKnpmaW5hbCIsCn0sClRjbCA9IHsKZm4gPSAiL3N3L2ViL21vZHMvYWxsL0NvbXBpbGVyL0dDQ2NvcmUvMTEuMy4wL1RjbC84LjYuMTIubHVhIiwKZnVsbE5hbWUgPSAiVGNsLzguNi4xMiIsCmxvYWRPcmRlciA9IDcsCnByb3BUID0ge30sCnN0YWNrRGVwdGggPSAyLApzdGF0dXMgPSAiYWN0aXZlIiwKdXNlck5hbWUgPSAiVGNsLzguNi4xMiIsCndWID0gIjAwMDAwMDAwOC4wMDAwMDAwMDYuMDAwMDAwMDEyLip6ZmluYWwiLAp9LApYWiA9IHsKZm4gPSAiL3N3L2ViL21vZHMvYWxsL0NvbXBpbGVyL0dDQ2NvcmUvMTEuMy4wL1haLzUuMi41Lmx1YSIsCmZ1bGxOYW1lID0gIlhaLzUuMi41IiwKbG9hZE9yZGVyID0gOSwKcHJv
+_ModuleTable006_=cFQgPSB7fSwKc3RhY2tEZXB0aCA9IDEsCnN0YXR1cyA9ICJhY3RpdmUiLAp1c2VyTmFtZSA9ICJYWi81LjIuNSIsCndWID0gIjAwMDAwMDAwNS4wMDAwMDAwMDIuMDAwMDAwMDA1Lip6ZmluYWwiLAp9LApiaW51dGlscyA9IHsKZm4gPSAiL3N3L2ViL21vZHMvYWxsL0NvbXBpbGVyL0dDQ2NvcmUvMTEuMy4wL2JpbnV0aWxzLzIuMzgubHVhIiwKZnVsbE5hbWUgPSAiYmludXRpbHMvMi4zOCIsCmxvYWRPcmRlciA9IDMsCnByb3BUID0ge30sCnN0YWNrRGVwdGggPSAxLApzdGF0dXMgPSAiYWN0aXZlIiwKdXNlck5hbWUgPSAiYmludXRpbHMvMi4zOCIsCndWID0gIjAwMDAwMDAwMi4wMDAwMDAwMzguKnpmaW5hbCIsCn0sCmJ6aXAyID0gewpmbiA9ICIvc3cvZWIvbW9kcy9hbGwv
+_ModuleTable007_=Q29tcGlsZXIvR0NDY29yZS8xMS4zLjAvYnppcDIvMS4wLjgubHVhIiwKZnVsbE5hbWUgPSAiYnppcDIvMS4wLjgiLApsb2FkT3JkZXIgPSA0LApwcm9wVCA9IHt9LApzdGFja0RlcHRoID0gMSwKc3RhdHVzID0gImFjdGl2ZSIsCnVzZXJOYW1lID0gImJ6aXAyLzEuMC44IiwKd1YgPSAiMDAwMDAwMDAxLjAwMDAwMDAwMC4wMDAwMDAwMDguKnpmaW5hbCIsCn0sCmN1RE5OID0gewpmbiA9ICIvc3cvZWIvbW9kcy9hbGwvQ29yZS9jdUROTi84LjkuMi4yNi1DVURBLTEyLjEuMS5sdWEiLApmdWxsTmFtZSA9ICJjdUROTi84LjkuMi4yNi1DVURBLTEyLjEuMSIsCmxvYWRPcmRlciA9IDE1LApwcm9wVCA9IHt9LApzdGFja0RlcHRoID0gMCwKc3RhdHVzID0gImFjdGl2ZSIsCnVzZXJO
+_ModuleTable008_=YW1lID0gImN1RE5OLzguOS4yLjI2LUNVREEtMTIuMS4xIiwKd1YgPSAiMDAwMDAwMDA4LjAwMDAwMDAwOS4wMDAwMDAwMDIuMDAwMDAwMDI2LipjdWRhLip6ZmluYWwtLjAwMDAwMDAxMi4wMDAwMDAwMDEuMDAwMDAwMDAxLip6ZmluYWwiLAp9LApsaWJmZmkgPSB7CmZuID0gIi9zdy9lYi9tb2RzL2FsbC9Db21waWxlci9HQ0Njb3JlLzExLjMuMC9saWJmZmkvMy40LjIubHVhIiwKZnVsbE5hbWUgPSAibGliZmZpLzMuNC4yIiwKbG9hZE9yZGVyID0gMTEsCnByb3BUID0ge30sCnN0YWNrRGVwdGggPSAxLApzdGF0dXMgPSAiYWN0aXZlIiwKdXNlck5hbWUgPSAibGliZmZpLzMuNC4yIiwKd1YgPSAiMDAwMDAwMDAzLjAwMDAwMDAwNC4wMDAwMDAwMDIuKnpmaW5hbCIsCn0sCmxp
+_ModuleTable009_=YnJlYWRsaW5lID0gewpmbiA9ICIvc3cvZWIvbW9kcy9hbGwvQ29tcGlsZXIvR0NDY29yZS8xMS4zLjAvbGlicmVhZGxpbmUvOC4xLjIubHVhIiwKZnVsbE5hbWUgPSAibGlicmVhZGxpbmUvOC4xLjIiLApsb2FkT3JkZXIgPSA2LApwcm9wVCA9IHt9LApzdGFja0RlcHRoID0gMSwKc3RhdHVzID0gImFjdGl2ZSIsCnVzZXJOYW1lID0gImxpYnJlYWRsaW5lLzguMS4yIiwKd1YgPSAiMDAwMDAwMDA4LjAwMDAwMDAwMS4wMDAwMDAwMDIuKnpmaW5hbCIsCn0sCm5jdXJzZXMgPSB7CmZuID0gIi9zdy9lYi9tb2RzL2FsbC9Db21waWxlci9HQ0Njb3JlLzExLjMuMC9uY3Vyc2VzLzYuMy5sdWEiLApmdWxsTmFtZSA9ICJuY3Vyc2VzLzYuMyIsCmxvYWRPcmRlciA9IDUsCnByb3BUID0g
+_ModuleTable010_=e30sCnN0YWNrRGVwdGggPSAyLApzdGF0dXMgPSAiYWN0aXZlIiwKdXNlck5hbWUgPSAibmN1cnNlcy82LjMiLAp3ViA9ICIwMDAwMDAwMDYuMDAwMDAwMDAzLip6ZmluYWwiLAp9LAp6bGliID0gewpmbiA9ICIvc3cvZWIvbW9kcy9hbGwvQ29tcGlsZXIvR0NDY29yZS8xMS4zLjAvemxpYi8xLjIuMTIubHVhIiwKZnVsbE5hbWUgPSAiemxpYi8xLjIuMTIiLApsb2FkT3JkZXIgPSAyLApwcm9wVCA9IHt9LApzdGFja0RlcHRoID0gMiwKc3RhdHVzID0gImFjdGl2ZSIsCnVzZXJOYW1lID0gInpsaWIvMS4yLjEyIiwKd1YgPSAiMDAwMDAwMDAxLjAwMDAwMDAwMi4wMDAwMDAwMTIuKnpmaW5hbCIsCn0sCn0sCm1wYXRoQSA9IHsKIi9zdy9lYi9tb2RzL2FsbC9Db21waWxlci9HQ0Nj
+_ModuleTable011_=b3JlLzExLjMuMCIsICIvc3cvaHByYy9tb2RzL2FsbC9Db3JlIgosICIvc3cvZWIvbW9kcy9hbGwvQ29yZSIsICIvc3cvbG1vZC9ocHJjL21vZHMvTGludXgiLCAiL3N3L2xtb2QvbG1vZC9tb2R1bGVmaWxlcy9Db3JlIiwKfSwKc3lzdGVtQmFzZU1QQVRIID0gIi9zdy9ocHJjL21vZHMvYWxsL0NvcmU6L3N3L2ViL21vZHMvYWxsL0NvcmU6L3N3L2xtb2QvaHByYy9tb2RzL0xpbnV4Oi9zdy9sbW9kL2xtb2QvbW9kdWxlZmlsZXMvQ29yZSIsCn0K
+_ModuleTable_Sz_=11
+__LMOD_REF_COUNT_CMAKE_LIBRARY_PATH=/sw/eb/sw/OpenSSL/1.1/lib64:1;/sw/eb/sw/libffi/3.4.2-GCCcore-11.3.0/lib64:1;/sw/eb/sw/GCCcore/11.3.0/lib64:1
+__LMOD_REF_COUNT_CMAKE_PREFIX_PATH=/sw/eb/sw/cuDNN/8.9.2.26-CUDA-12.1.1:1;/sw/eb/sw/CUDA/12.1.1:1;/sw/eb/sw/Python/3.10.4-GCCcore-11.3.0:1;/sw/eb/sw/OpenSSL/1.1:1;/sw/eb/sw/libffi/3.4.2-GCCcore-11.3.0:1;/sw/eb/sw/GMP/6.2.1-GCCcore-11.3.0:1;/sw/eb/sw/XZ/5.2.5-GCCcore-11.3.0:1;/sw/eb/sw/SQLite/3.38.3-GCCcore-11.3.0:1;/sw/eb/sw/Tcl/8.6.12-GCCcore-11.3.0:1;/sw/eb/sw/libreadline/8.1.2-GCCcore-11.3.0:1;/sw/eb/sw/ncurses/6.3-GCCcore-11.3.0:1;/sw/eb/sw/bzip2/1.0.8-GCCcore-11.3.0:1;/sw/eb/sw/binutils/2.38-GCCcore-11.3.0:1;/sw/eb/sw/zlib/1.2.12-GCCcore-11.3.0:1;/sw/eb/sw/GCCcore/11.3.0:1
+__LMOD_REF_COUNT_CPATH=/sw/eb/sw/cuDNN/8.9.2.26-CUDA-12.1.1/include:1;/sw/eb/sw/CUDA/12.1.1/nvvm/include:1;/sw/eb/sw/CUDA/12.1.1/extras/CUPTI/include:1;/sw/eb/sw/CUDA/12.1.1/include:1;/sw/eb/sw/Python/3.10.4-GCCcore-11.3.0/include:1;/sw/eb/sw/OpenSSL/1.1/include:1;/sw/eb/sw/libffi/3.4.2-GCCcore-11.3.0/include:1;/sw/eb/sw/GMP/6.2.1-GCCcore-11.3.0/include:1;/sw/eb/sw/XZ/5.2.5-GCCcore-11.3.0/include:1;/sw/eb/sw/SQLite/3.38.3-GCCcore-11.3.0/include:1;/sw/eb/sw/Tcl/8.6.12-GCCcore-11.3.0/include:1;/sw/eb/sw/libreadline/8.1.2-GCCcore-11.3.0/include:1;/sw/eb/sw/ncurses/6.3-GCCcore-11.3.0/include:1;/sw/eb/sw/bzip2/1.0.8-GCCcore-11.3.0/include:1;/sw/eb/sw/binutils/2.38-GCCcore-11.3.0/include:1;/sw/eb/sw/zlib/1.2.12-GCCcore-11.3.0/include:1
+__LMOD_REF_COUNT_LD_LIBRARY_PATH=/sw/eb/sw/cuDNN/8.9.2.26-CUDA-12.1.1/lib:1;/sw/eb/sw/CUDA/12.1.1/nvvm/lib64:1;/sw/eb/sw/CUDA/12.1.1/extras/CUPTI/lib64:1;/sw/eb/sw/CUDA/12.1.1/lib:1;/sw/eb/sw/Python/3.10.4-GCCcore-11.3.0/lib:1;/sw/eb/sw/OpenSSL/1.1/lib64:1;/sw/eb/sw/libffi/3.4.2-GCCcore-11.3.0/lib64:1;/sw/eb/sw/GMP/6.2.1-GCCcore-11.3.0/lib:1;/sw/eb/sw/XZ/5.2.5-GCCcore-11.3.0/lib:1;/sw/eb/sw/SQLite/3.38.3-GCCcore-11.3.0/lib:1;/sw/eb/sw/Tcl/8.6.12-GCCcore-11.3.0/lib:1;/sw/eb/sw/libreadline/8.1.2-GCCcore-11.3.0/lib:1;/sw/eb/sw/ncurses/6.3-GCCcore-11.3.0/lib:1;/sw/eb/sw/bzip2/1.0.8-GCCcore-11.3.0/lib:1;/sw/eb/sw/binutils/2.38-GCCcore-11.3.0/lib:1;/sw/eb/sw/zlib/1.2.12-GCCcore-11.3.0/lib:1;/sw/eb/sw/GCCcore/11.3.0/lib64:1
+__LMOD_REF_COUNT_LIBRARY_PATH=/sw/eb/sw/cuDNN/8.9.2.26-CUDA-12.1.1/lib:1;/sw/eb/sw/CUDA/12.1.1/stubs/lib64:1;/sw/eb/sw/CUDA/12.1.1/lib:1;/sw/eb/sw/Python/3.10.4-GCCcore-11.3.0/lib:1;/sw/eb/sw/OpenSSL/1.1/lib64:1;/sw/eb/sw/libffi/3.4.2-GCCcore-11.3.0/lib64:1;/sw/eb/sw/libffi/3.4.2-GCCcore-11.3.0/lib:1;/sw/eb/sw/GMP/6.2.1-GCCcore-11.3.0/lib:1;/sw/eb/sw/XZ/5.2.5-GCCcore-11.3.0/lib:1;/sw/eb/sw/SQLite/3.38.3-GCCcore-11.3.0/lib:1;/sw/eb/sw/Tcl/8.6.12-GCCcore-11.3.0/lib:1;/sw/eb/sw/libreadline/8.1.2-GCCcore-11.3.0/lib:1;/sw/eb/sw/ncurses/6.3-GCCcore-11.3.0/lib:1;/sw/eb/sw/bzip2/1.0.8-GCCcore-11.3.0/lib:1;/sw/eb/sw/binutils/2.38-GCCcore-11.3.0/lib:1;/sw/eb/sw/zlib/1.2.12-GCCcore-11.3.0/lib:1
+__LMOD_REF_COUNT_MANPATH=/sw/eb/sw/Python/3.10.4-GCCcore-11.3.0/share/man:1;/sw/eb/sw/libffi/3.4.2-GCCcore-11.3.0/share/man:1;/sw/eb/sw/XZ/5.2.5-GCCcore-11.3.0/share/man:1;/sw/eb/sw/SQLite/3.38.3-GCCcore-11.3.0/share/man:1;/sw/eb/sw/Tcl/8.6.12-GCCcore-11.3.0/share/man:1;/sw/eb/sw/Tcl/8.6.12-GCCcore-11.3.0/man:1;/sw/eb/sw/libreadline/8.1.2-GCCcore-11.3.0/share/man:1;/sw/eb/sw/ncurses/6.3-GCCcore-11.3.0/share/man:1;/sw/eb/sw/bzip2/1.0.8-GCCcore-11.3.0/man:1;/sw/eb/sw/binutils/2.38-GCCcore-11.3.0/share/man:1;/sw/eb/sw/zlib/1.2.12-GCCcore-11.3.0/share/man:1;/sw/eb/sw/GCCcore/11.3.0/share/man:1;/sw/hprc/local/share/man:1;/sw/lmod/lmod/share/man:1;:1
+__LMOD_REF_COUNT_MODULEPATH=/sw/eb/mods/all/Compiler/GCCcore/11.3.0:1;/sw/hprc/mods/all/Core:1;/sw/eb/mods/all/Core:1;/sw/lmod/hprc/mods/Linux:1;/sw/lmod/lmod/modulefiles/Core:1
+__LMOD_REF_COUNT_PATH=/sw/eb/sw/CUDA/12.1.1/nvvm/bin:1;/sw/eb/sw/CUDA/12.1.1/bin:1;/sw/eb/sw/Python/3.10.4-GCCcore-11.3.0/bin:1;/sw/eb/sw/OpenSSL/1.1/bin:1;/sw/eb/sw/XZ/5.2.5-GCCcore-11.3.0/bin:1;/sw/eb/sw/SQLite/3.38.3-GCCcore-11.3.0/bin:1;/sw/eb/sw/Tcl/8.6.12-GCCcore-11.3.0/bin:1;/sw/eb/sw/ncurses/6.3-GCCcore-11.3.0/bin:1;/sw/eb/sw/bzip2/1.0.8-GCCcore-11.3.0/bin:1;/sw/eb/sw/binutils/2.38-GCCcore-11.3.0/bin:1;/sw/eb/sw/GCCcore/11.3.0/bin:1;/scratch/user/shubhammhaske/vfm_env/bin:1;/sw/local/bin:1;/usr/local/bin:1;/usr/bin:1;/usr/local/sbin:1;/usr/sbin:1;/usr/lpp/mmfs/bin:1
+__LMOD_REF_COUNT_PKG_CONFIG_PATH=/sw/eb/sw/CUDA/12.1.1/pkgconfig:1;/sw/eb/sw/Python/3.10.4-GCCcore-11.3.0/lib/pkgconfig:1;/sw/eb/sw/OpenSSL/1.1/lib64/pkgconfig:1;/sw/eb/sw/libffi/3.4.2-GCCcore-11.3.0/lib/pkgconfig:1;/sw/eb/sw/GMP/6.2.1-GCCcore-11.3.0/lib/pkgconfig:1;/sw/eb/sw/XZ/5.2.5-GCCcore-11.3.0/lib/pkgconfig:1;/sw/eb/sw/SQLite/3.38.3-GCCcore-11.3.0/lib/pkgconfig:1;/sw/eb/sw/Tcl/8.6.12-GCCcore-11.3.0/lib/pkgconfig:1;/sw/eb/sw/libreadline/8.1.2-GCCcore-11.3.0/lib/pkgconfig:1;/sw/eb/sw/bzip2/1.0.8-GCCcore-11.3.0/lib/pkgconfig:1;/sw/eb/sw/zlib/1.2.12-GCCcore-11.3.0/lib/pkgconfig:1
+__LMOD_REF_COUNT_PYTHONPATH=/sw/eb/sw/Python/3.10.4-GCCcore-11.3.0/easybuild/python:1
+__LMOD_REF_COUNT_XDG_DATA_DIRS=/sw/eb/sw/CUDA/12.1.1/share:1;/sw/eb/sw/Python/3.10.4-GCCcore-11.3.0/share:1;/sw/eb/sw/libffi/3.4.2-GCCcore-11.3.0/share:1;/sw/eb/sw/GMP/6.2.1-GCCcore-11.3.0/share:1;/sw/eb/sw/XZ/5.2.5-GCCcore-11.3.0/share:1;/sw/eb/sw/SQLite/3.38.3-GCCcore-11.3.0/share:1;/sw/eb/sw/Tcl/8.6.12-GCCcore-11.3.0/share:1;/sw/eb/sw/libreadline/8.1.2-GCCcore-11.3.0/share:1;/sw/eb/sw/ncurses/6.3-GCCcore-11.3.0/share:1;/sw/eb/sw/binutils/2.38-GCCcore-11.3.0/share:1;/sw/eb/sw/zlib/1.2.12-GCCcore-11.3.0/share:1;/sw/eb/sw/GCCcore/11.3.0/share:1
+which_declare=declare -f
+
+INFO 2025-11-27 19:48:13,115 trainer.py: 994: Setting up components: Model, loss, optim, meters etc.
+INFO 2025-11-27 19:48:13,132 logger.py:  66: TensorBoard SummaryWriter instantiated. Files will be stored in: finetune_logs/sam2_box_focal-2025-11-27_19-48-09/tensorboard
+INFO 2025-11-27 19:48:14,607 trainer.py:1064: ====================
+INFO 2025-11-27 19:48:14,607 trainer.py:1065: Summary for model <class 'training.model.sam2.SAM2Train'>
+INFO 2025-11-27 19:48:14,610 trainer.py:1066: Model is SAM2Train(
+  (image_encoder): ImageEncoder(
+    (trunk): Hiera(
+      (patch_embed): PatchEmbed(
+        (proj): Conv2d(3, 144, kernel_size=(7, 7), stride=(4, 4), padding=(3, 3))
+      )
+      (blocks): ModuleList(
+        (0-1): 2 x MultiScaleBlock(
+          (norm1): LayerNorm((144,), eps=1e-06, elementwise_affine=True)
+          (attn): MultiScaleAttention(
+            (qkv): Linear(in_features=144, out_features=432, bias=True)
+            (proj): Linear(in_features=144, out_features=144, bias=True)
+          )
+          (drop_path): Identity()
+          (norm2): LayerNorm((144,), eps=1e-06, elementwise_affine=True)
+          (mlp): MLP(
+            (layers): ModuleList(
+              (0): Linear(in_features=144, out_features=576, bias=True)
+              (1): Linear(in_features=576, out_features=144, bias=True)
+            )
+            (act): GELU(approximate='none')
+          )
+        )
+        (2): MultiScaleBlock(
+          (norm1): LayerNorm((144,), eps=1e-06, elementwise_affine=True)
+          (pool): MaxPool2d(kernel_size=(2, 2), stride=(2, 2), padding=0, dilation=1, ceil_mode=False)
+          (attn): MultiScaleAttention(
+            (q_pool): MaxPool2d(kernel_size=(2, 2), stride=(2, 2), padding=0, dilation=1, ceil_mode=False)
+            (qkv): Linear(in_features=144, out_features=864, bias=True)
+            (proj): Linear(in_features=288, out_features=288, bias=True)
+          )
+          (drop_path): Identity()
+          (norm2): LayerNorm((288,), eps=1e-06, elementwise_affine=True)
+          (mlp): MLP(
+            (layers): ModuleList(
+              (0): Linear(in_features=288, out_features=1152, bias=True)
+              (1): Linear(in_features=1152, out_features=288, bias=True)
+            )
+            (act): GELU(approximate='none')
+          )
+          (proj): Linear(in_features=144, out_features=288, bias=True)
+        )
+        (3-7): 5 x MultiScaleBlock(
+          (norm1): LayerNorm((288,), eps=1e-06, elementwise_affine=True)
+          (attn): MultiScaleAttention(
+            (qkv): Linear(in_features=288, out_features=864, bias=True)
+            (proj): Linear(in_features=288, out_features=288, bias=True)
+          )
+          (drop_path): Identity()
+          (norm2): LayerNorm((288,), eps=1e-06, elementwise_affine=True)
+          (mlp): MLP(
+            (layers): ModuleList(
+              (0): Linear(in_features=288, out_features=1152, bias=True)
+              (1): Linear(in_features=1152, out_features=288, bias=True)
+            )
+            (act): GELU(approximate='none')
+          )
+        )
+        (8): MultiScaleBlock(
+          (norm1): LayerNorm((288,), eps=1e-06, elementwise_affine=True)
+          (pool): MaxPool2d(kernel_size=(2, 2), stride=(2, 2), padding=0, dilation=1, ceil_mode=False)
+          (attn): MultiScaleAttention(
+            (q_pool): MaxPool2d(kernel_size=(2, 2), stride=(2, 2), padding=0, dilation=1, ceil_mode=False)
+            (qkv): Linear(in_features=288, out_features=1728, bias=True)
+            (proj): Linear(in_features=576, out_features=576, bias=True)
+          )
+          (drop_path): Identity()
+          (norm2): LayerNorm((576,), eps=1e-06, elementwise_affine=True)
+          (mlp): MLP(
+            (layers): ModuleList(
+              (0): Linear(in_features=576, out_features=2304, bias=True)
+              (1): Linear(in_features=2304, out_features=576, bias=True)
+            )
+            (act): GELU(approximate='none')
+          )
+          (proj): Linear(in_features=288, out_features=576, bias=True)
+        )
+        (9-43): 35 x MultiScaleBlock(
+          (norm1): LayerNorm((576,), eps=1e-06, elementwise_affine=True)
+          (attn): MultiScaleAttention(
+            (qkv): Linear(in_features=576, out_features=1728, bias=True)
+            (proj): Linear(in_features=576, out_features=576, bias=True)
+          )
+          (drop_path): Identity()
+          (norm2): LayerNorm((576,), eps=1e-06, elementwise_affine=True)
+          (mlp): MLP(
+            (layers): ModuleList(
+              (0): Linear(in_features=576, out_features=2304, bias=True)
+              (1): Linear(in_features=2304, out_features=576, bias=True)
+            )
+            (act): GELU(approximate='none')
+          )
+        )
+        (44): MultiScaleBlock(
+          (norm1): LayerNorm((576,), eps=1e-06, elementwise_affine=True)
+          (pool): MaxPool2d(kernel_size=(2, 2), stride=(2, 2), padding=0, dilation=1, ceil_mode=False)
+          (attn): MultiScaleAttention(
+            (q_pool): MaxPool2d(kernel_size=(2, 2), stride=(2, 2), padding=0, dilation=1, ceil_mode=False)
+            (qkv): Linear(in_features=576, out_features=3456, bias=True)
+            (proj): Linear(in_features=1152, out_features=1152, bias=True)
+          )
+          (drop_path): Identity()
+          (norm2): LayerNorm((1152,), eps=1e-06, elementwise_affine=True)
+          (mlp): MLP(
+            (layers): ModuleList(
+              (0): Linear(in_features=1152, out_features=4608, bias=True)
+              (1): Linear(in_features=4608, out_features=1152, bias=True)
+            )
+            (act): GELU(approximate='none')
+          )
+          (proj): Linear(in_features=576, out_features=1152, bias=True)
+        )
+        (45-47): 3 x MultiScaleBlock(
+          (norm1): LayerNorm((1152,), eps=1e-06, elementwise_affine=True)
+          (attn): MultiScaleAttention(
+            (qkv): Linear(in_features=1152, out_features=3456, bias=True)
+            (proj): Linear(in_features=1152, out_features=1152, bias=True)
+          )
+          (drop_path): Identity()
+          (norm2): LayerNorm((1152,), eps=1e-06, elementwise_affine=True)
+          (mlp): MLP(
+            (layers): ModuleList(
+              (0): Linear(in_features=1152, out_features=4608, bias=True)
+              (1): Linear(in_features=4608, out_features=1152, bias=True)
+            )
+            (act): GELU(approximate='none')
+          )
+        )
+      )
+    )
+    (neck): FpnNeck(
+      (position_encoding): PositionEmbeddingSine()
+      (convs): ModuleList(
+        (0): Sequential(
+          (conv): Conv2d(1152, 256, kernel_size=(1, 1), stride=(1, 1))
+        )
+        (1): Sequential(
+          (conv): Conv2d(576, 256, kernel_size=(1, 1), stride=(1, 1))
+        )
+        (2): Sequential(
+          (conv): Conv2d(288, 256, kernel_size=(1, 1), stride=(1, 1))
+        )
+        (3): Sequential(
+          (conv): Conv2d(144, 256, kernel_size=(1, 1), stride=(1, 1))
+        )
+      )
+    )
+  )
+  (mask_downsample): Conv2d(1, 1, kernel_size=(4, 4), stride=(4, 4))
+  (memory_attention): MemoryAttention(
+    (layers): ModuleList(
+      (0-3): 4 x MemoryAttentionLayer(
+        (self_attn): RoPEAttention(
+          (q_proj): Linear(in_features=256, out_features=256, bias=True)
+          (k_proj): Linear(in_features=256, out_features=256, bias=True)
+          (v_proj): Linear(in_features=256, out_features=256, bias=True)
+          (out_proj): Linear(in_features=256, out_features=256, bias=True)
+        )
+        (cross_attn_image): RoPEAttention(
+          (q_proj): Linear(in_features=256, out_features=256, bias=True)
+          (k_proj): Linear(in_features=64, out_features=256, bias=True)
+          (v_proj): Linear(in_features=64, out_features=256, bias=True)
+          (out_proj): Linear(in_features=256, out_features=256, bias=True)
+        )
+        (linear1): Linear(in_features=256, out_features=2048, bias=True)
+        (dropout): Dropout(p=0.1, inplace=False)
+        (linear2): Linear(in_features=2048, out_features=256, bias=True)
+        (norm1): LayerNorm((256,), eps=1e-05, elementwise_affine=True)
+        (norm2): LayerNorm((256,), eps=1e-05, elementwise_affine=True)
+        (norm3): LayerNorm((256,), eps=1e-05, elementwise_affine=True)
+        (dropout1): Dropout(p=0.1, inplace=False)
+        (dropout2): Dropout(p=0.1, inplace=False)
+        (dropout3): Dropout(p=0.1, inplace=False)
+      )
+    )
+    (norm): LayerNorm((256,), eps=1e-05, elementwise_affine=True)
+  )
+  (memory_encoder): MemoryEncoder(
+    (mask_downsampler): MaskDownSampler(
+      (encoder): Sequential(
+        (0): Conv2d(1, 4, kernel_size=(3, 3), stride=(2, 2), padding=(1, 1))
+        (1): LayerNorm2d()
+        (2): GELU(approximate='none')
+        (3): Conv2d(4, 16, kernel_size=(3, 3), stride=(2, 2), padding=(1, 1))
+        (4): LayerNorm2d()
+        (5): GELU(approximate='none')
+        (6): Conv2d(16, 64, kernel_size=(3, 3), stride=(2, 2), padding=(1, 1))
+        (7): LayerNorm2d()
+        (8): GELU(approximate='none')
+        (9): Conv2d(64, 256, kernel_size=(3, 3), stride=(2, 2), padding=(1, 1))
+        (10): LayerNorm2d()
+        (11): GELU(approximate='none')
+        (12): Conv2d(256, 256, kernel_size=(1, 1), stride=(1, 1))
+      )
+    )
+    (pix_feat_proj): Conv2d(256, 256, kernel_size=(1, 1), stride=(1, 1))
+    (fuser): Fuser(
+      (proj): Identity()
+      (layers): ModuleList(
+        (0-1): 2 x CXBlock(
+          (dwconv): Conv2d(256, 256, kernel_size=(7, 7), stride=(1, 1), padding=(3, 3), groups=256)
+          (norm): LayerNorm2d()
+          (pwconv1): Linear(in_features=256, out_features=1024, bias=True)
+          (act): GELU(approximate='none')
+          (pwconv2): Linear(in_features=1024, out_features=256, bias=True)
+          (drop_path): Identity()
+        )
+      )
+    )
+    (position_encoding): PositionEmbeddingSine()
+    (out_proj): Conv2d(256, 64, kernel_size=(1, 1), stride=(1, 1))
+  )
+  (sam_prompt_encoder): PromptEncoder(
+    (pe_layer): PositionEmbeddingRandom()
+    (point_embeddings): ModuleList(
+      (0-3): 4 x Embedding(1, 256)
+    )
+    (not_a_point_embed): Embedding(1, 256)
+    (mask_downscaling): Sequential(
+      (0): Conv2d(1, 4, kernel_size=(2, 2), stride=(2, 2))
+      (1): LayerNorm2d()
+      (2): GELU(approximate='none')
+      (3): Conv2d(4, 16, kernel_size=(2, 2), stride=(2, 2))
+      (4): LayerNorm2d()
+      (5): GELU(approximate='none')
+      (6): Conv2d(16, 256, kernel_size=(1, 1), stride=(1, 1))
+    )
+    (no_mask_embed): Embedding(1, 256)
+  )
+  (sam_mask_decoder): MaskDecoder(
+    (transformer): TwoWayTransformer(
+      (layers): ModuleList(
+        (0-1): 2 x TwoWayAttentionBlock(
+          (self_attn): Attention(
+            (q_proj): Linear(in_features=256, out_features=256, bias=True)
+            (k_proj): Linear(in_features=256, out_features=256, bias=True)
+            (v_proj): Linear(in_features=256, out_features=256, bias=True)
+            (out_proj): Linear(in_features=256, out_features=256, bias=True)
+          )
+          (norm1): LayerNorm((256,), eps=1e-05, elementwise_affine=True)
+          (cross_attn_token_to_image): Attention(
+            (q_proj): Linear(in_features=256, out_features=128, bias=True)
+            (k_proj): Linear(in_features=256, out_features=128, bias=True)
+            (v_proj): Linear(in_features=256, out_features=128, bias=True)
+            (out_proj): Linear(in_features=128, out_features=256, bias=True)
+          )
+          (norm2): LayerNorm((256,), eps=1e-05, elementwise_affine=True)
+          (mlp): MLP(
+            (layers): ModuleList(
+              (0): Linear(in_features=256, out_features=2048, bias=True)
+              (1): Linear(in_features=2048, out_features=256, bias=True)
+            )
+            (act): ReLU()
+          )
+          (norm3): LayerNorm((256,), eps=1e-05, elementwise_affine=True)
+          (norm4): LayerNorm((256,), eps=1e-05, elementwise_affine=True)
+          (cross_attn_image_to_token): Attention(
+            (q_proj): Linear(in_features=256, out_features=128, bias=True)
+            (k_proj): Linear(in_features=256, out_features=128, bias=True)
+            (v_proj): Linear(in_features=256, out_features=128, bias=True)
+            (out_proj): Linear(in_features=128, out_features=256, bias=True)
+          )
+        )
+      )
+      (final_attn_token_to_image): Attention(
+        (q_proj): Linear(in_features=256, out_features=128, bias=True)
+        (k_proj): Linear(in_features=256, out_features=128, bias=True)
+        (v_proj): Linear(in_features=256, out_features=128, bias=True)
+        (out_proj): Linear(in_features=128, out_features=256, bias=True)
+      )
+      (norm_final_attn): LayerNorm((256,), eps=1e-05, elementwise_affine=True)
+    )
+    (iou_token): Embedding(1, 256)
+    (mask_tokens): Embedding(4, 256)
+    (obj_score_token): Embedding(1, 256)
+    (output_upscaling): Sequential(
+      (0): ConvTranspose2d(256, 64, kernel_size=(2, 2), stride=(2, 2))
+      (1): LayerNorm2d()
+      (2): GELU(approximate='none')
+      (3): ConvTranspose2d(64, 32, kernel_size=(2, 2), stride=(2, 2))
+      (4): GELU(approximate='none')
+    )
+    (conv_s0): Conv2d(256, 32, kernel_size=(1, 1), stride=(1, 1))
+    (conv_s1): Conv2d(256, 64, kernel_size=(1, 1), stride=(1, 1))
+    (output_hypernetworks_mlps): ModuleList(
+      (0-3): 4 x MLP(
+        (layers): ModuleList(
+          (0-1): 2 x Linear(in_features=256, out_features=256, bias=True)
+          (2): Linear(in_features=256, out_features=32, bias=True)
+        )
+        (act): ReLU()
+      )
+    )
+    (iou_prediction_head): MLP(
+      (layers): ModuleList(
+        (0-1): 2 x Linear(in_features=256, out_features=256, bias=True)
+        (2): Linear(in_features=256, out_features=4, bias=True)
+      )
+      (act): ReLU()
+    )
+    (pred_obj_score_head): MLP(
+      (layers): ModuleList(
+        (0-1): 2 x Linear(in_features=256, out_features=256, bias=True)
+        (2): Linear(in_features=256, out_features=1, bias=True)
+      )
+      (act): ReLU()
+    )
+  )
+  (obj_ptr_proj): MLP(
+    (layers): ModuleList(
+      (0-2): 3 x Linear(in_features=256, out_features=256, bias=True)
+    )
+    (act): ReLU()
+  )
+  (obj_ptr_tpos_proj): Linear(in_features=256, out_features=64, bias=True)
+)
+INFO 2025-11-27 19:48:14,610 trainer.py:1067: 	Total parameters 224 M
+INFO 2025-11-27 19:48:14,610 trainer.py:1068: 	Trainable parameters 11.7 M
+INFO 2025-11-27 19:48:14,610 trainer.py:1071: 	Non-Trainable parameters 212 M
+INFO 2025-11-27 19:48:14,610 trainer.py:1074: ====================
+INFO 2025-11-27 19:48:14,616 trainer.py:1028: Finished setting up components: Model, loss, optim, meters etc.
+INFO 2025-11-27 19:48:14,616 trainer.py: 319: Moving components to device cuda:0 and local rank 0.
+INFO 2025-11-27 19:48:14,860 trainer.py: 325: Done moving components to device cuda:0 and local rank 0.
+INFO 2025-11-27 19:48:16,749 sam2_datasets.py: 130: Dataset mixing probabilities: [1.0]
+INFO 2025-11-27 19:48:17,678 trainer.py: 422: Loading pretrained checkpoint from {'_partial_': True, '_target_': 'training.utils.checkpoint_utils.load_state_dict_into_model', 'strict': False, 'state_dict': {'_target_': 'training.utils.checkpoint_utils.load_checkpoint_and_apply_kernels', 'checkpoint_path': 'sam2/checkpoints/sam2.1_hiera_large.pt', 'ckpt_state_dict_keys': ['model']}}
+WARNING 2025-11-27 19:48:22,234 transforms.py: 418: Skip RandomAffine for zero-area mask in first frame after 2 tentatives
+WARNING 2025-11-27 19:48:37,771 transforms.py: 418: Skip RandomAffine for zero-area mask in first frame after 2 tentatives
+INFO 2025-11-27 19:49:35,220 train_utils.py: 278: Train Epoch: [0][ 0/21] | Batch Time: 76.96 (76.96) | Data Time: 14.75 (14.75) | Mem (GB): 5.00 (5.00/5.00) | Time Elapsed: 00d 00h 01m | Losses/train_all_loss: 1.50e+01 (1.50e+01)
+INFO 2025-11-27 19:49:37,763 train_utils.py: 278: Train Epoch: [0][10/21] | Batch Time: 1.06 (7.23) | Data Time: 0.00 (1.34) | Mem (GB): 4.00 (4.91/5.00) | Time Elapsed: 00d 00h 01m | Losses/train_all_loss: 9.59e+01 (4.32e+01)
+INFO 2025-11-27 19:49:39,347 train_utils.py: 278: Train Epoch: [0][20/21] | Batch Time: 0.16 (3.86) | Data Time: 0.00 (0.70) | Mem (GB): 5.00 (4.86/5.00) | Time Elapsed: 00d 00h 01m | Losses/train_all_loss: 6.64e+01 (4.54e+01)
+INFO 2025-11-27 19:49:39,685 trainer.py: 955: Estimated time remaining: 00d 01h 06m
+INFO 2025-11-27 19:49:39,685 trainer.py: 897: Synchronizing meters
+INFO 2025-11-27 19:49:39,686 trainer.py: 835: Losses and meters: {'Losses/train_all_loss': 45.424840859004426, 'Losses/train_all_core_loss': 45.424840859004426, 'Losses/train_all_focal_loss': 42.60538009234837, 'Losses/train_all_dice_loss': 0.9398202016240075, 'Trainer/where': 0.019047619047619046, 'Trainer/epoch': 0, 'Trainer/steps_train': 21}
+WARNING 2025-11-27 19:49:42,559 transforms.py: 418: Skip RandomAffine for zero-area mask in first frame after 2 tentatives
+WARNING 2025-11-27 19:49:44,705 transforms.py: 418: Skip RandomAffine for zero-area mask in first frame after 2 tentatives
+WARNING 2025-11-27 19:49:51,234 transforms.py: 418: Skip RandomAffine for zero-area mask in first frame after 2 tentatives
+WARNING 2025-11-27 19:49:56,117 transforms.py: 418: Skip RandomAffine for zero-area mask in first frame after 2 tentatives
+WARNING 2025-11-27 19:49:56,978 transforms.py: 418: Skip RandomAffine for zero-area mask in first frame after 2 tentatives
+INFO 2025-11-27 19:50:05,936 train_utils.py: 278: Train Epoch: [1][ 0/21] | Batch Time: 25.00 (25.00) | Data Time: 24.76 (24.76) | Mem (GB): 5.00 (5.00/5.00) | Time Elapsed: 00d 00h 01m | Losses/train_all_loss: 7.57e+01 (7.57e+01)
+INFO 2025-11-27 19:50:24,553 train_utils.py: 278: Train Epoch: [1][10/21] | Batch Time: 0.16 (3.96) | Data Time: 0.00 (3.79) | Mem (GB): 5.00 (5.00/5.00) | Time Elapsed: 00d 00h 02m | Losses/train_all_loss: 6.58e+01 (4.83e+01)
+INFO 2025-11-27 19:50:40,634 train_utils.py: 278: Train Epoch: [1][20/21] | Batch Time: 0.16 (2.84) | Data Time: 0.00 (2.67) | Mem (GB): 5.00 (4.86/5.00) | Time Elapsed: 00d 00h 02m | Losses/train_all_loss: 8.81e+01 (6.12e+01)
+INFO 2025-11-27 19:50:40,739 trainer.py: 955: Estimated time remaining: 00d 00h 47m
+INFO 2025-11-27 19:50:40,739 trainer.py: 897: Synchronizing meters
+INFO 2025-11-27 19:50:40,739 trainer.py: 835: Losses and meters: {'Losses/train_all_loss': 61.194160881496614, 'Losses/train_all_core_loss': 61.194160881496614, 'Losses/train_all_focal_loss': 58.33195718129476, 'Losses/train_all_dice_loss': 0.9540679369653974, 'Trainer/where': 0.039047619047619046, 'Trainer/epoch': 1, 'Trainer/steps_train': 42}
+WARNING 2025-11-27 19:50:45,287 transforms.py: 418: Skip RandomAffine for zero-area mask in first frame after 2 tentatives
+WARNING 2025-11-27 19:50:51,560 transforms.py: 418: Skip RandomAffine for zero-area mask in first frame after 2 tentatives
+INFO 2025-11-27 19:51:03,165 train_utils.py: 278: Train Epoch: [2][ 0/21] | Batch Time: 21.10 (21.10) | Data Time: 20.86 (20.86) | Mem (GB): 5.00 (5.00/5.00) | Time Elapsed: 00d 00h 02m | Losses/train_all_loss: 2.93e+00 (2.93e+00)
+INFO 2025-11-27 19:51:15,065 train_utils.py: 278: Train Epoch: [2][10/21] | Batch Time: 0.16 (3.00) | Data Time: 0.00 (2.82) | Mem (GB): 5.00 (5.00/5.00) | Time Elapsed: 00d 00h 03m | Losses/train_all_loss: 1.91e+01 (3.68e+01)
+INFO 2025-11-27 19:51:40,545 train_utils.py: 278: Train Epoch: [2][20/21] | Batch Time: 0.16 (2.78) | Data Time: 0.00 (2.61) | Mem (GB): 4.00 (4.86/5.00) | Time Elapsed: 00d 00h 03m | Losses/train_all_loss: 4.59e+01 (4.09e+01)
+INFO 2025-11-27 19:51:40,685 trainer.py: 955: Estimated time remaining: 00d 00h 45m
+INFO 2025-11-27 19:51:40,686 trainer.py: 897: Synchronizing meters
+INFO 2025-11-27 19:51:40,686 trainer.py: 835: Losses and meters: {'Losses/train_all_loss': 40.911170335043046, 'Losses/train_all_core_loss': 40.911170335043046, 'Losses/train_all_focal_loss': 38.334883001588636, 'Losses/train_all_dice_loss': 0.8587625055086046, 'Trainer/where': 0.05904761904761905, 'Trainer/epoch': 2, 'Trainer/steps_train': 63}
+INFO 2025-11-27 19:52:03,142 train_utils.py: 278: Train Epoch: [3][ 0/21] | Batch Time: 21.16 (21.16) | Data Time: 20.92 (20.92) | Mem (GB): 5.00 (5.00/5.00) | Time Elapsed: 00d 00h 03m | Losses/train_all_loss: 4.41e+01 (4.41e+01)
+INFO 2025-11-27 19:52:18,191 train_utils.py: 278: Train Epoch: [3][10/21] | Batch Time: 0.16 (3.29) | Data Time: 0.00 (3.11) | Mem (GB): 5.00 (4.82/5.00) | Time Elapsed: 00d 00h 04m | Losses/train_all_loss: 1.04e+02 (5.03e+01)
+INFO 2025-11-27 19:52:37,147 train_utils.py: 278: Train Epoch: [3][20/21] | Batch Time: 0.16 (2.63) | Data Time: 0.00 (2.45) | Mem (GB): 5.00 (4.86/5.00) | Time Elapsed: 00d 00h 04m | Losses/train_all_loss: 1.73e+01 (4.65e+01)
+INFO 2025-11-27 19:52:37,256 trainer.py: 955: Estimated time remaining: 00d 00h 42m
+INFO 2025-11-27 19:52:37,258 trainer.py: 897: Synchronizing meters
+INFO 2025-11-27 19:52:37,258 trainer.py: 835: Losses and meters: {'Losses/train_all_loss': 46.46465746561686, 'Losses/train_all_core_loss': 46.46465746561686, 'Losses/train_all_focal_loss': 44.051863825037366, 'Losses/train_all_dice_loss': 0.8042644432612828, 'Trainer/where': 0.07904761904761905, 'Trainer/epoch': 3, 'Trainer/steps_train': 84}
+INFO 2025-11-27 19:53:02,046 train_utils.py: 278: Train Epoch: [4][ 0/21] | Batch Time: 23.47 (23.47) | Data Time: 23.25 (23.25) | Mem (GB): 5.00 (5.00/5.00) | Time Elapsed: 00d 00h 04m | Losses/train_all_loss: 9.31e+01 (9.31e+01)
+INFO 2025-11-27 19:53:14,822 train_utils.py: 278: Train Epoch: [4][10/21] | Batch Time: 0.16 (3.30) | Data Time: 0.00 (3.12) | Mem (GB): 5.00 (4.91/5.00) | Time Elapsed: 00d 00h 05m | Losses/train_all_loss: 2.77e+01 (4.98e+01)
+INFO 2025-11-27 19:53:24,311 train_utils.py: 278: Train Epoch: [4][20/21] | Batch Time: 0.16 (2.18) | Data Time: 0.00 (2.01) | Mem (GB): 5.00 (4.86/5.00) | Time Elapsed: 00d 00h 05m | Losses/train_all_loss: 2.20e+00 (4.91e+01)
+INFO 2025-11-27 19:53:24,411 trainer.py: 955: Estimated time remaining: 00d 00h 34m
+INFO 2025-11-27 19:53:24,412 trainer.py: 897: Synchronizing meters
+INFO 2025-11-27 19:53:24,412 trainer.py: 835: Losses and meters: {'Losses/train_all_loss': 49.10586178870428, 'Losses/train_all_core_loss': 49.10586178870428, 'Losses/train_all_focal_loss': 46.699989492694534, 'Losses/train_all_dice_loss': 0.801957388718923, 'Trainer/where': 0.09904761904761905, 'Trainer/epoch': 4, 'Trainer/steps_train': 105}
+WARNING 2025-11-27 19:53:30,473 transforms.py: 418: Skip RandomAffine for zero-area mask in first frame after 2 tentatives
+WARNING 2025-11-27 19:53:34,897 transforms.py: 418: Skip RandomAffine for zero-area mask in first frame after 2 tentatives
+INFO 2025-11-27 19:53:35,327 train_utils.py: 278: Train Epoch: [5][ 0/21] | Batch Time: 8.47 (8.47) | Data Time: 8.24 (8.24) | Mem (GB): 5.00 (5.00/5.00) | Time Elapsed: 00d 00h 05m | Losses/train_all_loss: 7.90e+01 (7.90e+01)
+INFO 2025-11-27 19:54:19,988 train_utils.py: 278: Train Epoch: [5][10/21] | Batch Time: 0.16 (4.83) | Data Time: 0.00 (4.65) | Mem (GB): 5.00 (5.00/5.00) | Time Elapsed: 00d 00h 06m | Losses/train_all_loss: 6.44e+01 (6.89e+01)
+INFO 2025-11-27 19:54:43,366 train_utils.py: 278: Train Epoch: [5][20/21] | Batch Time: 0.18 (3.64) | Data Time: 0.00 (3.47) | Mem (GB): 5.00 (4.86/5.00) | Time Elapsed: 00d 00h 06m | Losses/train_all_loss: 5.06e+01 (6.21e+01)
+INFO 2025-11-27 19:54:43,471 trainer.py: 955: Estimated time remaining: 00d 00h 56m
+INFO 2025-11-27 19:54:43,471 trainer.py: 897: Synchronizing meters
+INFO 2025-11-27 19:54:43,471 trainer.py: 835: Losses and meters: {'Losses/train_all_loss': 62.11355153719584, 'Losses/train_all_core_loss': 62.11355153719584, 'Losses/train_all_focal_loss': 59.65876895047369, 'Losses/train_all_dice_loss': 0.8182606867381504, 'Trainer/where': 0.11904761904761905, 'Trainer/epoch': 5, 'Trainer/steps_train': 126}
+INFO 2025-11-27 19:55:06,263 train_utils.py: 278: Train Epoch: [6][ 0/21] | Batch Time: 21.50 (21.50) | Data Time: 21.27 (21.27) | Mem (GB): 5.00 (5.00/5.00) | Time Elapsed: 00d 00h 06m | Losses/train_all_loss: 5.41e+01 (5.41e+01)
+WARNING 2025-11-27 19:55:15,551 transforms.py: 418: Skip RandomAffine for zero-area mask in first frame after 2 tentatives
+INFO 2025-11-27 19:55:27,788 train_utils.py: 278: Train Epoch: [6][10/21] | Batch Time: 0.16 (3.91) | Data Time: 0.00 (3.74) | Mem (GB): 5.00 (5.00/5.00) | Time Elapsed: 00d 00h 07m | Losses/train_all_loss: 2.68e+00 (3.78e+01)
+INFO 2025-11-27 19:55:35,671 train_utils.py: 278: Train Epoch: [6][20/21] | Batch Time: 0.16 (2.42) | Data Time: 0.00 (2.21) | Mem (GB): 5.00 (4.90/5.00) | Time Elapsed: 00d 00h 07m | Losses/train_all_loss: 3.88e+01 (5.02e+01)
+INFO 2025-11-27 19:55:35,771 trainer.py: 955: Estimated time remaining: 00d 00h 36m
+INFO 2025-11-27 19:55:35,772 trainer.py: 897: Synchronizing meters
+INFO 2025-11-27 19:55:35,772 trainer.py: 835: Losses and meters: {'Losses/train_all_loss': 50.21737674304417, 'Losses/train_all_core_loss': 50.21737674304417, 'Losses/train_all_focal_loss': 47.82766423126062, 'Losses/train_all_dice_loss': 0.7965708942640395, 'Trainer/where': 0.13904761904761906, 'Trainer/epoch': 6, 'Trainer/steps_train': 147}
+WARNING 2025-11-27 19:55:47,855 transforms.py: 418: Skip RandomAffine for zero-area mask in first frame after 2 tentatives
+INFO 2025-11-27 19:56:00,339 train_utils.py: 278: Train Epoch: [7][ 0/21] | Batch Time: 23.28 (23.28) | Data Time: 23.04 (23.04) | Mem (GB): 5.00 (5.00/5.00) | Time Elapsed: 00d 00h 07m | Losses/train_all_loss: 2.10e+01 (2.10e+01)
+INFO 2025-11-27 19:56:18,699 train_utils.py: 278: Train Epoch: [7][10/21] | Batch Time: 0.16 (3.79) | Data Time: 0.00 (3.61) | Mem (GB): 4.00 (4.82/5.00) | Time Elapsed: 00d 00h 08m | Losses/train_all_loss: 7.84e+01 (4.81e+01)
+INFO 2025-11-27 19:56:39,261 train_utils.py: 278: Train Epoch: [7][20/21] | Batch Time: 0.16 (2.96) | Data Time: 0.00 (2.79) | Mem (GB): 5.00 (4.86/5.00) | Time Elapsed: 00d 00h 08m | Losses/train_all_loss: 1.07e+02 (5.12e+01)
+INFO 2025-11-27 19:56:39,373 trainer.py: 955: Estimated time remaining: 00d 00h 43m
+INFO 2025-11-27 19:56:39,374 trainer.py: 897: Synchronizing meters
+INFO 2025-11-27 19:56:39,374 trainer.py: 835: Losses and meters: {'Losses/train_all_loss': 51.219522226424445, 'Losses/train_all_core_loss': 51.219522226424445, 'Losses/train_all_focal_loss': 48.831517482087726, 'Losses/train_all_dice_loss': 0.7960015762419927, 'Trainer/where': 0.15904761904761905, 'Trainer/epoch': 7, 'Trainer/steps_train': 168}
+WARNING 2025-11-27 19:57:03,445 transforms.py: 418: Skip RandomAffine for zero-area mask in first frame after 2 tentatives
+WARNING 2025-11-27 19:57:11,353 transforms.py: 418: Skip RandomAffine for zero-area mask in first frame after 2 tentatives
+INFO 2025-11-27 19:57:15,483 train_utils.py: 278: Train Epoch: [8][ 0/21] | Batch Time: 34.83 (34.83) | Data Time: 34.59 (34.59) | Mem (GB): 5.00 (5.00/5.00) | Time Elapsed: 00d 00h 09m | Losses/train_all_loss: 9.19e+01 (9.19e+01)
+INFO 2025-11-27 19:57:23,120 train_utils.py: 278: Train Epoch: [8][10/21] | Batch Time: 0.16 (3.86) | Data Time: 0.00 (3.69) | Mem (GB): 5.00 (4.91/5.00) | Time Elapsed: 00d 00h 09m | Losses/train_all_loss: 2.09e+00 (4.69e+01)
+INFO 2025-11-27 19:57:39,501 train_utils.py: 278: Train Epoch: [8][20/21] | Batch Time: 0.16 (2.80) | Data Time: 0.00 (2.63) | Mem (GB): 4.00 (4.86/5.00) | Time Elapsed: 00d 00h 09m | Losses/train_all_loss: 2.27e+00 (4.65e+01)
+INFO 2025-11-27 19:57:39,621 trainer.py: 955: Estimated time remaining: 00d 00h 40m
+INFO 2025-11-27 19:57:39,622 trainer.py: 897: Synchronizing meters
+INFO 2025-11-27 19:57:39,622 trainer.py: 835: Losses and meters: {'Losses/train_all_loss': 46.51480206989107, 'Losses/train_all_core_loss': 46.51480206989107, 'Losses/train_all_focal_loss': 44.1862019123066, 'Losses/train_all_dice_loss': 0.7762001639320737, 'Trainer/where': 0.17904761904761904, 'Trainer/epoch': 8, 'Trainer/steps_train': 189}
+WARNING 2025-11-27 19:57:45,340 transforms.py: 418: Skip RandomAffine for zero-area mask in first frame after 2 tentatives
+INFO 2025-11-27 19:57:58,780 train_utils.py: 278: Train Epoch: [9][ 0/21] | Batch Time: 17.84 (17.84) | Data Time: 17.60 (17.60) | Mem (GB): 5.00 (5.00/5.00) | Time Elapsed: 00d 00h 09m | Losses/train_all_loss: 5.58e+01 (5.58e+01)
+WARNING 2025-11-27 19:58:00,829 transforms.py: 418: Skip RandomAffine for zero-area mask in first frame after 2 tentatives
+INFO 2025-11-27 19:58:08,857 train_utils.py: 278: Train Epoch: [9][10/21] | Batch Time: 0.16 (2.54) | Data Time: 0.00 (2.36) | Mem (GB): 5.00 (4.82/5.00) | Time Elapsed: 00d 00h 09m | Losses/train_all_loss: 5.75e+01 (5.88e+01)
+INFO 2025-11-27 19:58:39,275 train_utils.py: 278: Train Epoch: [9][20/21] | Batch Time: 0.16 (2.78) | Data Time: 0.00 (2.60) | Mem (GB): 5.00 (4.86/5.00) | Time Elapsed: 00d 00h 10m | Losses/train_all_loss: 2.11e+00 (4.90e+01)
+INFO 2025-11-27 19:58:39,399 trainer.py: 955: Estimated time remaining: 00d 00h 38m
+INFO 2025-11-27 19:58:39,400 trainer.py: 897: Synchronizing meters
+INFO 2025-11-27 19:58:39,400 trainer.py: 835: Losses and meters: {'Losses/train_all_loss': 48.97129935310001, 'Losses/train_all_core_loss': 48.97129935310001, 'Losses/train_all_focal_loss': 46.591409110597205, 'Losses/train_all_dice_loss': 0.7932967373303005, 'Trainer/where': 0.19904761904761906, 'Trainer/epoch': 9, 'Trainer/steps_train': 210}
+INFO 2025-11-27 19:58:54,329 train_utils.py: 278: Train Epoch: [10][ 0/21] | Batch Time: 12.61 (12.61) | Data Time: 12.37 (12.37) | Mem (GB): 5.00 (5.00/5.00) | Time Elapsed: 00d 00h 10m | Losses/train_all_loss: 1.94e+01 (1.94e+01)
+INFO 2025-11-27 19:59:13,739 train_utils.py: 278: Train Epoch: [10][10/21] | Batch Time: 0.17 (2.91) | Data Time: 0.00 (2.73) | Mem (GB): 5.00 (4.91/5.00) | Time Elapsed: 00d 00h 11m | Losses/train_all_loss: 2.31e+00 (2.72e+01)
+INFO 2025-11-27 19:59:33,521 train_utils.py: 278: Train Epoch: [10][20/21] | Batch Time: 0.16 (2.47) | Data Time: 0.00 (2.29) | Mem (GB): 5.00 (4.90/5.00) | Time Elapsed: 00d 00h 11m | Losses/train_all_loss: 9.83e+01 (3.85e+01)
+INFO 2025-11-27 19:59:33,633 trainer.py: 955: Estimated time remaining: 00d 00h 33m
+INFO 2025-11-27 19:59:33,634 trainer.py: 897: Synchronizing meters
+INFO 2025-11-27 19:59:33,634 trainer.py: 835: Losses and meters: {'Losses/train_all_loss': 38.52896392913092, 'Losses/train_all_core_loss': 38.52896392913092, 'Losses/train_all_focal_loss': 36.22248947478476, 'Losses/train_all_dice_loss': 0.7688248015585399, 'Trainer/where': 0.21904761904761905, 'Trainer/epoch': 10, 'Trainer/steps_train': 231}
+WARNING 2025-11-27 19:59:43,892 transforms.py: 418: Skip RandomAffine for zero-area mask in first frame after 2 tentatives
+INFO 2025-11-27 19:59:52,583 train_utils.py: 278: Train Epoch: [11][ 0/21] | Batch Time: 17.65 (17.65) | Data Time: 17.41 (17.41) | Mem (GB): 5.00 (5.00/5.00) | Time Elapsed: 00d 00h 11m | Losses/train_all_loss: 9.31e+01 (9.31e+01)
+INFO 2025-11-27 20:00:14,327 train_utils.py: 278: Train Epoch: [11][10/21] | Batch Time: 0.16 (3.58) | Data Time: 0.00 (3.40) | Mem (GB): 5.00 (4.82/5.00) | Time Elapsed: 00d 00h 12m | Losses/train_all_loss: 6.39e+01 (4.96e+01)
+INFO 2025-11-27 20:00:18,189 train_utils.py: 278: Train Epoch: [11][20/21] | Batch Time: 2.42 (2.06) | Data Time: 2.20 (1.89) | Mem (GB): 5.00 (4.86/5.00) | Time Elapsed: 00d 00h 12m | Losses/train_all_loss: 9.78e+01 (4.89e+01)
+INFO 2025-11-27 20:00:18,291 trainer.py: 955: Estimated time remaining: 00d 00h 27m
+INFO 2025-11-27 20:00:18,292 trainer.py: 897: Synchronizing meters
+INFO 2025-11-27 20:00:18,292 trainer.py: 835: Losses and meters: {'Losses/train_all_loss': 48.8959751583281, 'Losses/train_all_core_loss': 48.8959751583281, 'Losses/train_all_focal_loss': 46.59207401956831, 'Losses/train_all_dice_loss': 0.7679672156061444, 'Trainer/where': 0.23904761904761906, 'Trainer/epoch': 11, 'Trainer/steps_train': 252}
+INFO 2025-11-27 20:00:58,311 train_utils.py: 278: Train Epoch: [12][ 0/21] | Batch Time: 38.70 (38.70) | Data Time: 38.49 (38.49) | Mem (GB): 5.00 (5.00/5.00) | Time Elapsed: 00d 00h 12m | Losses/train_all_loss: 4.69e+01 (4.69e+01)
+INFO 2025-11-27 20:00:59,944 train_utils.py: 278: Train Epoch: [12][10/21] | Batch Time: 0.16 (3.67) | Data Time: 0.00 (3.50) | Mem (GB): 5.00 (4.82/5.00) | Time Elapsed: 00d 00h 12m | Losses/train_all_loss: 2.36e+01 (4.30e+01)
+INFO 2025-11-27 20:01:12,175 train_utils.py: 278: Train Epoch: [12][20/21] | Batch Time: 0.16 (2.50) | Data Time: 0.00 (2.34) | Mem (GB): 5.00 (4.86/5.00) | Time Elapsed: 00d 00h 12m | Losses/train_all_loss: 4.75e+01 (3.17e+01)
+INFO 2025-11-27 20:01:12,276 trainer.py: 955: Estimated time remaining: 00d 00h 32m
+INFO 2025-11-27 20:01:12,277 trainer.py: 897: Synchronizing meters
+INFO 2025-11-27 20:01:12,277 trainer.py: 835: Losses and meters: {'Losses/train_all_loss': 31.674378871917725, 'Losses/train_all_core_loss': 31.674378871917725, 'Losses/train_all_focal_loss': 29.442733235302427, 'Losses/train_all_dice_loss': 0.743881813117436, 'Trainer/where': 0.259047619047619, 'Trainer/epoch': 12, 'Trainer/steps_train': 273}
+WARNING 2025-11-27 20:01:25,225 transforms.py: 418: Skip RandomAffine for zero-area mask in first frame after 2 tentatives
+INFO 2025-11-27 20:01:46,491 train_utils.py: 278: Train Epoch: [13][ 0/21] | Batch Time: 32.93 (32.93) | Data Time: 32.68 (32.68) | Mem (GB): 5.00 (5.00/5.00) | Time Elapsed: 00d 00h 13m | Losses/train_all_loss: 2.45e+00 (2.45e+00)
+INFO 2025-11-27 20:01:48,127 train_utils.py: 278: Train Epoch: [13][10/21] | Batch Time: 0.16 (3.14) | Data Time: 0.00 (2.97) | Mem (GB): 5.00 (4.82/5.00) | Time Elapsed: 00d 00h 13m | Losses/train_all_loss: 2.48e+00 (4.54e+01)
+INFO 2025-11-27 20:02:12,638 train_utils.py: 278: Train Epoch: [13][20/21] | Batch Time: 0.18 (2.81) | Data Time: 0.00 (2.64) | Mem (GB): 5.00 (4.86/5.00) | Time Elapsed: 00d 00h 13m | Losses/train_all_loss: 2.09e+01 (4.40e+01)
+INFO 2025-11-27 20:02:12,745 trainer.py: 955: Estimated time remaining: 00d 00h 35m
+INFO 2025-11-27 20:02:12,745 trainer.py: 897: Synchronizing meters
+INFO 2025-11-27 20:02:12,745 trainer.py: 835: Losses and meters: {'Losses/train_all_loss': 43.96120500564575, 'Losses/train_all_core_loss': 43.96120500564575, 'Losses/train_all_focal_loss': 41.704146598776184, 'Losses/train_all_dice_loss': 0.7523527684665862, 'Trainer/where': 0.27904761904761904, 'Trainer/epoch': 13, 'Trainer/steps_train': 294}
+INFO 2025-11-27 20:02:30,507 train_utils.py: 278: Train Epoch: [14][ 0/21] | Batch Time: 16.48 (16.48) | Data Time: 16.26 (16.26) | Mem (GB): 4.00 (4.00/4.00) | Time Elapsed: 00d 00h 14m | Losses/train_all_loss: 7.76e+01 (7.76e+01)
+WARNING 2025-11-27 20:02:31,035 transforms.py: 418: Skip RandomAffine for zero-area mask in first frame after 2 tentatives
+WARNING 2025-11-27 20:02:31,293 transforms.py: 418: Skip RandomAffine for zero-area mask in first frame after 2 tentatives
+INFO 2025-11-27 20:02:59,571 train_utils.py: 278: Train Epoch: [14][10/21] | Batch Time: 0.16 (4.14) | Data Time: 0.00 (3.96) | Mem (GB): 4.00 (4.73/5.00) | Time Elapsed: 00d 00h 14m | Losses/train_all_loss: 6.14e+01 (5.04e+01)
+INFO 2025-11-27 20:03:01,159 train_utils.py: 278: Train Epoch: [14][20/21] | Batch Time: 0.16 (2.24) | Data Time: 0.00 (2.08) | Mem (GB): 5.00 (4.86/5.00) | Time Elapsed: 00d 00h 14m | Losses/train_all_loss: 2.90e+00 (4.16e+01)
+INFO 2025-11-27 20:03:01,259 trainer.py: 955: Estimated time remaining: 00d 00h 27m
+INFO 2025-11-27 20:03:01,259 trainer.py: 897: Synchronizing meters
+INFO 2025-11-27 20:03:01,259 trainer.py: 835: Losses and meters: {'Losses/train_all_loss': 41.60442407358261, 'Losses/train_all_core_loss': 41.60442407358261, 'Losses/train_all_focal_loss': 39.363774450052354, 'Losses/train_all_dice_loss': 0.7468832163583665, 'Trainer/where': 0.29904761904761906, 'Trainer/epoch': 14, 'Trainer/steps_train': 315}
+WARNING 2025-11-27 20:03:12,379 transforms.py: 418: Skip RandomAffine for zero-area mask in first frame after 2 tentatives
+WARNING 2025-11-27 20:03:15,704 transforms.py: 418: Skip RandomAffine for zero-area mask in first frame after 2 tentatives
+INFO 2025-11-27 20:03:21,256 train_utils.py: 278: Train Epoch: [15][ 0/21] | Batch Time: 17.67 (17.67) | Data Time: 17.45 (17.45) | Mem (GB): 5.00 (5.00/5.00) | Time Elapsed: 00d 00h 15m | Losses/train_all_loss: 7.59e+01 (7.59e+01)
+WARNING 2025-11-27 20:03:25,752 transforms.py: 418: Skip RandomAffine for zero-area mask in first frame after 2 tentatives
+INFO 2025-11-27 20:03:52,542 train_utils.py: 278: Train Epoch: [15][10/21] | Batch Time: 0.16 (4.45) | Data Time: 0.00 (4.27) | Mem (GB): 5.00 (4.82/5.00) | Time Elapsed: 00d 00h 15m | Losses/train_all_loss: 3.81e+01 (2.78e+01)
+INFO 2025-11-27 20:04:09,214 train_utils.py: 278: Train Epoch: [15][20/21] | Batch Time: 0.18 (3.13) | Data Time: 0.00 (2.95) | Mem (GB): 5.00 (4.86/5.00) | Time Elapsed: 00d 00h 15m | Losses/train_all_loss: 2.38e+01 (3.16e+01)
+INFO 2025-11-27 20:04:09,321 trainer.py: 955: Estimated time remaining: 00d 00h 37m
+INFO 2025-11-27 20:04:09,321 trainer.py: 897: Synchronizing meters
+INFO 2025-11-27 20:04:09,321 trainer.py: 835: Losses and meters: {'Losses/train_all_loss': 31.64965269679115, 'Losses/train_all_core_loss': 31.64965269679115, 'Losses/train_all_focal_loss': 29.45281919801519, 'Losses/train_all_dice_loss': 0.7322776942026048, 'Trainer/where': 0.319047619047619, 'Trainer/epoch': 15, 'Trainer/steps_train': 336}
+WARNING 2025-11-27 20:04:17,041 transforms.py: 418: Skip RandomAffine for zero-area mask in first frame after 2 tentatives
+WARNING 2025-11-27 20:04:19,097 transforms.py: 418: Skip RandomAffine for zero-area mask in first frame after 2 tentatives
+INFO 2025-11-27 20:04:31,989 train_utils.py: 278: Train Epoch: [16][ 0/21] | Batch Time: 21.26 (21.26) | Data Time: 21.03 (21.03) | Mem (GB): 5.00 (5.00/5.00) | Time Elapsed: 00d 00h 16m | Losses/train_all_loss: 2.15e+00 (2.15e+00)
+WARNING 2025-11-27 20:04:40,784 transforms.py: 418: Skip RandomAffine for zero-area mask in first frame after 2 tentatives
+INFO 2025-11-27 20:04:47,537 train_utils.py: 278: Train Epoch: [16][10/21] | Batch Time: 0.16 (3.35) | Data Time: 0.00 (3.17) | Mem (GB): 5.00 (4.91/5.00) | Time Elapsed: 00d 00h 16m | Losses/train_all_loss: 2.11e+01 (3.38e+01)
+INFO 2025-11-27 20:05:25,603 train_utils.py: 278: Train Epoch: [16][20/21] | Batch Time: 0.16 (3.57) | Data Time: 0.00 (3.39) | Mem (GB): 5.00 (4.90/5.00) | Time Elapsed: 00d 00h 17m | Losses/train_all_loss: 5.28e+01 (2.88e+01)
+INFO 2025-11-27 20:05:25,710 trainer.py: 955: Estimated time remaining: 00d 00h 41m
+INFO 2025-11-27 20:05:25,710 trainer.py: 897: Synchronizing meters
+INFO 2025-11-27 20:05:25,711 trainer.py: 835: Losses and meters: {'Losses/train_all_loss': 28.768348444075812, 'Losses/train_all_core_loss': 28.768348444075812, 'Losses/train_all_focal_loss': 26.557993013234366, 'Losses/train_all_dice_loss': 0.7367850967815944, 'Trainer/where': 0.33904761904761904, 'Trainer/epoch': 16, 'Trainer/steps_train': 357}
+WARNING 2025-11-27 20:05:32,105 transforms.py: 418: Skip RandomAffine for zero-area mask in first frame after 2 tentatives
+INFO 2025-11-27 20:05:58,290 train_utils.py: 278: Train Epoch: [17][ 0/21] | Batch Time: 31.27 (31.27) | Data Time: 31.04 (31.04) | Mem (GB): 5.00 (5.00/5.00) | Time Elapsed: 00d 00h 17m | Losses/train_all_loss: 4.65e+01 (4.65e+01)
+WARNING 2025-11-27 20:06:00,240 transforms.py: 418: Skip RandomAffine for zero-area mask in first frame after 2 tentatives
+INFO 2025-11-27 20:06:03,680 train_utils.py: 278: Train Epoch: [17][10/21] | Batch Time: 0.16 (3.33) | Data Time: 0.00 (3.15) | Mem (GB): 4.00 (4.91/5.00) | Time Elapsed: 00d 00h 17m | Losses/train_all_loss: 1.87e+00 (1.97e+01)
+INFO 2025-11-27 20:06:20,170 train_utils.py: 278: Train Epoch: [17][20/21] | Batch Time: 0.16 (2.53) | Data Time: 0.00 (2.36) | Mem (GB): 5.00 (4.90/5.00) | Time Elapsed: 00d 00h 18m | Losses/train_all_loss: 5.29e+01 (3.86e+01)
+INFO 2025-11-27 20:06:20,278 trainer.py: 955: Estimated time remaining: 00d 00h 28m
+INFO 2025-11-27 20:06:20,279 trainer.py: 897: Synchronizing meters
+INFO 2025-11-27 20:06:20,279 trainer.py: 835: Losses and meters: {'Losses/train_all_loss': 38.55428749606723, 'Losses/train_all_core_loss': 38.55428749606723, 'Losses/train_all_focal_loss': 36.29536893715461, 'Losses/train_all_dice_loss': 0.7529728157179696, 'Trainer/where': 0.35904761904761906, 'Trainer/epoch': 17, 'Trainer/steps_train': 378}
+WARNING 2025-11-27 20:06:28,508 transforms.py: 418: Skip RandomAffine for zero-area mask in first frame after 2 tentatives
+INFO 2025-11-27 20:06:35,311 train_utils.py: 278: Train Epoch: [18][ 0/21] | Batch Time: 13.00 (13.00) | Data Time: 12.76 (12.76) | Mem (GB): 5.00 (5.00/5.00) | Time Elapsed: 00d 00h 18m | Losses/train_all_loss: 1.11e+02 (1.11e+02)
+WARNING 2025-11-27 20:06:37,000 transforms.py: 418: Skip RandomAffine for zero-area mask in first frame after 2 tentatives
+WARNING 2025-11-27 20:06:37,307 transforms.py: 418: Skip RandomAffine for zero-area mask in first frame after 2 tentatives
+WARNING 2025-11-27 20:06:37,689 transforms.py: 418: Skip RandomAffine for zero-area mask in first frame after 2 tentatives
+INFO 2025-11-27 20:07:02,482 train_utils.py: 278: Train Epoch: [18][10/21] | Batch Time: 0.16 (3.65) | Data Time: 0.00 (3.46) | Mem (GB): 5.00 (4.91/5.00) | Time Elapsed: 00d 00h 18m | Losses/train_all_loss: 2.20e+00 (3.76e+01)
+INFO 2025-11-27 20:07:07,124 train_utils.py: 278: Train Epoch: [18][20/21] | Batch Time: 0.16 (2.13) | Data Time: 0.00 (1.96) | Mem (GB): 5.00 (4.86/5.00) | Time Elapsed: 00d 00h 18m | Losses/train_all_loss: 2.27e+01 (3.86e+01)
+INFO 2025-11-27 20:07:07,225 trainer.py: 955: Estimated time remaining: 00d 00h 23m
+INFO 2025-11-27 20:07:07,225 trainer.py: 897: Synchronizing meters
+INFO 2025-11-27 20:07:07,225 trainer.py: 835: Losses and meters: {'Losses/train_all_loss': 38.62104914301918, 'Losses/train_all_core_loss': 38.62104914301918, 'Losses/train_all_focal_loss': 36.38319100652422, 'Losses/train_all_dice_loss': 0.7459527793384734, 'Trainer/where': 0.3790476190476191, 'Trainer/epoch': 18, 'Trainer/steps_train': 399}
+WARNING 2025-11-27 20:07:22,589 transforms.py: 418: Skip RandomAffine for zero-area mask in first frame after 2 tentatives
+WARNING 2025-11-27 20:07:29,303 transforms.py: 418: Skip RandomAffine for zero-area mask in first frame after 2 tentatives
+INFO 2025-11-27 20:07:32,995 train_utils.py: 278: Train Epoch: [19][ 0/21] | Batch Time: 24.44 (24.44) | Data Time: 24.23 (24.23) | Mem (GB): 5.00 (5.00/5.00) | Time Elapsed: 00d 00h 19m | Losses/train_all_loss: 2.28e+00 (2.28e+00)
+INFO 2025-11-27 20:07:52,485 train_utils.py: 278: Train Epoch: [19][10/21] | Batch Time: 0.16 (3.99) | Data Time: 0.00 (3.82) | Mem (GB): 5.00 (4.82/5.00) | Time Elapsed: 00d 00h 19m | Losses/train_all_loss: 2.49e+00 (3.64e+01)
+INFO 2025-11-27 20:08:04,569 train_utils.py: 278: Train Epoch: [19][20/21] | Batch Time: 6.84 (2.67) | Data Time: 6.63 (2.49) | Mem (GB): 5.00 (4.86/5.00) | Time Elapsed: 00d 00h 19m | Losses/train_all_loss: 2.88e+01 (3.09e+01)
+INFO 2025-11-27 20:08:04,688 trainer.py: 955: Estimated time remaining: 00d 00h 28m
+INFO 2025-11-27 20:08:04,688 trainer.py: 897: Synchronizing meters
+INFO 2025-11-27 20:08:04,688 trainer.py: 835: Losses and meters: {'Losses/train_all_loss': 30.89721842039199, 'Losses/train_all_core_loss': 30.89721842039199, 'Losses/train_all_focal_loss': 28.748271391505288, 'Losses/train_all_dice_loss': 0.7163158144269671, 'Trainer/where': 0.39904761904761904, 'Trainer/epoch': 19, 'Trainer/steps_train': 420}
+WARNING 2025-11-27 20:08:17,098 transforms.py: 418: Skip RandomAffine for zero-area mask in first frame after 2 tentatives
+WARNING 2025-11-27 20:08:17,840 transforms.py: 418: Skip RandomAffine for zero-area mask in first frame after 2 tentatives
+INFO 2025-11-27 20:08:24,594 train_utils.py: 278: Train Epoch: [20][ 0/21] | Batch Time: 17.61 (17.61) | Data Time: 17.39 (17.39) | Mem (GB): 5.00 (5.00/5.00) | Time Elapsed: 00d 00h 20m | Losses/train_all_loss: 2.41e+00 (2.41e+00)
+INFO 2025-11-27 20:08:43,020 train_utils.py: 278: Train Epoch: [20][10/21] | Batch Time: 0.16 (3.28) | Data Time: 0.00 (3.10) | Mem (GB): 5.00 (4.91/5.00) | Time Elapsed: 00d 00h 20m | Losses/train_all_loss: 7.76e+01 (4.20e+01)
+INFO 2025-11-27 20:08:56,742 train_utils.py: 278: Train Epoch: [20][20/21] | Batch Time: 5.19 (2.37) | Data Time: 4.97 (2.19) | Mem (GB): 5.00 (4.90/5.00) | Time Elapsed: 00d 00h 20m | Losses/train_all_loss: 2.43e+00 (3.41e+01)
+INFO 2025-11-27 20:08:56,848 trainer.py: 955: Estimated time remaining: 00d 00h 24m
+INFO 2025-11-27 20:08:56,849 trainer.py: 897: Synchronizing meters
+INFO 2025-11-27 20:08:56,849 trainer.py: 835: Losses and meters: {'Losses/train_all_loss': 34.06667111033485, 'Losses/train_all_core_loss': 34.06667111033485, 'Losses/train_all_focal_loss': 31.86472066030616, 'Losses/train_all_dice_loss': 0.7339836217108227, 'Trainer/where': 0.41904761904761906, 'Trainer/epoch': 20, 'Trainer/steps_train': 441}
+INFO 2025-11-27 20:09:15,594 train_utils.py: 278: Train Epoch: [21][ 0/21] | Batch Time: 17.45 (17.45) | Data Time: 17.21 (17.21) | Mem (GB): 5.00 (5.00/5.00) | Time Elapsed: 00d 00h 21m | Losses/train_all_loss: 2.44e+00 (2.44e+00)
+INFO 2025-11-27 20:09:36,798 train_utils.py: 278: Train Epoch: [21][10/21] | Batch Time: 0.16 (3.51) | Data Time: 0.00 (3.33) | Mem (GB): 5.00 (4.91/5.00) | Time Elapsed: 00d 00h 21m | Losses/train_all_loss: 2.26e+00 (2.74e+01)
+INFO 2025-11-27 20:09:54,114 train_utils.py: 278: Train Epoch: [21][20/21] | Batch Time: 10.55 (2.67) | Data Time: 10.32 (2.48) | Mem (GB): 5.00 (4.86/5.00) | Time Elapsed: 00d 00h 21m | Losses/train_all_loss: 1.89e+01 (3.79e+01)
+INFO 2025-11-27 20:09:54,204 trainer.py: 955: Estimated time remaining: 00d 00h 26m
+INFO 2025-11-27 20:09:54,205 trainer.py: 897: Synchronizing meters
+INFO 2025-11-27 20:09:54,205 trainer.py: 835: Losses and meters: {'Losses/train_all_loss': 37.90537439073835, 'Losses/train_all_core_loss': 37.90537439073835, 'Losses/train_all_focal_loss': 35.73059299339851, 'Losses/train_all_dice_loss': 0.7249269485473633, 'Trainer/where': 0.4390476190476191, 'Trainer/epoch': 21, 'Trainer/steps_train': 462}
+WARNING 2025-11-27 20:10:05,259 transforms.py: 418: Skip RandomAffine for zero-area mask in first frame after 2 tentatives
+INFO 2025-11-27 20:10:16,073 train_utils.py: 278: Train Epoch: [22][ 0/21] | Batch Time: 20.58 (20.58) | Data Time: 20.36 (20.36) | Mem (GB): 5.00 (5.00/5.00) | Time Elapsed: 00d 00h 22m | Losses/train_all_loss: 4.79e+01 (4.79e+01)
+WARNING 2025-11-27 20:10:22,095 transforms.py: 418: Skip RandomAffine for zero-area mask in first frame after 2 tentatives
+INFO 2025-11-27 20:10:35,797 train_utils.py: 278: Train Epoch: [22][10/21] | Batch Time: 3.99 (3.66) | Data Time: 3.77 (3.48) | Mem (GB): 5.00 (4.82/5.00) | Time Elapsed: 00d 00h 22m | Losses/train_all_loss: 2.55e+00 (3.64e+01)
+INFO 2025-11-27 20:10:45,302 train_utils.py: 278: Train Epoch: [22][20/21] | Batch Time: 0.16 (2.37) | Data Time: 0.00 (2.20) | Mem (GB): 4.00 (4.86/5.00) | Time Elapsed: 00d 00h 22m | Losses/train_all_loss: 2.45e+01 (3.39e+01)
+INFO 2025-11-27 20:10:45,399 trainer.py: 955: Estimated time remaining: 00d 00h 22m
+INFO 2025-11-27 20:10:45,399 trainer.py: 897: Synchronizing meters
+INFO 2025-11-27 20:10:45,399 trainer.py: 835: Losses and meters: {'Losses/train_all_loss': 33.90174612544832, 'Losses/train_all_core_loss': 33.90174612544832, 'Losses/train_all_focal_loss': 31.67254012823105, 'Losses/train_all_dice_loss': 0.7430686893917265, 'Trainer/where': 0.45904761904761904, 'Trainer/epoch': 22, 'Trainer/steps_train': 483}
+INFO 2025-11-27 20:11:06,202 train_utils.py: 278: Train Epoch: [23][ 0/21] | Batch Time: 19.33 (19.33) | Data Time: 19.09 (19.09) | Mem (GB): 5.00 (5.00/5.00) | Time Elapsed: 00d 00h 22m | Losses/train_all_loss: 2.45e+00 (2.45e+00)
+WARNING 2025-11-27 20:11:08,809 transforms.py: 418: Skip RandomAffine for zero-area mask in first frame after 2 tentatives
+INFO 2025-11-27 20:11:33,161 train_utils.py: 278: Train Epoch: [23][10/21] | Batch Time: 0.16 (4.21) | Data Time: 0.00 (4.02) | Mem (GB): 5.00 (4.91/5.00) | Time Elapsed: 00d 00h 23m | Losses/train_all_loss: 6.15e+01 (4.11e+01)
+INFO 2025-11-27 20:11:34,750 train_utils.py: 278: Train Epoch: [23][20/21] | Batch Time: 0.16 (2.28) | Data Time: 0.00 (2.11) | Mem (GB): 5.00 (4.90/5.00) | Time Elapsed: 00d 00h 23m | Losses/train_all_loss: 1.06e+02 (4.29e+01)
+INFO 2025-11-27 20:11:34,869 trainer.py: 955: Estimated time remaining: 00d 00h 20m
+INFO 2025-11-27 20:11:34,869 trainer.py: 897: Synchronizing meters
+INFO 2025-11-27 20:11:34,870 trainer.py: 835: Losses and meters: {'Losses/train_all_loss': 42.9301689692906, 'Losses/train_all_core_loss': 42.9301689692906, 'Losses/train_all_focal_loss': 40.70429592650561, 'Losses/train_all_dice_loss': 0.741957806405567, 'Trainer/where': 0.47904761904761906, 'Trainer/epoch': 23, 'Trainer/steps_train': 504}
+WARNING 2025-11-27 20:11:40,328 transforms.py: 418: Skip RandomAffine for zero-area mask in first frame after 2 tentatives
+WARNING 2025-11-27 20:11:40,633 transforms.py: 418: Skip RandomAffine for zero-area mask in first frame after 2 tentatives
+WARNING 2025-11-27 20:11:41,566 transforms.py: 418: Skip RandomAffine for zero-area mask in first frame after 2 tentatives
+WARNING 2025-11-27 20:11:44,334 transforms.py: 418: Skip RandomAffine for zero-area mask in first frame after 2 tentatives
+INFO 2025-11-27 20:11:56,469 train_utils.py: 278: Train Epoch: [24][ 0/21] | Batch Time: 20.24 (20.24) | Data Time: 20.00 (20.00) | Mem (GB): 5.00 (5.00/5.00) | Time Elapsed: 00d 00h 23m | Losses/train_all_loss: 1.93e+01 (1.93e+01)
+INFO 2025-11-27 20:12:10,007 train_utils.py: 278: Train Epoch: [24][10/21] | Batch Time: 0.16 (3.07) | Data Time: 0.00 (2.89) | Mem (GB): 5.00 (4.82/5.00) | Time Elapsed: 00d 00h 23m | Losses/train_all_loss: 3.99e+01 (3.16e+01)
+INFO 2025-11-27 20:12:40,874 train_utils.py: 278: Train Epoch: [24][20/21] | Batch Time: 3.35 (3.08) | Data Time: 3.14 (2.90) | Mem (GB): 5.00 (4.86/5.00) | Time Elapsed: 00d 00h 24m | Losses/train_all_loss: 2.45e+00 (3.18e+01)
+INFO 2025-11-27 20:12:40,978 trainer.py: 955: Estimated time remaining: 00d 00h 26m
+INFO 2025-11-27 20:12:40,978 trainer.py: 897: Synchronizing meters
+INFO 2025-11-27 20:12:40,978 trainer.py: 835: Losses and meters: {'Losses/train_all_loss': 31.75496515205928, 'Losses/train_all_core_loss': 31.75496515205928, 'Losses/train_all_focal_loss': 29.61467081379323, 'Losses/train_all_dice_loss': 0.7134313044093904, 'Trainer/where': 0.4990476190476191, 'Trainer/epoch': 24, 'Trainer/steps_train': 525}
+WARNING 2025-11-27 20:12:50,273 transforms.py: 418: Skip RandomAffine for zero-area mask in first frame after 2 tentatives
+INFO 2025-11-27 20:13:04,836 train_utils.py: 278: Train Epoch: [25][ 0/21] | Batch Time: 21.40 (21.40) | Data Time: 21.18 (21.18) | Mem (GB): 5.00 (5.00/5.00) | Time Elapsed: 00d 00h 24m | Losses/train_all_loss: 3.89e+01 (3.89e+01)
+INFO 2025-11-27 20:13:11,677 train_utils.py: 278: Train Epoch: [25][10/21] | Batch Time: 0.16 (2.57) | Data Time: 0.00 (2.39) | Mem (GB): 4.00 (4.91/5.00) | Time Elapsed: 00d 00h 24m | Losses/train_all_loss: 2.12e+01 (3.76e+01)
+INFO 2025-11-27 20:13:39,893 train_utils.py: 278: Train Epoch: [25][20/21] | Batch Time: 0.16 (2.69) | Data Time: 0.00 (2.52) | Mem (GB): 5.00 (4.86/5.00) | Time Elapsed: 00d 00h 25m | Losses/train_all_loss: 6.60e+01 (3.40e+01)
+INFO 2025-11-27 20:13:40,004 trainer.py: 955: Estimated time remaining: 00d 00h 22m
+INFO 2025-11-27 20:13:40,004 trainer.py: 897: Synchronizing meters
+INFO 2025-11-27 20:13:40,005 trainer.py: 835: Losses and meters: {'Losses/train_all_loss': 33.96142337435768, 'Losses/train_all_core_loss': 33.96142337435768, 'Losses/train_all_focal_loss': 31.803656333259173, 'Losses/train_all_dice_loss': 0.719255648908161, 'Trainer/where': 0.5190476190476191, 'Trainer/epoch': 25, 'Trainer/steps_train': 546}
+WARNING 2025-11-27 20:13:54,820 transforms.py: 418: Skip RandomAffine for zero-area mask in first frame after 2 tentatives
+WARNING 2025-11-27 20:14:06,310 transforms.py: 418: Skip RandomAffine for zero-area mask in first frame after 2 tentatives
+INFO 2025-11-27 20:14:07,049 train_utils.py: 278: Train Epoch: [26][ 0/21] | Batch Time: 25.70 (25.70) | Data Time: 25.48 (25.48) | Mem (GB): 5.00 (5.00/5.00) | Time Elapsed: 00d 00h 25m | Losses/train_all_loss: 2.69e+00 (2.69e+00)
+WARNING 2025-11-27 20:14:10,155 transforms.py: 418: Skip RandomAffine for zero-area mask in first frame after 2 tentatives
+WARNING 2025-11-27 20:14:15,205 transforms.py: 418: Skip RandomAffine for zero-area mask in first frame after 2 tentatives
+INFO 2025-11-27 20:14:22,298 train_utils.py: 278: Train Epoch: [26][10/21] | Batch Time: 0.16 (3.72) | Data Time: 0.00 (3.55) | Mem (GB): 5.00 (4.91/5.00) | Time Elapsed: 00d 00h 26m | Losses/train_all_loss: 5.61e+01 (3.27e+01)
+INFO 2025-11-27 20:14:30,811 train_utils.py: 278: Train Epoch: [26][20/21] | Batch Time: 0.16 (2.36) | Data Time: 0.00 (2.18) | Mem (GB): 5.00 (4.86/5.00) | Time Elapsed: 00d 00h 26m | Losses/train_all_loss: 2.12e+00 (2.70e+01)
+INFO 2025-11-27 20:14:30,907 trainer.py: 955: Estimated time remaining: 00d 00h 18m
+INFO 2025-11-27 20:14:30,908 trainer.py: 897: Synchronizing meters
+INFO 2025-11-27 20:14:30,908 trainer.py: 835: Losses and meters: {'Losses/train_all_loss': 26.980764286858694, 'Losses/train_all_core_loss': 26.980764286858694, 'Losses/train_all_focal_loss': 24.83414535721143, 'Losses/train_all_dice_loss': 0.7155397250538781, 'Trainer/where': 0.539047619047619, 'Trainer/epoch': 26, 'Trainer/steps_train': 567}
+WARNING 2025-11-27 20:14:43,154 transforms.py: 418: Skip RandomAffine for zero-area mask in first frame after 2 tentatives
+INFO 2025-11-27 20:14:52,917 train_utils.py: 278: Train Epoch: [27][ 0/21] | Batch Time: 20.72 (20.72) | Data Time: 20.48 (20.48) | Mem (GB): 5.00 (5.00/5.00) | Time Elapsed: 00d 00h 26m | Losses/train_all_loss: 2.22e+00 (2.22e+00)
+INFO 2025-11-27 20:15:01,401 train_utils.py: 278: Train Epoch: [27][10/21] | Batch Time: 0.16 (2.65) | Data Time: 0.00 (2.48) | Mem (GB): 5.00 (4.82/5.00) | Time Elapsed: 00d 00h 26m | Losses/train_all_loss: 2.48e+00 (4.62e+01)
+WARNING 2025-11-27 20:15:03,480 transforms.py: 418: Skip RandomAffine for zero-area mask in first frame after 2 tentatives
+INFO 2025-11-27 20:15:31,096 train_utils.py: 278: Train Epoch: [27][20/21] | Batch Time: 0.18 (2.80) | Data Time: 0.00 (2.63) | Mem (GB): 5.00 (4.90/5.00) | Time Elapsed: 00d 00h 27m | Losses/train_all_loss: 6.23e+01 (4.33e+01)
+INFO 2025-11-27 20:15:31,205 trainer.py: 955: Estimated time remaining: 00d 00h 21m
+INFO 2025-11-27 20:15:31,206 trainer.py: 897: Synchronizing meters
+INFO 2025-11-27 20:15:31,206 trainer.py: 835: Losses and meters: {'Losses/train_all_loss': 43.34642549923488, 'Losses/train_all_core_loss': 43.34642549923488, 'Losses/train_all_focal_loss': 41.13833713531494, 'Losses/train_all_dice_loss': 0.736029326915741, 'Trainer/where': 0.559047619047619, 'Trainer/epoch': 27, 'Trainer/steps_train': 588}
+WARNING 2025-11-27 20:15:53,547 transforms.py: 418: Skip RandomAffine for zero-area mask in first frame after 2 tentatives
+INFO 2025-11-27 20:15:56,500 train_utils.py: 278: Train Epoch: [28][ 0/21] | Batch Time: 23.95 (23.95) | Data Time: 23.72 (23.72) | Mem (GB): 4.00 (4.00/4.00) | Time Elapsed: 00d 00h 27m | Losses/train_all_loss: 8.09e+01 (8.09e+01)
+INFO 2025-11-27 20:16:06,095 train_utils.py: 278: Train Epoch: [28][10/21] | Batch Time: 0.16 (3.05) | Data Time: 0.00 (2.87) | Mem (GB): 5.00 (4.82/5.00) | Time Elapsed: 00d 00h 27m | Losses/train_all_loss: 2.10e+01 (3.66e+01)
+WARNING 2025-11-27 20:16:11,607 transforms.py: 418: Skip RandomAffine for zero-area mask in first frame after 2 tentatives
+INFO 2025-11-27 20:16:44,431 train_utils.py: 278: Train Epoch: [28][20/21] | Batch Time: 0.16 (3.42) | Data Time: 0.00 (3.25) | Mem (GB): 5.00 (4.86/5.00) | Time Elapsed: 00d 00h 28m | Losses/train_all_loss: 1.79e+02 (4.16e+01)
+INFO 2025-11-27 20:16:44,529 trainer.py: 955: Estimated time remaining: 00d 00h 25m
+INFO 2025-11-27 20:16:44,530 trainer.py: 897: Synchronizing meters
+INFO 2025-11-27 20:16:44,530 trainer.py: 835: Losses and meters: {'Losses/train_all_loss': 41.599918825285776, 'Losses/train_all_core_loss': 41.599918825285776, 'Losses/train_all_focal_loss': 39.407203831488175, 'Losses/train_all_dice_loss': 0.7309049765268961, 'Trainer/where': 0.579047619047619, 'Trainer/epoch': 28, 'Trainer/steps_train': 609}
+WARNING 2025-11-27 20:16:49,697 transforms.py: 418: Skip RandomAffine for zero-area mask in first frame after 2 tentatives
+WARNING 2025-11-27 20:16:55,961 transforms.py: 418: Skip RandomAffine for zero-area mask in first frame after 2 tentatives
+WARNING 2025-11-27 20:17:02,238 transforms.py: 418: Skip RandomAffine for zero-area mask in first frame after 2 tentatives
+INFO 2025-11-27 20:17:07,018 train_utils.py: 278: Train Epoch: [29][ 0/21] | Batch Time: 21.16 (21.16) | Data Time: 20.92 (20.92) | Mem (GB): 5.00 (5.00/5.00) | Time Elapsed: 00d 00h 28m | Losses/train_all_loss: 2.34e+01 (2.34e+01)
+INFO 2025-11-27 20:17:10,911 train_utils.py: 278: Train Epoch: [29][10/21] | Batch Time: 0.16 (2.28) | Data Time: 0.00 (2.10) | Mem (GB): 5.00 (4.91/5.00) | Time Elapsed: 00d 00h 28m | Losses/train_all_loss: 7.36e+01 (5.49e+01)
+INFO 2025-11-27 20:17:34,912 train_utils.py: 278: Train Epoch: [29][20/21] | Batch Time: 0.16 (2.34) | Data Time: 0.00 (2.16) | Mem (GB): 5.00 (4.90/5.00) | Time Elapsed: 00d 00h 29m | Losses/train_all_loss: 1.99e+00 (3.72e+01)
+INFO 2025-11-27 20:17:35,020 trainer.py: 955: Estimated time remaining: 00d 00h 16m
+INFO 2025-11-27 20:17:35,020 trainer.py: 897: Synchronizing meters
+INFO 2025-11-27 20:17:35,020 trainer.py: 835: Losses and meters: {'Losses/train_all_loss': 37.190049097651524, 'Losses/train_all_core_loss': 37.190049097651524, 'Losses/train_all_focal_loss': 35.06617301134836, 'Losses/train_all_dice_loss': 0.7079585591952006, 'Trainer/where': 0.599047619047619, 'Trainer/epoch': 29, 'Trainer/steps_train': 630}
+WARNING 2025-11-27 20:17:50,192 transforms.py: 418: Skip RandomAffine for zero-area mask in first frame after 2 tentatives
+INFO 2025-11-27 20:17:50,228 train_utils.py: 278: Train Epoch: [30][ 0/21] | Batch Time: 12.73 (12.73) | Data Time: 12.50 (12.50) | Mem (GB): 5.00 (5.00/5.00) | Time Elapsed: 00d 00h 29m | Losses/train_all_loss: 2.16e+00 (2.16e+00)
+WARNING 2025-11-27 20:17:57,243 transforms.py: 418: Skip RandomAffine for zero-area mask in first frame after 2 tentatives
+INFO 2025-11-27 20:18:11,339 train_utils.py: 278: Train Epoch: [30][10/21] | Batch Time: 0.16 (3.08) | Data Time: 0.00 (2.89) | Mem (GB): 5.00 (4.91/5.00) | Time Elapsed: 00d 00h 29m | Losses/train_all_loss: 3.93e+01 (2.85e+01)
+INFO 2025-11-27 20:18:39,114 train_utils.py: 278: Train Epoch: [30][20/21] | Batch Time: 0.16 (2.93) | Data Time: 0.00 (2.76) | Mem (GB): 5.00 (4.86/5.00) | Time Elapsed: 00d 00h 30m | Losses/train_all_loss: 6.47e+01 (3.04e+01)
+INFO 2025-11-27 20:18:39,206 trainer.py: 955: Estimated time remaining: 00d 00h 19m
+INFO 2025-11-27 20:18:39,207 trainer.py: 897: Synchronizing meters
+INFO 2025-11-27 20:18:39,207 trainer.py: 835: Losses and meters: {'Losses/train_all_loss': 30.44262789544605, 'Losses/train_all_core_loss': 30.44262789544605, 'Losses/train_all_focal_loss': 28.258831055391404, 'Losses/train_all_dice_loss': 0.7279323367845445, 'Trainer/where': 0.6190476190476191, 'Trainer/epoch': 30, 'Trainer/steps_train': 651}
+WARNING 2025-11-27 20:18:43,417 transforms.py: 418: Skip RandomAffine for zero-area mask in first frame after 2 tentatives
+INFO 2025-11-27 20:18:51,658 train_utils.py: 278: Train Epoch: [31][ 0/21] | Batch Time: 11.15 (11.15) | Data Time: 10.92 (10.92) | Mem (GB): 4.00 (4.00/4.00) | Time Elapsed: 00d 00h 30m | Losses/train_all_loss: 1.68e+01 (1.68e+01)
+WARNING 2025-11-27 20:19:05,424 transforms.py: 418: Skip RandomAffine for zero-area mask in first frame after 2 tentatives
+INFO 2025-11-27 20:19:20,435 train_utils.py: 278: Train Epoch: [31][10/21] | Batch Time: 0.16 (3.63) | Data Time: 0.00 (3.45) | Mem (GB): 5.00 (4.73/5.00) | Time Elapsed: 00d 00h 31m | Losses/train_all_loss: 8.02e+01 (4.74e+01)
+INFO 2025-11-27 20:19:42,061 train_utils.py: 278: Train Epoch: [31][20/21] | Batch Time: 20.17 (2.93) | Data Time: 19.94 (2.76) | Mem (GB): 5.00 (4.86/5.00) | Time Elapsed: 00d 00h 31m | Losses/train_all_loss: 7.46e+01 (3.76e+01)
+INFO 2025-11-27 20:19:42,167 trainer.py: 955: Estimated time remaining: 00d 00h 18m
+INFO 2025-11-27 20:19:42,167 trainer.py: 897: Synchronizing meters
+INFO 2025-11-27 20:19:42,167 trainer.py: 835: Losses and meters: {'Losses/train_all_loss': 37.6377018292745, 'Losses/train_all_core_loss': 37.6377018292745, 'Losses/train_all_focal_loss': 35.49966577334063, 'Losses/train_all_dice_loss': 0.712678679398128, 'Trainer/where': 0.6390476190476191, 'Trainer/epoch': 31, 'Trainer/steps_train': 672}
+WARNING 2025-11-27 20:19:52,901 transforms.py: 418: Skip RandomAffine for zero-area mask in first frame after 2 tentatives
+INFO 2025-11-27 20:20:04,991 train_utils.py: 278: Train Epoch: [32][ 0/21] | Batch Time: 21.46 (21.46) | Data Time: 21.22 (21.22) | Mem (GB): 5.00 (5.00/5.00) | Time Elapsed: 00d 00h 31m | Losses/train_all_loss: 4.01e+01 (4.01e+01)
+WARNING 2025-11-27 20:20:05,481 transforms.py: 418: Skip RandomAffine for zero-area mask in first frame after 2 tentatives
+INFO 2025-11-27 20:20:19,793 train_utils.py: 278: Train Epoch: [32][10/21] | Batch Time: 0.16 (3.30) | Data Time: 0.00 (3.12) | Mem (GB): 5.00 (4.91/5.00) | Time Elapsed: 00d 00h 32m | Losses/train_all_loss: 9.85e+01 (3.79e+01)
+INFO 2025-11-27 20:20:32,638 train_utils.py: 278: Train Epoch: [32][20/21] | Batch Time: 0.16 (2.34) | Data Time: 0.00 (2.16) | Mem (GB): 5.00 (4.86/5.00) | Time Elapsed: 00d 00h 32m | Losses/train_all_loss: 1.89e+00 (4.44e+01)
+INFO 2025-11-27 20:20:32,726 trainer.py: 955: Estimated time remaining: 00d 00h 13m
+INFO 2025-11-27 20:20:32,727 trainer.py: 897: Synchronizing meters
+INFO 2025-11-27 20:20:32,727 trainer.py: 835: Losses and meters: {'Losses/train_all_loss': 44.366305595352536, 'Losses/train_all_core_loss': 44.366305595352536, 'Losses/train_all_focal_loss': 42.24643987417221, 'Losses/train_all_dice_loss': 0.7066219080062139, 'Trainer/where': 0.659047619047619, 'Trainer/epoch': 32, 'Trainer/steps_train': 693}
+WARNING 2025-11-27 20:20:44,946 transforms.py: 418: Skip RandomAffine for zero-area mask in first frame after 2 tentatives
+WARNING 2025-11-27 20:20:47,076 transforms.py: 418: Skip RandomAffine for zero-area mask in first frame after 2 tentatives
+INFO 2025-11-27 20:20:58,667 train_utils.py: 278: Train Epoch: [33][ 0/21] | Batch Time: 24.56 (24.56) | Data Time: 24.35 (24.35) | Mem (GB): 5.00 (5.00/5.00) | Time Elapsed: 00d 00h 32m | Losses/train_all_loss: 9.72e+00 (9.72e+00)
+WARNING 2025-11-27 20:21:01,417 transforms.py: 418: Skip RandomAffine for zero-area mask in first frame after 2 tentatives
+INFO 2025-11-27 20:21:14,020 train_utils.py: 278: Train Epoch: [33][10/21] | Batch Time: 0.18 (3.63) | Data Time: 0.00 (3.45) | Mem (GB): 5.00 (4.91/5.00) | Time Elapsed: 00d 00h 33m | Losses/train_all_loss: 5.28e+01 (3.22e+01)
+INFO 2025-11-27 20:21:40,002 train_utils.py: 278: Train Epoch: [33][20/21] | Batch Time: 0.16 (3.14) | Data Time: 0.00 (2.96) | Mem (GB): 5.00 (4.86/5.00) | Time Elapsed: 00d 00h 33m | Losses/train_all_loss: 3.13e+01 (4.21e+01)
+INFO 2025-11-27 20:21:40,094 trainer.py: 955: Estimated time remaining: 00d 00h 17m
+INFO 2025-11-27 20:21:40,094 trainer.py: 897: Synchronizing meters
+INFO 2025-11-27 20:21:40,094 trainer.py: 835: Losses and meters: {'Losses/train_all_loss': 42.10274330774943, 'Losses/train_all_core_loss': 42.10274330774943, 'Losses/train_all_focal_loss': 39.92334106209732, 'Losses/train_all_dice_loss': 0.7264672971907116, 'Trainer/where': 0.679047619047619, 'Trainer/epoch': 33, 'Trainer/steps_train': 714}
+WARNING 2025-11-27 20:21:53,157 transforms.py: 418: Skip RandomAffine for zero-area mask in first frame after 2 tentatives
+WARNING 2025-11-27 20:22:07,267 transforms.py: 418: Skip RandomAffine for zero-area mask in first frame after 2 tentatives
+INFO 2025-11-27 20:22:12,394 train_utils.py: 278: Train Epoch: [34][ 0/21] | Batch Time: 30.97 (30.97) | Data Time: 30.75 (30.75) | Mem (GB): 5.00 (5.00/5.00) | Time Elapsed: 00d 00h 33m | Losses/train_all_loss: 4.11e+01 (4.11e+01)
+WARNING 2025-11-27 20:22:13,416 transforms.py: 418: Skip RandomAffine for zero-area mask in first frame after 2 tentatives
+WARNING 2025-11-27 20:22:17,416 transforms.py: 418: Skip RandomAffine for zero-area mask in first frame after 2 tentatives
+INFO 2025-11-27 20:22:18,349 train_utils.py: 278: Train Epoch: [34][10/21] | Batch Time: 0.16 (3.36) | Data Time: 0.00 (3.18) | Mem (GB): 5.00 (4.91/5.00) | Time Elapsed: 00d 00h 34m | Losses/train_all_loss: 3.40e+01 (6.31e+01)
+WARNING 2025-11-27 20:22:19,432 transforms.py: 418: Skip RandomAffine for zero-area mask in first frame after 2 tentatives
+INFO 2025-11-27 20:22:31,569 train_utils.py: 278: Train Epoch: [34][20/21] | Batch Time: 0.16 (2.39) | Data Time: 0.00 (2.21) | Mem (GB): 5.00 (4.86/5.00) | Time Elapsed: 00d 00h 34m | Losses/train_all_loss: 4.25e+01 (5.13e+01)
+INFO 2025-11-27 20:22:31,662 trainer.py: 955: Estimated time remaining: 00d 00h 12m
+INFO 2025-11-27 20:22:31,663 trainer.py: 897: Synchronizing meters
+INFO 2025-11-27 20:22:31,663 trainer.py: 835: Losses and meters: {'Losses/train_all_loss': 51.270724251156764, 'Losses/train_all_core_loss': 51.270724251156764, 'Losses/train_all_focal_loss': 49.04363604244732, 'Losses/train_all_dice_loss': 0.7423626241229829, 'Trainer/where': 0.699047619047619, 'Trainer/epoch': 34, 'Trainer/steps_train': 735}
+WARNING 2025-11-27 20:22:39,211 transforms.py: 418: Skip RandomAffine for zero-area mask in first frame after 2 tentatives
+INFO 2025-11-27 20:22:46,691 train_utils.py: 278: Train Epoch: [35][ 0/21] | Batch Time: 12.72 (12.72) | Data Time: 12.48 (12.48) | Mem (GB): 5.00 (5.00/5.00) | Time Elapsed: 00d 00h 34m | Losses/train_all_loss: 2.24e+01 (2.24e+01)
+WARNING 2025-11-27 20:22:46,898 transforms.py: 418: Skip RandomAffine for zero-area mask in first frame after 2 tentatives
+INFO 2025-11-27 20:23:01,710 train_utils.py: 278: Train Epoch: [35][10/21] | Batch Time: 0.16 (2.52) | Data Time: 0.00 (2.31) | Mem (GB): 5.00 (5.00/5.00) | Time Elapsed: 00d 00h 34m | Losses/train_all_loss: 3.52e+01 (2.38e+01)
+WARNING 2025-11-27 20:23:11,319 transforms.py: 418: Skip RandomAffine for zero-area mask in first frame after 2 tentatives
+INFO 2025-11-27 20:23:14,511 train_utils.py: 278: Train Epoch: [35][20/21] | Batch Time: 0.16 (1.93) | Data Time: 0.00 (1.74) | Mem (GB): 5.00 (4.90/5.00) | Time Elapsed: 00d 00h 35m | Losses/train_all_loss: 2.05e+00 (3.06e+01)
+INFO 2025-11-27 20:23:14,622 trainer.py: 955: Estimated time remaining: 00d 00h 09m
+INFO 2025-11-27 20:23:14,622 trainer.py: 897: Synchronizing meters
+INFO 2025-11-27 20:23:14,622 trainer.py: 835: Losses and meters: {'Losses/train_all_loss': 30.590867803210305, 'Losses/train_all_core_loss': 30.590867803210305, 'Losses/train_all_focal_loss': 28.432207653210277, 'Losses/train_all_dice_loss': 0.7195533684321812, 'Trainer/where': 0.7190476190476189, 'Trainer/epoch': 35, 'Trainer/steps_train': 756}
+WARNING 2025-11-27 20:23:25,684 transforms.py: 418: Skip RandomAffine for zero-area mask in first frame after 2 tentatives
+INFO 2025-11-27 20:23:33,677 train_utils.py: 278: Train Epoch: [36][ 0/21] | Batch Time: 17.68 (17.68) | Data Time: 17.46 (17.46) | Mem (GB): 5.00 (5.00/5.00) | Time Elapsed: 00d 00h 35m | Losses/train_all_loss: 1.15e+02 (1.15e+02)
+WARNING 2025-11-27 20:23:35,021 transforms.py: 418: Skip RandomAffine for zero-area mask in first frame after 2 tentatives
+INFO 2025-11-27 20:23:57,845 train_utils.py: 278: Train Epoch: [36][10/21] | Batch Time: 0.16 (3.80) | Data Time: 0.00 (3.62) | Mem (GB): 5.00 (5.00/5.00) | Time Elapsed: 00d 00h 35m | Losses/train_all_loss: 3.55e+01 (4.21e+01)
+INFO 2025-11-27 20:24:01,784 train_utils.py: 278: Train Epoch: [36][20/21] | Batch Time: 0.16 (2.18) | Data Time: 0.00 (2.01) | Mem (GB): 4.00 (4.86/5.00) | Time Elapsed: 00d 00h 35m | Losses/train_all_loss: 1.97e+01 (4.56e+01)
+INFO 2025-11-27 20:24:01,882 trainer.py: 955: Estimated time remaining: 00d 00h 09m
+INFO 2025-11-27 20:24:01,882 trainer.py: 897: Synchronizing meters
+INFO 2025-11-27 20:24:01,883 trainer.py: 835: Losses and meters: {'Losses/train_all_loss': 45.59878582613809, 'Losses/train_all_core_loss': 45.59878582613809, 'Losses/train_all_focal_loss': 43.425985283085275, 'Losses/train_all_dice_loss': 0.7242668952260699, 'Trainer/where': 0.739047619047619, 'Trainer/epoch': 36, 'Trainer/steps_train': 777}
+WARNING 2025-11-27 20:24:21,720 transforms.py: 418: Skip RandomAffine for zero-area mask in first frame after 2 tentatives
+INFO 2025-11-27 20:24:35,288 train_utils.py: 278: Train Epoch: [37][ 0/21] | Batch Time: 32.11 (32.11) | Data Time: 31.88 (31.88) | Mem (GB): 5.00 (5.00/5.00) | Time Elapsed: 00d 00h 36m | Losses/train_all_loss: 5.06e+01 (5.06e+01)
+INFO 2025-11-27 20:24:36,909 train_utils.py: 278: Train Epoch: [37][10/21] | Batch Time: 0.16 (3.07) | Data Time: 0.00 (2.90) | Mem (GB): 4.00 (4.73/5.00) | Time Elapsed: 00d 00h 36m | Losses/train_all_loss: 2.05e+00 (4.83e+01)
+INFO 2025-11-27 20:25:02,727 train_utils.py: 278: Train Epoch: [37][20/21] | Batch Time: 0.16 (2.84) | Data Time: 0.00 (2.67) | Mem (GB): 5.00 (4.86/5.00) | Time Elapsed: 00d 00h 36m | Losses/train_all_loss: 2.85e+01 (4.12e+01)
+INFO 2025-11-27 20:25:02,827 trainer.py: 955: Estimated time remaining: 00d 00h 11m
+INFO 2025-11-27 20:25:02,828 trainer.py: 897: Synchronizing meters
+INFO 2025-11-27 20:25:02,828 trainer.py: 835: Losses and meters: {'Losses/train_all_loss': 41.22149715537117, 'Losses/train_all_core_loss': 41.22149715537117, 'Losses/train_all_focal_loss': 39.05597496139152, 'Losses/train_all_dice_loss': 0.7218406654539562, 'Trainer/where': 0.759047619047619, 'Trainer/epoch': 37, 'Trainer/steps_train': 798}
+WARNING 2025-11-27 20:25:08,857 transforms.py: 418: Skip RandomAffine for zero-area mask in first frame after 2 tentatives
+WARNING 2025-11-27 20:25:17,111 transforms.py: 418: Skip RandomAffine for zero-area mask in first frame after 2 tentatives
+WARNING 2025-11-27 20:25:20,563 transforms.py: 418: Skip RandomAffine for zero-area mask in first frame after 2 tentatives
+WARNING 2025-11-27 20:25:27,452 transforms.py: 418: Skip RandomAffine for zero-area mask in first frame after 2 tentatives
+INFO 2025-11-27 20:25:31,403 train_utils.py: 278: Train Epoch: [38][ 0/21] | Batch Time: 27.08 (27.08) | Data Time: 26.85 (26.85) | Mem (GB): 4.00 (4.00/4.00) | Time Elapsed: 00d 00h 37m | Losses/train_all_loss: 2.97e+01 (2.97e+01)
+INFO 2025-11-27 20:25:33,202 train_utils.py: 278: Train Epoch: [38][10/21] | Batch Time: 0.16 (2.63) | Data Time: 0.00 (2.45) | Mem (GB): 5.00 (4.91/5.00) | Time Elapsed: 00d 00h 37m | Losses/train_all_loss: 2.16e+00 (3.31e+01)
+INFO 2025-11-27 20:26:00,283 train_utils.py: 278: Train Epoch: [38][20/21] | Batch Time: 0.16 (2.66) | Data Time: 0.00 (2.49) | Mem (GB): 5.00 (4.86/5.00) | Time Elapsed: 00d 00h 37m | Losses/train_all_loss: 3.09e+01 (3.58e+01)
+INFO 2025-11-27 20:26:00,388 trainer.py: 955: Estimated time remaining: 00d 00h 10m
+INFO 2025-11-27 20:26:00,388 trainer.py: 897: Synchronizing meters
+INFO 2025-11-27 20:26:00,388 trainer.py: 835: Losses and meters: {'Losses/train_all_loss': 35.79339489482698, 'Losses/train_all_core_loss': 35.79339489482698, 'Losses/train_all_focal_loss': 33.64484702334518, 'Losses/train_all_dice_loss': 0.7161827796981448, 'Trainer/where': 0.779047619047619, 'Trainer/epoch': 38, 'Trainer/steps_train': 819}
+WARNING 2025-11-27 20:26:15,615 transforms.py: 418: Skip RandomAffine for zero-area mask in first frame after 2 tentatives
+INFO 2025-11-27 20:26:32,345 train_utils.py: 278: Train Epoch: [39][ 0/21] | Batch Time: 30.57 (30.57) | Data Time: 30.36 (30.36) | Mem (GB): 5.00 (5.00/5.00) | Time Elapsed: 00d 00h 38m | Losses/train_all_loss: 1.04e+02 (1.04e+02)
+WARNING 2025-11-27 20:26:32,690 transforms.py: 418: Skip RandomAffine for zero-area mask in first frame after 2 tentatives
+INFO 2025-11-27 20:26:34,058 train_utils.py: 278: Train Epoch: [39][10/21] | Batch Time: 0.16 (2.93) | Data Time: 0.00 (2.77) | Mem (GB): 5.00 (4.82/5.00) | Time Elapsed: 00d 00h 38m | Losses/train_all_loss: 4.01e+01 (4.40e+01)
+INFO 2025-11-27 20:26:57,010 train_utils.py: 278: Train Epoch: [39][20/21] | Batch Time: 0.16 (2.63) | Data Time: 0.00 (2.46) | Mem (GB): 5.00 (4.86/5.00) | Time Elapsed: 00d 00h 38m | Losses/train_all_loss: 3.99e+01 (3.81e+01)
+INFO 2025-11-27 20:26:57,110 trainer.py: 955: Estimated time remaining: 00d 00h 09m
+INFO 2025-11-27 20:26:57,110 trainer.py: 897: Synchronizing meters
+INFO 2025-11-27 20:26:57,110 trainer.py: 835: Losses and meters: {'Losses/train_all_loss': 38.07738896778652, 'Losses/train_all_core_loss': 38.07738896778652, 'Losses/train_all_focal_loss': 35.9171936526185, 'Losses/train_all_dice_loss': 0.7200651793252855, 'Trainer/where': 0.799047619047619, 'Trainer/epoch': 39, 'Trainer/steps_train': 840}
+WARNING 2025-11-27 20:27:12,329 transforms.py: 418: Skip RandomAffine for zero-area mask in first frame after 2 tentatives
+WARNING 2025-11-27 20:27:15,580 transforms.py: 418: Skip RandomAffine for zero-area mask in first frame after 2 tentatives
+WARNING 2025-11-27 20:27:23,322 transforms.py: 418: Skip RandomAffine for zero-area mask in first frame after 2 tentatives
+INFO 2025-11-27 20:27:28,479 train_utils.py: 278: Train Epoch: [40][ 0/21] | Batch Time: 28.91 (28.91) | Data Time: 28.68 (28.68) | Mem (GB): 5.00 (5.00/5.00) | Time Elapsed: 00d 00h 39m | Losses/train_all_loss: 1.80e+00 (1.80e+00)
+INFO 2025-11-27 20:27:30,116 train_utils.py: 278: Train Epoch: [40][10/21] | Batch Time: 0.16 (2.78) | Data Time: 0.00 (2.61) | Mem (GB): 5.00 (5.00/5.00) | Time Elapsed: 00d 00h 39m | Losses/train_all_loss: 5.61e+00 (1.73e+01)
+WARNING 2025-11-27 20:27:30,814 transforms.py: 418: Skip RandomAffine for zero-area mask in first frame after 2 tentatives
+WARNING 2025-11-27 20:27:35,990 transforms.py: 418: Skip RandomAffine for zero-area mask in first frame after 2 tentatives
+INFO 2025-11-27 20:27:51,692 train_utils.py: 278: Train Epoch: [40][20/21] | Batch Time: 0.16 (2.48) | Data Time: 0.00 (2.31) | Mem (GB): 5.00 (4.86/5.00) | Time Elapsed: 00d 00h 39m | Losses/train_all_loss: 2.14e+00 (3.27e+01)
+INFO 2025-11-27 20:27:51,786 trainer.py: 955: Estimated time remaining: 00d 00h 07m
+INFO 2025-11-27 20:27:51,787 trainer.py: 897: Synchronizing meters
+INFO 2025-11-27 20:27:51,787 trainer.py: 835: Losses and meters: {'Losses/train_all_loss': 32.701303771563936, 'Losses/train_all_core_loss': 32.701303771563936, 'Losses/train_all_focal_loss': 30.656875478369848, 'Losses/train_all_dice_loss': 0.6814761899766468, 'Trainer/where': 0.819047619047619, 'Trainer/epoch': 40, 'Trainer/steps_train': 861}
+INFO 2025-11-27 20:28:04,125 train_utils.py: 278: Train Epoch: [41][ 0/21] | Batch Time: 11.00 (11.00) | Data Time: 10.77 (10.77) | Mem (GB): 5.00 (5.00/5.00) | Time Elapsed: 00d 00h 39m | Losses/train_all_loss: 4.77e+01 (4.77e+01)
+WARNING 2025-11-27 20:28:08,417 transforms.py: 418: Skip RandomAffine for zero-area mask in first frame after 2 tentatives
+INFO 2025-11-27 20:28:36,369 train_utils.py: 278: Train Epoch: [41][10/21] | Batch Time: 0.16 (3.93) | Data Time: 0.00 (3.74) | Mem (GB): 5.00 (4.91/5.00) | Time Elapsed: 00d 00h 40m | Losses/train_all_loss: 2.05e+00 (2.78e+01)
+INFO 2025-11-27 20:28:47,342 train_utils.py: 278: Train Epoch: [41][20/21] | Batch Time: 0.16 (2.58) | Data Time: 0.00 (2.40) | Mem (GB): 5.00 (4.86/5.00) | Time Elapsed: 00d 00h 40m | Losses/train_all_loss: 2.52e+00 (3.12e+01)
+INFO 2025-11-27 20:28:47,457 trainer.py: 955: Estimated time remaining: 00d 00h 07m
+INFO 2025-11-27 20:28:47,458 trainer.py: 897: Synchronizing meters
+INFO 2025-11-27 20:28:47,458 trainer.py: 835: Losses and meters: {'Losses/train_all_loss': 31.18022948787326, 'Losses/train_all_core_loss': 31.18022948787326, 'Losses/train_all_focal_loss': 29.06129388653097, 'Losses/train_all_dice_loss': 0.7063119042487371, 'Trainer/where': 0.8390476190476189, 'Trainer/epoch': 41, 'Trainer/steps_train': 882}
+WARNING 2025-11-27 20:28:58,057 transforms.py: 418: Skip RandomAffine for zero-area mask in first frame after 2 tentatives
+INFO 2025-11-27 20:28:59,178 train_utils.py: 278: Train Epoch: [42][ 0/21] | Batch Time: 10.39 (10.39) | Data Time: 10.15 (10.15) | Mem (GB): 5.00 (5.00/5.00) | Time Elapsed: 00d 00h 40m | Losses/train_all_loss: 1.93e+00 (1.93e+00)
+INFO 2025-11-27 20:29:25,276 train_utils.py: 278: Train Epoch: [42][10/21] | Batch Time: 0.44 (3.32) | Data Time: 0.27 (3.13) | Mem (GB): 5.00 (4.91/5.00) | Time Elapsed: 00d 00h 41m | Losses/train_all_loss: 1.54e+01 (3.04e+01)
+INFO 2025-11-27 20:29:41,298 train_utils.py: 278: Train Epoch: [42][20/21] | Batch Time: 3.02 (2.50) | Data Time: 2.79 (2.32) | Mem (GB): 5.00 (4.90/5.00) | Time Elapsed: 00d 00h 41m | Losses/train_all_loss: 1.09e+02 (3.46e+01)
+INFO 2025-11-27 20:29:41,400 trainer.py: 955: Estimated time remaining: 00d 00h 06m
+INFO 2025-11-27 20:29:41,401 trainer.py: 897: Synchronizing meters
+INFO 2025-11-27 20:29:41,401 trainer.py: 835: Losses and meters: {'Losses/train_all_loss': 34.625211863290694, 'Losses/train_all_core_loss': 34.625211863290694, 'Losses/train_all_focal_loss': 32.5034190043807, 'Losses/train_all_dice_loss': 0.7072643467358181, 'Trainer/where': 0.859047619047619, 'Trainer/epoch': 42, 'Trainer/steps_train': 903}
+WARNING 2025-11-27 20:29:57,687 transforms.py: 418: Skip RandomAffine for zero-area mask in first frame after 2 tentatives
+INFO 2025-11-27 20:29:59,762 train_utils.py: 278: Train Epoch: [43][ 0/21] | Batch Time: 17.01 (17.01) | Data Time: 16.79 (16.79) | Mem (GB): 5.00 (5.00/5.00) | Time Elapsed: 00d 00h 41m | Losses/train_all_loss: 3.95e+01 (3.95e+01)
+WARNING 2025-11-27 20:30:01,769 transforms.py: 418: Skip RandomAffine for zero-area mask in first frame after 2 tentatives
+INFO 2025-11-27 20:30:35,418 train_utils.py: 278: Train Epoch: [43][10/21] | Batch Time: 0.16 (4.79) | Data Time: 0.00 (4.62) | Mem (GB): 5.00 (5.00/5.00) | Time Elapsed: 00d 00h 42m | Losses/train_all_loss: 1.45e+01 (2.53e+01)
+INFO 2025-11-27 20:30:50,344 train_utils.py: 278: Train Epoch: [43][20/21] | Batch Time: 0.16 (3.22) | Data Time: 0.00 (3.05) | Mem (GB): 5.00 (4.86/5.00) | Time Elapsed: 00d 00h 42m | Losses/train_all_loss: 1.99e+00 (2.99e+01)
+INFO 2025-11-27 20:30:50,423 trainer.py: 955: Estimated time remaining: 00d 00h 06m
+INFO 2025-11-27 20:30:50,423 trainer.py: 897: Synchronizing meters
+INFO 2025-11-27 20:30:50,423 trainer.py: 835: Losses and meters: {'Losses/train_all_loss': 29.853866985866002, 'Losses/train_all_core_loss': 29.853866985866002, 'Losses/train_all_focal_loss': 27.785031228548004, 'Losses/train_all_dice_loss': 0.6896117726961771, 'Trainer/where': 0.879047619047619, 'Trainer/epoch': 43, 'Trainer/steps_train': 924}
+INFO 2025-11-27 20:31:09,135 train_utils.py: 278: Train Epoch: [44][ 0/21] | Batch Time: 17.32 (17.32) | Data Time: 17.09 (17.09) | Mem (GB): 5.00 (5.00/5.00) | Time Elapsed: 00d 00h 42m | Losses/train_all_loss: 1.01e+02 (1.01e+02)
+WARNING 2025-11-27 20:31:22,114 transforms.py: 418: Skip RandomAffine for zero-area mask in first frame after 2 tentatives
+INFO 2025-11-27 20:31:30,576 train_utils.py: 278: Train Epoch: [44][10/21] | Batch Time: 0.17 (3.52) | Data Time: 0.00 (3.34) | Mem (GB): 5.00 (4.82/5.00) | Time Elapsed: 00d 00h 43m | Losses/train_all_loss: 3.88e+01 (3.71e+01)
+INFO 2025-11-27 20:31:47,794 train_utils.py: 278: Train Epoch: [44][20/21] | Batch Time: 3.06 (2.67) | Data Time: 2.82 (2.48) | Mem (GB): 5.00 (4.86/5.00) | Time Elapsed: 00d 00h 43m | Losses/train_all_loss: 5.06e+01 (3.56e+01)
+INFO 2025-11-27 20:31:47,872 trainer.py: 955: Estimated time remaining: 00d 00h 04m
+INFO 2025-11-27 20:31:47,872 trainer.py: 897: Synchronizing meters
+INFO 2025-11-27 20:31:47,872 trainer.py: 835: Losses and meters: {'Losses/train_all_loss': 35.64578567800068, 'Losses/train_all_core_loss': 35.64578567800068, 'Losses/train_all_focal_loss': 33.521333497195016, 'Losses/train_all_dice_loss': 0.7081507699830192, 'Trainer/where': 0.899047619047619, 'Trainer/epoch': 44, 'Trainer/steps_train': 945}
+INFO 2025-11-27 20:32:11,662 train_utils.py: 278: Train Epoch: [45][ 0/21] | Batch Time: 21.06 (21.06) | Data Time: 20.84 (20.84) | Mem (GB): 5.00 (5.00/5.00) | Time Elapsed: 00d 00h 43m | Losses/train_all_loss: 4.88e+01 (4.88e+01)
+INFO 2025-11-27 20:32:27,678 train_utils.py: 278: Train Epoch: [45][10/21] | Batch Time: 9.39 (3.37) | Data Time: 9.16 (3.19) | Mem (GB): 5.00 (5.00/5.00) | Time Elapsed: 00d 00h 44m | Losses/train_all_loss: 2.23e+01 (3.89e+01)
+INFO 2025-11-27 20:32:41,136 train_utils.py: 278: Train Epoch: [45][20/21] | Batch Time: 0.16 (2.41) | Data Time: 0.00 (2.23) | Mem (GB): 4.00 (4.86/5.00) | Time Elapsed: 00d 00h 44m | Losses/train_all_loss: 7.39e+01 (4.03e+01)
+INFO 2025-11-27 20:32:41,223 trainer.py: 955: Estimated time remaining: 00d 00h 03m
+INFO 2025-11-27 20:32:41,224 trainer.py: 897: Synchronizing meters
+INFO 2025-11-27 20:32:41,224 trainer.py: 835: Losses and meters: {'Losses/train_all_loss': 40.29646050930023, 'Losses/train_all_core_loss': 40.29646050930023, 'Losses/train_all_focal_loss': 38.17174508919319, 'Losses/train_all_dice_loss': 0.7082385278883434, 'Trainer/where': 0.919047619047619, 'Trainer/epoch': 45, 'Trainer/steps_train': 966}
+WARNING 2025-11-27 20:32:54,423 transforms.py: 418: Skip RandomAffine for zero-area mask in first frame after 2 tentatives
+INFO 2025-11-27 20:33:03,118 train_utils.py: 278: Train Epoch: [46][ 0/21] | Batch Time: 20.55 (20.55) | Data Time: 20.31 (20.31) | Mem (GB): 5.00 (5.00/5.00) | Time Elapsed: 00d 00h 44m | Losses/train_all_loss: 1.14e+02 (1.14e+02)
+INFO 2025-11-27 20:33:26,568 train_utils.py: 278: Train Epoch: [46][10/21] | Batch Time: 0.16 (4.00) | Data Time: 0.00 (3.83) | Mem (GB): 5.00 (4.91/5.00) | Time Elapsed: 00d 00h 45m | Losses/train_all_loss: 7.01e+01 (5.21e+01)
+INFO 2025-11-27 20:33:42,933 train_utils.py: 278: Train Epoch: [46][20/21] | Batch Time: 0.16 (2.87) | Data Time: 0.00 (2.71) | Mem (GB): 4.00 (4.86/5.00) | Time Elapsed: 00d 00h 45m | Losses/train_all_loss: 4.73e+01 (4.54e+01)
+INFO 2025-11-27 20:33:43,020 trainer.py: 955: Estimated time remaining: 00d 00h 03m
+INFO 2025-11-27 20:33:43,021 trainer.py: 897: Synchronizing meters
+INFO 2025-11-27 20:33:43,021 trainer.py: 835: Losses and meters: {'Losses/train_all_loss': 45.36172382604508, 'Losses/train_all_core_loss': 45.36172382604508, 'Losses/train_all_focal_loss': 43.19179355814343, 'Losses/train_all_dice_loss': 0.7233099795523144, 'Trainer/where': 0.939047619047619, 'Trainer/epoch': 46, 'Trainer/steps_train': 987}
+WARNING 2025-11-27 20:33:48,425 transforms.py: 418: Skip RandomAffine for zero-area mask in first frame after 2 tentatives
+WARNING 2025-11-27 20:33:55,583 transforms.py: 418: Skip RandomAffine for zero-area mask in first frame after 2 tentatives
+INFO 2025-11-27 20:34:12,907 train_utils.py: 278: Train Epoch: [47][ 0/21] | Batch Time: 28.57 (28.57) | Data Time: 28.34 (28.34) | Mem (GB): 5.00 (5.00/5.00) | Time Elapsed: 00d 00h 46m | Losses/train_all_loss: 4.83e+01 (4.83e+01)
+WARNING 2025-11-27 20:34:17,653 transforms.py: 418: Skip RandomAffine for zero-area mask in first frame after 2 tentatives
+INFO 2025-11-27 20:34:22,790 train_utils.py: 278: Train Epoch: [47][10/21] | Batch Time: 0.16 (3.50) | Data Time: 0.00 (3.32) | Mem (GB): 5.00 (4.91/5.00) | Time Elapsed: 00d 00h 46m | Losses/train_all_loss: 3.36e+01 (4.82e+01)
+INFO 2025-11-27 20:34:47,045 train_utils.py: 278: Train Epoch: [47][20/21] | Batch Time: 18.89 (2.99) | Data Time: 18.66 (2.81) | Mem (GB): 5.00 (4.86/5.00) | Time Elapsed: 00d 00h 46m | Losses/train_all_loss: 2.00e+00 (3.62e+01)
+INFO 2025-11-27 20:34:47,133 trainer.py: 955: Estimated time remaining: 00d 00h 02m
+INFO 2025-11-27 20:34:47,134 trainer.py: 897: Synchronizing meters
+INFO 2025-11-27 20:34:47,134 trainer.py: 835: Losses and meters: {'Losses/train_all_loss': 36.16290165129162, 'Losses/train_all_core_loss': 36.16290165129162, 'Losses/train_all_focal_loss': 34.06733699391285, 'Losses/train_all_dice_loss': 0.6985215289252145, 'Trainer/where': 0.9590476190476189, 'Trainer/epoch': 47, 'Trainer/steps_train': 1008}
+WARNING 2025-11-27 20:35:01,166 transforms.py: 418: Skip RandomAffine for zero-area mask in first frame after 2 tentatives
+INFO 2025-11-27 20:35:16,031 train_utils.py: 278: Train Epoch: [48][ 0/21] | Batch Time: 27.61 (27.61) | Data Time: 27.38 (27.38) | Mem (GB): 5.00 (5.00/5.00) | Time Elapsed: 00d 00h 47m | Losses/train_all_loss: 2.19e+01 (2.19e+01)
+INFO 2025-11-27 20:35:22,188 train_utils.py: 278: Train Epoch: [48][10/21] | Batch Time: 0.16 (3.07) | Data Time: 0.00 (2.89) | Mem (GB): 5.00 (4.91/5.00) | Time Elapsed: 00d 00h 47m | Losses/train_all_loss: 4.42e+01 (2.99e+01)
+INFO 2025-11-27 20:35:40,511 train_utils.py: 278: Train Epoch: [48][20/21] | Batch Time: 0.16 (2.48) | Data Time: 0.00 (2.31) | Mem (GB): 5.00 (4.86/5.00) | Time Elapsed: 00d 00h 47m | Losses/train_all_loss: 5.17e+01 (3.85e+01)
+INFO 2025-11-27 20:35:40,599 trainer.py: 955: Estimated time remaining: 00d 00h 00m
+INFO 2025-11-27 20:35:40,600 trainer.py: 897: Synchronizing meters
+INFO 2025-11-27 20:35:40,600 trainer.py: 835: Losses and meters: {'Losses/train_all_loss': 38.49041494869051, 'Losses/train_all_core_loss': 38.49041494869051, 'Losses/train_all_focal_loss': 36.28161061555147, 'Losses/train_all_dice_loss': 0.7362680435180664, 'Trainer/where': 0.9790476190476189, 'Trainer/epoch': 48, 'Trainer/steps_train': 1029}
+WARNING 2025-11-27 20:35:43,987 transforms.py: 418: Skip RandomAffine for zero-area mask in first frame after 2 tentatives
+INFO 2025-11-27 20:36:03,292 train_utils.py: 278: Train Epoch: [49][ 0/21] | Batch Time: 21.40 (21.40) | Data Time: 21.16 (21.16) | Mem (GB): 5.00 (5.00/5.00) | Time Elapsed: 00d 00h 47m | Losses/train_all_loss: 1.89e+00 (1.89e+00)
+INFO 2025-11-27 20:36:15,931 train_utils.py: 278: Train Epoch: [49][10/21] | Batch Time: 0.16 (3.09) | Data Time: 0.00 (2.92) | Mem (GB): 5.00 (4.82/5.00) | Time Elapsed: 00d 00h 48m | Losses/train_all_loss: 8.96e+00 (2.65e+01)
+INFO 2025-11-27 20:36:37,265 train_utils.py: 278: Train Epoch: [49][20/21] | Batch Time: 0.16 (2.64) | Data Time: 0.00 (2.46) | Mem (GB): 5.00 (4.86/5.00) | Time Elapsed: 00d 00h 48m | Losses/train_all_loss: 5.07e+01 (2.89e+01)
+INFO 2025-11-27 20:36:37,348 trainer.py: 955: Estimated time remaining: 00d 00h 00m
+INFO 2025-11-27 20:36:37,349 trainer.py: 897: Synchronizing meters
+INFO 2025-11-27 20:36:37,349 trainer.py: 835: Losses and meters: {'Losses/train_all_loss': 28.90447275411515, 'Losses/train_all_core_loss': 28.90447275411515, 'Losses/train_all_focal_loss': 26.81560411517109, 'Losses/train_all_dice_loss': 0.6962895308222089, 'Trainer/where': 0.999047619047619, 'Trainer/epoch': 49, 'Trainer/steps_train': 1050}

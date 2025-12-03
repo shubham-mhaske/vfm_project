@@ -1,0 +1,37 @@
+
+\begin{table}[h]
+\centering
+\caption{Segmentation Performance on BCSS Test Set (n=45 images)}
+\label{tab:segmentation}
+\begin{tabular}{llccc}
+\toprule
+\textbf{Method} & \textbf{Prompt} & \textbf{Dice} & \textbf{IoU} & \textbf{Std} \\
+\midrule
+SAM2 & Box+Neg & \textbf{0.555} & \textbf{0.408} & 0.193 \\
+SAM2 & Box & 0.553 & 0.407 & 0.195 \\
+MedSAM & Box+TTA & 0.536 & 0.389 & 0.191 \\
+MedSAM & Box & 0.522 & 0.375 & 0.189 \\
+SAM2 & Multi-Point & 0.418 & 0.287 & 0.209 \\
+SAM2 & Centroid & 0.338 & 0.236 & 0.263 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+
+
+\begin{table}[h]
+\centering
+\caption{Per-Class Segmentation Performance (SAM2 Box+Neg)}
+\label{tab:perclass}
+\begin{tabular}{lcccc}
+\toprule
+\textbf{Class} & \textbf{N} & \textbf{Dice} & \textbf{IoU} & \textbf{Std} \\
+\midrule
+Necrosis & 23 & \textbf{0.691} & \textbf{0.559} & 0.194 \\
+Tumor & 45 & 0.560 & 0.403 & 0.147 \\
+Stroma & 45 & 0.538 & 0.385 & 0.166 \\
+Lymphocyte & 37 & 0.532 & 0.391 & 0.218 \\
+Blood Vessel & 31 & 0.497 & 0.357 & 0.208 \\
+\bottomrule
+\end{tabular}
+\end{table}
