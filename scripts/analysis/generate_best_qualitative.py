@@ -154,8 +154,11 @@ def run_per_image_evaluation(predictor, model_config, dataset, device, max_sampl
     
     results = []
     n_samples = len(dataset) if max_samples is None else min(max_samples, len(dataset))
+    log(f"    Processing {n_samples} samples...")
     
     for idx in tqdm(range(n_samples), desc=f"    {model_config['name']}"):
+        if idx % 10 == 0:
+            log(f"    [Progress] Sample {idx+1}/{n_samples}")
         sample = dataset[idx]
         
         # Handle both tensor and numpy outputs
@@ -232,6 +235,7 @@ def run_per_image_evaluation(predictor, model_config, dataset, device, max_sampl
             sample_results['avg_dice'] = float(np.mean(dices))
             results.append(sample_results)
     
+    log(f"    Completed: {len(results)} samples with valid results")
     return results
 
 
@@ -610,26 +614,32 @@ def main():
     log("=" * 60)
     
     # 1. Method comparison with best samples
+    log("\n  [1/3] Creating method comparison figure...")
     create_method_comparison_figure(
         best_samples,
         all_model_results,
         str(FIGURES_DIR / 'best_method_comparison.png')
     )
+    log("    -> Saved: best_method_comparison.png")
     
     # 2. Per-class best samples
+    log("\n  [2/3] Creating per-class figure...")
     create_per_class_figure(
         best_samples,
         'sam2_box_neg',
         all_model_results['sam2_box_neg'],
         str(FIGURES_DIR / 'best_per_class.png')
     )
+    log("    -> Saved: best_per_class.png")
     
     # 3. Success vs Failure
+    log("\n  [3/3] Creating success/failure figure...")
     create_success_failure_figure(
         all_model_results['sam2_box_neg'],
         'sam2_box_neg',
         str(FIGURES_DIR / 'best_success_failure.png')
     )
+    log("    -> Saved: best_success_failure.png")
     
     log("\n" + "=" * 70)
     log("Done! Generated files:")
