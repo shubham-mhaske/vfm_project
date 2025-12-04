@@ -407,7 +407,13 @@ def create_per_class_figure(best_samples, model_key, model_results, output_path)
                 # Draw box prompt if available
                 if 'prompts' in class_data and 'box' in class_data['prompts']:
                     box = class_data['prompts']['box']
-                    rect = plt.Rectangle((box[0], box[1]), box[2]-box[0], box[3]-box[1],
+                    # Box format is [[x1, y1], [x2, y2]]
+                    if len(box.shape) == 2 and box.shape[0] == 2:
+                        x1, y1 = box[0]
+                        x2, y2 = box[1]
+                    else:
+                        x1, y1, x2, y2 = box[0], box[1], box[2], box[3]
+                    rect = plt.Rectangle((x1, y1), x2-x1, y2-y1,
                                         linewidth=2, edgecolor='lime', facecolor='none')
                     axes[row, col_base + 2].add_patch(rect)
                 
